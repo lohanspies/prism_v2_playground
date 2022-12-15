@@ -2,9 +2,9 @@
 ARG BASE_CONTAINER=jupyter/minimal-notebook
 FROM $BASE_CONTAINER
 
-USER root
+#USER root
 # Install CURL
-RUN apt-get install curl jq -y
+#RUN apt-get install curl jq -y
 
 USER jovyan
 # Copy the requirements.txt file
