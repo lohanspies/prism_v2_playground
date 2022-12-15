@@ -1,12 +1,12 @@
-docker# py3-jupyter-docker-compose
+# Prism V2 Playground
 
-This repo contains a easy-to configure jupyter notebook that runs from a `docker-compose`. Its useful when you have a
+This repo contains an easy-to configure jupyter notebook that runs from a `docker-compose`. It's useful when you have a
 bunch of docker-compose services running, and you want to easily interact with their APIs via python jupyter-notebook.
 
 
 ## Run
 
-All you need to do is use the regulare docker-compose command:
+All you need to do is use the regular docker-compose command:
 
 ```
 docker-compose up -d
@@ -41,7 +41,7 @@ Remember that the local `./config` dir is mounted as `/home/jovyan/.jupyter/conf
 
 ### Passphrase
 
-The default passphrase to access the notebook is `changeme`.
+The default passphrase to access the notebook is `Prismv2`.
 
 You will need to edit the `./config/jupyter-config.json` file and change the value of `NotebookApp.password` key. The
 passphrase can be generated using the following command:
