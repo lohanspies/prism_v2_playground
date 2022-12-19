@@ -15,6 +15,12 @@ RUN python3 -m pip install -r requirements.txt
 
 
 
+# Install Prism V2 Agent generated client controller library
+# Copy the library folder
+ADD openapi-generator/prism-agent-open-api-specification-client .
+# Install all Python dependencies
+RUN pip install --no-cache-dir -e .
+
 # Install the widgets
 RUN jupyter nbextension enable --py widgetsnbextension
 
