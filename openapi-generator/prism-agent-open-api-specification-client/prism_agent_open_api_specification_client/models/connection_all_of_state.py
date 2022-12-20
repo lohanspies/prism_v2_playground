@@ -5,13 +5,13 @@ class ConnectionAllOfState(str, Enum):
     PENDING = "pending"
     SUCCESS = "success"
     FAILED = "failed"
-    # TODO - make all values UPPERCASE in ENUM
-    InvitationGenerated = 'InvitationGenerated'
-    ConnectionResponsePending = 'ConnectionResponsePending'
-    ConnectionResponseSent = 'ConnectionResponseSent'
-    ConnectionRequestSent = 'ConnectionRequestSent'
-    ConnectionRequestPending = 'ConnectionRequestPending'
-    ConnectionResponseReceived = 'ConnectionResponseReceived'
+
+    INVITATIONGENERATED = 'InvitationGenerated'
+    CONNECTIONRESPONSEPENDING = 'ConnectionResponsePending'
+    CONNECTIONRESPONSESENT = 'ConnectionResponseSent'
+    CONNECTIONREQUESTSENT = 'ConnectionRequestSent'
+    CONNECTIONREQUESTPENDING = 'ConnectionRequestPending'
+    CONNECTIONRESPONSERECEIVED = 'ConnectionResponseReceived'
 
     def __str__(self) -> str:
         return str(self.value)
