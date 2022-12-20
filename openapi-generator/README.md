@@ -16,7 +16,13 @@ cd openapi-generator/
 ```bash
 ./generate_dereferenced_openapi_spec.sh
 ```
-## 5. Generate Open API Client
+## 5. Generate or Update Open API Client
+If client library don't exist then generate a new version  
 ```bash
 ./generate_client_library.sh 
+```
+
+If client library already exist then update the current version
+```bash
+./update_client_library.sh 
 ```
