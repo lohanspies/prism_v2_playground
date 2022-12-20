@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
@@ -16,21 +16,24 @@ class PresentationStatus:
     """Presentation Status
 
     Example:
-        {'presentationId': 'presentationId', 'proofs': [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
+        {'presentationId': 'presentationId', 'data': ['data', 'data'], 'proofs': [{'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser', 'did.prism:123',
-            'did:prism:...']}], 'connectionId': 'connectionId', 'status': 'status'}
+            'did:prism:...']}, {'schemaId': 'https://schema.org/Person', 'trustIssuers':
+            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId',
+            'status': 'status'}
 
     Attributes:
         presentation_id (str):
         status (str):
         proofs (List['ProofRequestAux']):
+        data (List[str]):
         connection_id (Union[Unset, str]):
     """
 
     presentation_id: str
     status: str
     proofs: List["ProofRequestAux"]
+    data: List[str]
     connection_id: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -43,6 +46,8 @@ class PresentationStatus:
 
             proofs.append(proofs_item)
 
+        data = self.data
+
         connection_id = self.connection_id
 
         field_dict: Dict[str, Any] = {}
@@ -52,6 +57,7 @@ class PresentationStatus:
                 "presentationId": presentation_id,
                 "status": status,
                 "proofs": proofs,
+                "data": data,
             }
         )
         if connection_id is not UNSET:
@@ -75,12 +81,15 @@ class PresentationStatus:
 
             proofs.append(proofs_item)
 
+        data = cast(List[str], d.pop("data"))
+
         connection_id = d.pop("connectionId", UNSET)
 
         presentation_status = cls(
             presentation_id=presentation_id,
             status=status,
             proofs=proofs,
+            data=data,
             connection_id=connection_id,
         )
 
