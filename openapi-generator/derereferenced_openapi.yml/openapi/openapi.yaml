@@ -813,6 +813,34 @@ paths:
       tags:
       - Present Proof
   /present-proof/presentations/{id}:
+    get:
+      operationId: getPresentation
+      parameters:
+      - description: Unique identifier of the presentation
+        example: 06e126d1-fa44-4882-a243-1e326fbe21db
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresentationStatus'
+          description: Presentation state record
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: There is no presentation record matching the given 'id'.
+      summary: Returns an existing presentation record by id.
+      tags:
+      - Present Proof
     patch:
       operationId: updatePresentation
       parameters:
