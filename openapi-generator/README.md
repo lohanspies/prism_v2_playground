@@ -3,15 +3,20 @@
 ```bash
 npm install @openapitools/openapi-generator-cli -g
 ```
-## 2. CD to correct directory
+
+## 2. Install Python openapi-python-client
+```bash
+pip3 install openapi-python-client
+```
+## 3. CD to correct directory
 ```bash
 cd openapi-generator/
 ```
-## 3. Create dereferenced OpenAPI specification for Prism V2 
+## 4. Create dereferenced OpenAPI specification for Prism V2 
 ```bash
 ./generate_dereferenced_openapi_spec.sh
 ```
-## 4. Generate Open API Client
+## 5. Generate Open API Client
 ```bash
-./generate_library.sh 
+./generate_client_library.sh 
 ```
