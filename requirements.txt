@@ -7,3 +7,6 @@ termcolor
 pillow
 qrcode
 peerdid==0.3.0
+secp256k1
+ECPy
+jwcrypto
