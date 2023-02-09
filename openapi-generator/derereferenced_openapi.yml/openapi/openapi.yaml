@@ -14,8 +14,6 @@ security:
 tags:
 - description: Generic DID Endpoints
   name: DID
-- description: DID Authentication REST API
-  name: DID Authentication
 - description: DID Endpoints where keys are managed by PrismAgent
   name: DID Registrar
 - description: Schema Registry REST API
@@ -54,63 +52,6 @@ paths:
       summary: Resolve Prism DID
       tags:
       - DID
-  /authentication/challenges:
-    post:
-      deprecated: true
-      description: |
-        Create a new authentication challenge that will be later verified
-        by Castor for a relying-party.
-      operationId: createDidAuthenticationChallenge
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAuthenticationChallengeRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateAuthenticationChallengeResponse'
-          description: Authentication challenge created successfully
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: A create AuthenticationChallenge payload is malformed
-      summary: Create a new authentication challenge
-      tags:
-      - DID Authentication
-  /authentication/challenge-submissions:
-    post:
-      deprecated: true
-      description: |
-        Submit a challenge submission that will be verified by Castor for a relying-party.
-      operationId: createDidAuthenticationChallengeSubmission
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthenticationChallengeSubmissionRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthenticationChallengeSubmissionResponse'
-          description: Authentication challenge has been successfully verified
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: ChallengeSubmission is malformed
-      summary: Create a verification from challenge
-      tags:
-      - DID Authentication
   /did-registrar/dids:
     get:
       description: List all DIDs stored in PrismAgent's wallet
@@ -121,7 +62,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListManagedDIDResponse'
-          description: List managed DIDs
+          description: List PrismAgent managed DIDs
         "500":
           content:
             application/json:
@@ -184,6 +125,72 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: The DID publication failed.
       summary: Publish the DID stored in PrismAgent's wallet to the blockchain
+      tags:
+      - DID Registrar
+  /did-registrar/dids/{didRef}/updates:
+    post:
+      description: |
+        Update DID in PrismAgent's wallet and post update operation to blockchain.
+        This endpoint updates the DID document from last confirmed operation.
+        Submitting multiple update operations without waiting for confirmation will result in
+        some operation being rejected as only one operation can be appended from last confirmed operation.
+      operationId: updateManagedDid
+      parameters:
+      - description: DID reference.
+        in: path
+        name: didRef
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateManagedDIDRequest'
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DIDOperationResponse'
+          description: Publishing DID to Blockchain.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The DID update failed.
+      summary: Update DID in PrismAgent's wallet and post update operation to blockchain
+      tags:
+      - DID Registrar
+  /did-registrar/dids/{didRef}/deactivations:
+    post:
+      description: |
+        Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain.
+      operationId: deactivateManagedDid
+      parameters:
+      - description: DID reference.
+        in: path
+        name: didRef
+        required: true
+        schema:
+          type: string
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DIDOperationResponse'
+          description: Publishing DID to Blockchain.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The DID deactivation failed.
+      summary: Deactivate DID in PrismAgent's wallet and post deactivate operation
+        to blockchain
       tags:
       - DID Registrar
   /schema-registry/schemas:
@@ -920,27 +927,6 @@ paths:
       tags:
       - Connections Management
   /connections/{connectionId}:
-    delete:
-      description: "Just deletes connection state in the Agent, it does not include\
-        \ notifing other party that connection is deleted. We should consider this\
-        \ feature for the future. If additional action is attempted over deleted connection,\
-        \ it should thow error (no matter which side deleted connection)."
-      operationId: deleteConnection
-      parameters:
-      - description: Id of connection state record.
-        in: path
-        name: connectionId
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Successful delete
-        "404":
-          description: Connection state record not found for given `connectionId`
-      summary: Deletes existing connection record.
-      tags:
-      - Connections Management
     get:
       operationId: getConnection
       parameters:
@@ -1024,58 +1010,96 @@ components:
     DIDResponse:
       example:
         metadata:
+          canonicalId: canonicalId
           deactivated: true
         did:
           assertionMethod:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
           controller: did:prism:mainnet:456
           service:
           - id: service1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
+            type: LinkedDomains
           - id: service1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
+            type: LinkedDomains
           keyAgreement:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
+          capabilityDelegation:
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
           id: did:prism:mainnet:123
           verificationMethod:
           - controller: did:prism:456
@@ -1097,43 +1121,55 @@ components:
             id: did:prism:123#key-1
             type: EcdsaSecp256k1VerificationKey2019
           capabilityInvocation:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
           authentication:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:456
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:123#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:example:123#key-1
       properties:
         did:
           $ref: '#/components/schemas/DID'
@@ -1144,57 +1180,96 @@ components:
       - metadata
       type: object
     DID:
+      description: |
+        A core DID data model capable of being transformed into W3C compliant representation.
       example:
         assertionMethod:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
         controller: did:prism:mainnet:456
         service:
         - id: service1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
+          type: LinkedDomains
         - id: service1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
+          type: LinkedDomains
         keyAgreement:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
+        capabilityDelegation:
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
         id: did:prism:mainnet:123
         verificationMethod:
         - controller: did:prism:456
@@ -1216,43 +1291,55 @@ components:
           id: did:prism:123#key-1
           type: EcdsaSecp256k1VerificationKey2019
         capabilityInvocation:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
         authentication:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:456
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:123#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:example:123#key-1
       properties:
         id:
           example: did:prism:mainnet:123
@@ -1266,19 +1353,23 @@ components:
           type: array
         authentication:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         assertionMethod:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         keyAgreement:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         capabilityInvocation:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
+          type: array
+        capabilityDelegation:
+          items:
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         service:
           items:
@@ -1342,21 +1433,55 @@ components:
       required:
       - kty
       type: object
+    VerificationMethodOrRef:
+      description: |
+        An embedded verificationMethod as JSON or a referenced key as a URI.
+        Referenced key and embedded key are mutually exclusive.
+        If the type is EMBEDDED, `uri` field must be present.
+        Otherwise `verificationMethod` field must be present.
+      example:
+        type: EMBEDDED
+        verificationMethod:
+          controller: did:prism:456
+          publicKeyJwk:
+            kty: EC
+            crv: secp256k1
+            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
+            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+          id: did:prism:123#key-1
+          type: EcdsaSecp256k1VerificationKey2019
+        uri: did:example:123#key-1
+      properties:
+        type:
+          enum:
+          - EMBEDDED
+          - REFERENCED
+          example: EMBEDDED
+          type: string
+        uri:
+          example: did:example:123#key-1
+          type: string
+        verificationMethod:
+          $ref: '#/components/schemas/VerificationMethod'
+      required:
+      - type
+      type: object
     Service:
       example:
         id: service1
         serviceEndpoint:
         - https://bar.example.com
         - https://bar.example.com
-        type: MediatorService
+        type: LinkedDomains
       properties:
         id:
           example: service1
           type: string
         type:
           enum:
-          - MediatorService
-          example: MediatorService
+          - LinkedDomains
+          example: LinkedDomains
           type: string
         serviceEndpoint:
           items:
@@ -1370,6 +1495,7 @@ components:
       type: object
     DIDDocumentMetadata:
       example:
+        canonicalId: canonicalId
         deactivated: true
       properties:
         deactivated:
@@ -1378,6 +1504,9 @@ components:
             \ been deactivated, this property is OPTIONAL, but if included, MUST have\
             \ the boolean value false."
           type: boolean
+        canonicalId:
+          description: A DID in canonical form
+          type: string
       required:
       - deactivated
       type: object
@@ -1418,110 +1547,6 @@ components:
       - title
       - type
       type: object
-    CreateAuthenticationChallengeRequest:
-      example:
-        subject: did:example:123456789abcdefghi
-        state: qrcode#123
-        ttl: 900
-      properties:
-        ttl:
-          description: A number of seconds that challenge will be considered valid.
-          example: 900
-          type: number
-        state:
-          description: |
-            An opaque string provided by a relying-party indicating the purpose of
-            this challenge in order to avoid repurposing the challenge submission.
-          example: qrcode#123
-          type: string
-        subject:
-          description: |
-            A challenged subject that must complete the challenge.
-            May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-            is used, it must be inside the authentication verification relationship.
-          example: did:example:123456789abcdefghi
-          type: string
-      required:
-      - ttl
-      type: object
-    AuthenticationChallengeSubject:
-      description: |
-        A challenged subject that must complete the challenge.
-        May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-        is used, it must be inside the authentication verification relationship.
-      example: did:example:123456789abcdefghi
-      type: string
-    CreateAuthenticationChallengeResponse:
-      example:
-        subject: did:example:123456789abcdefghi
-        challenge: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-      properties:
-        challenge:
-          description: |
-            A JWT challenge that a user must provide to Castor SDK to create a ChallengeSubmission.
-            JWT payload contains nonce, state, expiration, issuer
-          example: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-          type: string
-        subject:
-          description: |
-            A challenged subject that must complete the challenge.
-            May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-            is used, it must be inside the authentication verification relationship.
-          example: did:example:123456789abcdefghi
-          type: string
-      required:
-      - challenge
-      type: object
-    AuthenticationChallengeJwt:
-      description: |
-        A JWT challenge that a user must provide to Castor SDK to create a ChallengeSubmission.
-        JWT payload contains nonce, state, expiration, issuer
-      example: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-      type: string
-    AuthenticationChallengeSubmissionRequest:
-      example:
-        signature: 243b9ed6561ab3...5d497f609b8cd04
-        subject: did:example:123456789abcdefghi
-        challenge: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-      properties:
-        challenge:
-          description: |
-            A JWT challenge that a user must provide to Castor SDK to create a ChallengeSubmission.
-            JWT payload contains nonce, state, expiration, issuer
-          example: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-          type: string
-        subject:
-          description: |
-            A challenged subject that must complete the challenge.
-            May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-            is used, it must be inside the authentication verification relationship.
-          example: did:example:123456789abcdefghi
-          type: string
-        signature:
-          example: 243b9ed6561ab3...5d497f609b8cd04
-          type: string
-      required:
-      - challenge
-      - signature
-      - subject
-      type: object
-    AuthenticationChallengeSubmissionResponse:
-      example:
-        success: true
-        state: qrcode#123
-      properties:
-        success:
-          example: true
-          type: boolean
-        state:
-          description: |
-            An opaque string provided by a relying-party indicating the purpose of
-            this challenge in order to avoid repurposing the challenge submission.
-          example: qrcode#123
-          type: string
-      required:
-      - success
-      type: object
     ListManagedDIDResponse:
       items:
         $ref: '#/components/schemas/ListManagedDIDResponse_inner'
@@ -1539,17 +1564,40 @@ components:
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
+            type: LinkedDomains
           - id: service1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
+            type: LinkedDomains
       properties:
         documentTemplate:
           $ref: '#/components/schemas/CreateManagedDidRequest_documentTemplate'
       required:
       - documentTemplate
+      type: object
+    ManagedDIDKeyTemplate:
+      description: key-pair template to add to DID document.
+      example:
+        purpose: authentication
+        id: key1
+      properties:
+        id:
+          description: Identifier of a verification material in the DID Document
+          example: key1
+          type: string
+        purpose:
+          enum:
+          - authentication
+          - assertionMethod
+          - keyAgreement
+          - capabilityInvocation
+          - capabilityDelegation
+          example: authentication
+          type: string
+      required:
+      - id
+      - purpose
       type: object
     CreateManagedDIDResponse:
       example:
@@ -1588,6 +1636,57 @@ components:
       required:
       - didRef
       - id
+      type: object
+    UpdateManagedDIDRequest:
+      example:
+        actions:
+        - actionType: ADD_KEY
+          removeKey:
+            id: key1
+          removeService:
+            id: service1
+          addService:
+            id: service1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          updateService:
+            id: service1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          addKey:
+            purpose: authentication
+            id: key1
+        - actionType: ADD_KEY
+          removeKey:
+            id: key1
+          removeService:
+            id: service1
+          addService:
+            id: service1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          updateService:
+            id: service1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          addKey:
+            purpose: authentication
+            id: key1
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner'
+          type: array
+      required:
+      - actions
       type: object
     VerifiableCredentialSchemaPage:
       example:
@@ -2298,6 +2397,9 @@ components:
           example: did:prism:abc:123
           type: string
         status:
+          description: "A status indicating whether this is already published from\
+            \ the wallet or not. Does not represent DID full lifecyle (e.g. deactivated,\
+            \ recovered, updated)."
           enum:
           - CREATED
           - PUBLICATION_PENDING
@@ -2306,28 +2408,6 @@ components:
       required:
       - did
       - status
-      type: object
-    CreateManagedDidRequest_documentTemplate_publicKeys_inner:
-      example:
-        purpose: authentication
-        id: key1
-      properties:
-        id:
-          description: Identifier of a verification material in the DID Document
-          example: key1
-          type: string
-        purpose:
-          enum:
-          - authentication
-          - assertionMethod
-          - keyAgreement
-          - capabilityInvocation
-          - capabilityDelegation
-          example: authentication
-          type: string
-      required:
-      - id
-      - purpose
       type: object
     CreateManagedDidRequest_documentTemplate:
       example:
@@ -2341,16 +2421,16 @@ components:
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
+          type: LinkedDomains
         - id: service1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
+          type: LinkedDomains
       properties:
         publicKeys:
           items:
-            $ref: '#/components/schemas/CreateManagedDidRequest_documentTemplate_publicKeys_inner'
+            $ref: '#/components/schemas/ManagedDIDKeyTemplate'
           type: array
         services:
           items:
@@ -2360,6 +2440,102 @@ components:
       - publicKeys
       - services
       - storage
+      type: object
+    UpdateManagedDIDRequest_actions_inner_removeKey:
+      example:
+        id: key1
+      properties:
+        id:
+          description: ID of key to remove from DID document
+          example: key1
+          type: string
+      required:
+      - id
+      type: object
+    UpdateManagedDIDRequest_actions_inner_removeService:
+      example:
+        id: service1
+      properties:
+        id:
+          description: ID of service to remove from DID document
+          example: service1
+          type: string
+      required:
+      - id
+      type: object
+    UpdateManagedDIDRequest_actions_inner_updateService:
+      description: A patch to existing Service. 'type' and 'serviceEndpoint' must
+        not be both empty.
+      example:
+        id: service1
+        serviceEndpoint:
+        - https://bar.example.com
+        - https://bar.example.com
+        type: LinkedDomains
+      properties:
+        id:
+          description: ID of existing service to update in the DID document
+          example: service1
+          type: string
+        type:
+          enum:
+          - LinkedDomains
+          example: LinkedDomains
+          type: string
+        serviceEndpoint:
+          items:
+            example: https://bar.example.com
+            type: string
+          type: array
+      required:
+      - id
+      type: object
+    UpdateManagedDIDRequest_actions_inner:
+      description: Detail of DID update action. Only property matching actionType
+        can be present.
+      example:
+        actionType: ADD_KEY
+        removeKey:
+          id: key1
+        removeService:
+          id: service1
+        addService:
+          id: service1
+          serviceEndpoint:
+          - https://bar.example.com
+          - https://bar.example.com
+          type: LinkedDomains
+        updateService:
+          id: service1
+          serviceEndpoint:
+          - https://bar.example.com
+          - https://bar.example.com
+          type: LinkedDomains
+        addKey:
+          purpose: authentication
+          id: key1
+      properties:
+        actionType:
+          enum:
+          - ADD_KEY
+          - REMOVE_KEY
+          - ADD_SERVICE
+          - REMOVE_SERVICE
+          - UPDATE_SERVICE
+          example: ADD_KEY
+          type: string
+        addKey:
+          $ref: '#/components/schemas/ManagedDIDKeyTemplate'
+        removeKey:
+          $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner_removeKey'
+        addService:
+          $ref: '#/components/schemas/Service'
+        removeService:
+          $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner_removeService'
+        updateService:
+          $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner_updateService'
+      required:
+      - actionType
       type: object
     IssueCredentialRecord_allOf:
       properties:

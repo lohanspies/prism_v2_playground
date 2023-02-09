@@ -1,43 +1,38 @@
-from typing import Any, Dict, List, Type, TypeVar, cast
+from typing import Any, Dict, List, Type, TypeVar
 
 import attr
 
-from ..models.service_type import ServiceType
+from ..models.managed_did_key_template_purpose import ManagedDIDKeyTemplatePurpose
 
-T = TypeVar("T", bound="Service")
+T = TypeVar("T", bound="ManagedDIDKeyTemplate")
 
 
 @attr.s(auto_attribs=True)
-class Service:
-    """
+class ManagedDIDKeyTemplate:
+    """key-pair template to add to DID document.
+
     Example:
-        {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}
+        {'purpose': 'authentication', 'id': 'key1'}
 
     Attributes:
-        id (str):  Example: service1.
-        type (ServiceType):  Example: LinkedDomains.
-        service_endpoint (List[str]):
+        id (str): Identifier of a verification material in the DID Document Example: key1.
+        purpose (ManagedDIDKeyTemplatePurpose):  Example: authentication.
     """
 
     id: str
-    type: ServiceType
-    service_endpoint: List[str]
+    purpose: ManagedDIDKeyTemplatePurpose
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
-        type = self.type.value
-
-        service_endpoint = self.service_endpoint
+        purpose = self.purpose.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "id": id,
-                "type": type,
-                "serviceEndpoint": service_endpoint,
+                "purpose": purpose,
             }
         )
 
@@ -48,18 +43,15 @@ class Service:
         d = src_dict.copy()
         id = d.pop("id")
 
-        type = ServiceType(d.pop("type"))
+        purpose = ManagedDIDKeyTemplatePurpose(d.pop("purpose"))
 
-        service_endpoint = cast(List[str], d.pop("serviceEndpoint"))
-
-        service = cls(
+        managed_did_key_template = cls(
             id=id,
-            type=type,
-            service_endpoint=service_endpoint,
+            purpose=purpose,
         )
 
-        service.additional_properties = d
-        return service
+        managed_did_key_template.additional_properties = d
+        return managed_did_key_template
 
     @property
     def additional_keys(self) -> List[str]:

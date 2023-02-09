@@ -75,9 +75,9 @@ def sync_detailed(
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
             'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}, {'id': 'service1',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'MediatorService'}]}}.
+            'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -114,9 +114,9 @@ def sync(
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
             'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}, {'id': 'service1',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'MediatorService'}]}}.
+            'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,9 +146,9 @@ async def asyncio_detailed(
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
             'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}, {'id': 'service1',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'MediatorService'}]}}.
+            'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -183,9 +183,9 @@ async def asyncio(
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
             'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}, {'id': 'service1',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'MediatorService'}]}}.
+            'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

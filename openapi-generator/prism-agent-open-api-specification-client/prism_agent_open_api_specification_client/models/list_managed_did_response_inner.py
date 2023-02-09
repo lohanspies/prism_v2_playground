@@ -16,7 +16,8 @@ class ListManagedDIDResponseInner:
 
     Attributes:
         did (str):  Example: did:prism:abc.
-        status (ListManagedDIDResponseInnerStatus):
+        status (ListManagedDIDResponseInnerStatus): A status indicating whether this is already published from the
+            wallet or not. Does not represent DID full lifecyle (e.g. deactivated, recovered, updated).
         long_form_did (Union[Unset, str]): A long-form DID. Mandatory when status is not PUBLISHED and optional when
             status is PUBLISHED Example: did:prism:abc:123.
     """

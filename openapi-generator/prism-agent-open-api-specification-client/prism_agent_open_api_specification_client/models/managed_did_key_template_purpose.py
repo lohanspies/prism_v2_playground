@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class CreateManagedDidRequestDocumentTemplatePublicKeysInnerPurpose(str, Enum):
+class ManagedDIDKeyTemplatePurpose(str, Enum):
     AUTHENTICATION = "authentication"
     ASSERTIONMETHOD = "assertionMethod"
     KEYAGREEMENT = "keyAgreement"

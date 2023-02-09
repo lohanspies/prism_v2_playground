@@ -15,6 +15,6 @@ class ConnectionAllOfState(str, Enum):
     CONNECTION_RESPONSE_RECEIVED = 'ConnectionResponseReceived'
     PROBLEM_REPORT_PENDING = 'ProblemReportPending'
     PROBLEM_REPORT_SENT = 'ProblemReportSent'
-
+    
     def __str__(self) -> str:
         return str(self.value)

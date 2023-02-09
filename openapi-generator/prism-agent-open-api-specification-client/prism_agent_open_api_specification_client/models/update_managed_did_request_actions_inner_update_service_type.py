@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ServiceType(str, Enum):
+class UpdateManagedDIDRequestActionsInnerUpdateServiceType(str, Enum):
     LINKEDDOMAINS = "LinkedDomains"
 
     def __str__(self) -> str:

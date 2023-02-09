@@ -2,38 +2,30 @@ from typing import Any, Dict, List, Type, TypeVar
 
 import attr
 
-from ..models.create_managed_did_request_document_template_public_keys_inner_purpose import (
-    CreateManagedDidRequestDocumentTemplatePublicKeysInnerPurpose,
-)
-
-T = TypeVar("T", bound="CreateManagedDidRequestDocumentTemplatePublicKeysInner")
+T = TypeVar("T", bound="UpdateManagedDIDRequestActionsInnerRemoveKey")
 
 
 @attr.s(auto_attribs=True)
-class CreateManagedDidRequestDocumentTemplatePublicKeysInner:
+class UpdateManagedDIDRequestActionsInnerRemoveKey:
     """
     Example:
-        {'purpose': 'authentication', 'id': 'key1'}
+        {'id': 'key1'}
 
     Attributes:
-        id (str): Identifier of a verification material in the DID Document Example: key1.
-        purpose (CreateManagedDidRequestDocumentTemplatePublicKeysInnerPurpose):  Example: authentication.
+        id (str): ID of key to remove from DID document Example: key1.
     """
 
     id: str
-    purpose: CreateManagedDidRequestDocumentTemplatePublicKeysInnerPurpose
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
-        purpose = self.purpose.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "id": id,
-                "purpose": purpose,
             }
         )
 
@@ -44,15 +36,12 @@ class CreateManagedDidRequestDocumentTemplatePublicKeysInner:
         d = src_dict.copy()
         id = d.pop("id")
 
-        purpose = CreateManagedDidRequestDocumentTemplatePublicKeysInnerPurpose(d.pop("purpose"))
-
-        create_managed_did_request_document_template_public_keys_inner = cls(
+        update_managed_did_request_actions_inner_remove_key = cls(
             id=id,
-            purpose=purpose,
         )
 
-        create_managed_did_request_document_template_public_keys_inner.additional_properties = d
-        return create_managed_did_request_document_template_public_keys_inner
+        update_managed_did_request_actions_inner_remove_key.additional_properties = d
+        return update_managed_did_request_actions_inner_remove_key
 
     @property
     def additional_keys(self) -> List[str]:

@@ -3,9 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 import attr
 
 if TYPE_CHECKING:
-    from ..models.create_managed_did_request_document_template_public_keys_inner import (
-        CreateManagedDidRequestDocumentTemplatePublicKeysInner,
-    )
+    from ..models.managed_did_key_template import ManagedDIDKeyTemplate
     from ..models.service import Service
 
 
@@ -18,15 +16,15 @@ class CreateManagedDidRequestDocumentTemplate:
     Example:
         {'publicKeys': [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id': 'key1'}],
             'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'MediatorService'}, {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}]}
+            'type': 'LinkedDomains'}, {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}]}
 
     Attributes:
-        public_keys (List['CreateManagedDidRequestDocumentTemplatePublicKeysInner']):
+        public_keys (List['ManagedDIDKeyTemplate']):
         services (List['Service']):
     """
 
-    public_keys: List["CreateManagedDidRequestDocumentTemplatePublicKeysInner"]
+    public_keys: List["ManagedDIDKeyTemplate"]
     services: List["Service"]
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -56,16 +54,14 @@ class CreateManagedDidRequestDocumentTemplate:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.create_managed_did_request_document_template_public_keys_inner import (
-            CreateManagedDidRequestDocumentTemplatePublicKeysInner,
-        )
+        from ..models.managed_did_key_template import ManagedDIDKeyTemplate
         from ..models.service import Service
 
         d = src_dict.copy()
         public_keys = []
         _public_keys = d.pop("publicKeys")
         for public_keys_item_data in _public_keys:
-            public_keys_item = CreateManagedDidRequestDocumentTemplatePublicKeysInner.from_dict(public_keys_item_data)
+            public_keys_item = ManagedDIDKeyTemplate.from_dict(public_keys_item_data)
 
             public_keys.append(public_keys_item)
 

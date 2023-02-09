@@ -15,15 +15,15 @@ class CreateManagedDidRequest:
     Example:
         {'documentTemplate': {'publicKeys': [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication',
             'id': 'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}, {'id': 'service1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'MediatorService'}]}}
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1', 'serviceEndpoint':
+            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}]}}
 
     Attributes:
         document_template (CreateManagedDidRequestDocumentTemplate):  Example: {'publicKeys': [{'purpose':
             'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id': 'key1'}], 'services': [{'id': 'service1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'MediatorService'}, {'id':
+            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id':
             'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'MediatorService'}]}.
+            'LinkedDomains'}]}.
     """
 
     document_template: "CreateManagedDidRequestDocumentTemplate"
