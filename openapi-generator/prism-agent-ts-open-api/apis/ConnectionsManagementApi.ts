@@ -52,8 +52,8 @@ export interface GetConnectionRequest {
 export class ConnectionsManagementApi extends runtime.BaseAPI {
 
     /**
-     * Creates new connection state record in `pending` state. It is assumed that application would first decode and validate the invitation. When it is accepted in the application side, it should be submitted in raw format to this API.
-     * Accepts externally received invitation.
+     * Accepts an [Out of Band 2.0](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) invitation, generates a new Peer DID, and submits a Connection Request to the inviter. It returns a connection object in `ConnectionRequestPending` state, until the Connection Request is eventually sent to the inviter by the prism-agent\'s background process. The connection object state will then automatically move to `ConnectionRequestSent`. 
+     * Accepts an Out of Band invitation.
      */
     async acceptConnectionInvitationRaw(requestParameters: AcceptConnectionInvitationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.acceptConnectionInvitationRequest === null || requestParameters.acceptConnectionInvitationRequest === undefined) {
@@ -82,8 +82,8 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates new connection state record in `pending` state. It is assumed that application would first decode and validate the invitation. When it is accepted in the application side, it should be submitted in raw format to this API.
-     * Accepts externally received invitation.
+     * Accepts an [Out of Band 2.0](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) invitation, generates a new Peer DID, and submits a Connection Request to the inviter. It returns a connection object in `ConnectionRequestPending` state, until the Connection Request is eventually sent to the inviter by the prism-agent\'s background process. The connection object state will then automatically move to `ConnectionRequestSent`. 
+     * Accepts an Out of Band invitation.
      */
     async acceptConnectionInvitation(requestParameters: AcceptConnectionInvitationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
         const response = await this.acceptConnectionInvitationRaw(requestParameters, initOverrides);
@@ -91,8 +91,8 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns new invitation object and creates new connection state record in `pending` state. Content of invitation depends on DIDComm protocol used, here is an example of how it would look like for `AIP 1.0 connection/v1` protocol. Once connection invitation is accepted, Agent should filter all additional attempts to accept it. We consider mult-party connections as out of scope for now.
-     * Creates new connection and returns an invitation.
+     * Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) invitation. It returns a new connection record in `InvitationGenerated` state. The request body may contain a `label` that can be used as a human readable alias for the connection, for example `{\'label\': \"Bob\"}` 
+     * Creates a new connection record and returns an Out of Band invitation.
      */
     async createConnectionRaw(requestParameters: CreateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.createConnectionRequest === null || requestParameters.createConnectionRequest === undefined) {
@@ -121,8 +121,8 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns new invitation object and creates new connection state record in `pending` state. Content of invitation depends on DIDComm protocol used, here is an example of how it would look like for `AIP 1.0 connection/v1` protocol. Once connection invitation is accepted, Agent should filter all additional attempts to accept it. We consider mult-party connections as out of scope for now.
-     * Creates new connection and returns an invitation.
+     * Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) invitation. It returns a new connection record in `InvitationGenerated` state. The request body may contain a `label` that can be used as a human readable alias for the connection, for example `{\'label\': \"Bob\"}` 
+     * Creates a new connection record and returns an Out of Band invitation.
      */
     async createConnection(requestParameters: CreateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
         const response = await this.createConnectionRaw(requestParameters, initOverrides);
@@ -130,7 +130,7 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns an existing connection record by id.
+     * Gets an existing connection record by its unique identifier.
      */
     async getConnectionRaw(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.connectionId === null || requestParameters.connectionId === undefined) {
@@ -156,7 +156,7 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns an existing connection record by id.
+     * Gets an existing connection record by its unique identifier.
      */
     async getConnection(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
         const response = await this.getConnectionRaw(requestParameters, initOverrides);
@@ -164,7 +164,7 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns a list of connections.
+     * Gets the list of connection records.
      */
     async getConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionCollection>> {
         const queryParameters: any = {};
@@ -186,7 +186,7 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns a list of connections.
+     * Gets the list of connection records.
      */
     async getConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionCollection> {
         const response = await this.getConnectionsRaw(initOverrides);

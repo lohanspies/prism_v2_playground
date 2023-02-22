@@ -11,43 +11,30 @@ T = TypeVar("T", bound="IssueCredentialRecordCollection")
 
 @attr.s(auto_attribs=True)
 class IssueCredentialRecordCollection:
-    """A collection of issue credential records
+    """A collection of issue credential records.
 
     Example:
-        {'offset': 0, 'limit': 6, 'count': 1, 'items': [None, None]}
+        {'contents': [None, None]}
 
     Attributes:
-        items (List['IssueCredentialRecord']):
-        offset (int):
-        limit (int):
-        count (int):
+        contents (List['IssueCredentialRecord']): The array containing the list of issue credential records.
     """
 
-    items: List["IssueCredentialRecord"]
-    offset: int
-    limit: int
-    count: int
+    contents: List["IssueCredentialRecord"]
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        items = []
-        for items_item_data in self.items:
-            items_item = items_item_data.to_dict()
+        contents = []
+        for contents_item_data in self.contents:
+            contents_item = contents_item_data.to_dict()
 
-            items.append(items_item)
-
-        offset = self.offset
-        limit = self.limit
-        count = self.count
+            contents.append(contents_item)
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "items": items,
-                "offset": offset,
-                "limit": limit,
-                "count": count,
+                "contents": contents,
             }
         )
 
@@ -58,24 +45,15 @@ class IssueCredentialRecordCollection:
         from ..models.issue_credential_record import IssueCredentialRecord
 
         d = src_dict.copy()
-        items = []
-        _items = d.pop("items")
-        for items_item_data in _items:
-            items_item = IssueCredentialRecord.from_dict(items_item_data)
+        contents = []
+        _contents = d.pop("contents")
+        for contents_item_data in _contents:
+            contents_item = IssueCredentialRecord.from_dict(contents_item_data)
 
-            items.append(items_item)
-
-        offset = d.pop("offset")
-
-        limit = d.pop("limit")
-
-        count = d.pop("count")
+            contents.append(contents_item)
 
         issue_credential_record_collection = cls(
-            items=items,
-            offset=offset,
-            limit=limit,
-            count=count,
+            contents=contents,
         )
 
         issue_credential_record_collection.additional_properties = d

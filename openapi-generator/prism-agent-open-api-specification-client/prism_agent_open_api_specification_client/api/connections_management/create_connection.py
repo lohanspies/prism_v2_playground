@@ -62,13 +62,13 @@ def sync_detailed(
     client: Client,
     json_body: CreateConnectionRequest,
 ) -> Response[Union[Connection, ErrorResponse]]:
-    """Creates new connection and returns an invitation.
+    """Creates a new connection record and returns an Out of Band invitation.
 
-     Returns new invitation object and creates new connection state record in `pending` state.
-    Content of invitation depends on DIDComm protocol used, here is an example of how it would look like
-    for `AIP 1.0 connection/v1` protocol.
-    Once connection invitation is accepted, Agent should filter all additional attempts to accept it.
-    We consider mult-party connections as out of scope for now.
+     Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-
+    messaging/spec/v2.0/#out-of-band-messages) invitation.
+    It returns a new connection record in `InvitationGenerated` state.
+    The request body may contain a `label` that can be used as a human readable alias for the
+    connection, for example `{'label': \"Bob\"}`
 
     Args:
         json_body (CreateConnectionRequest):  Example: {'label': 'Peter'}.
@@ -99,13 +99,13 @@ def sync(
     client: Client,
     json_body: CreateConnectionRequest,
 ) -> Optional[Union[Connection, ErrorResponse]]:
-    """Creates new connection and returns an invitation.
+    """Creates a new connection record and returns an Out of Band invitation.
 
-     Returns new invitation object and creates new connection state record in `pending` state.
-    Content of invitation depends on DIDComm protocol used, here is an example of how it would look like
-    for `AIP 1.0 connection/v1` protocol.
-    Once connection invitation is accepted, Agent should filter all additional attempts to accept it.
-    We consider mult-party connections as out of scope for now.
+     Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-
+    messaging/spec/v2.0/#out-of-band-messages) invitation.
+    It returns a new connection record in `InvitationGenerated` state.
+    The request body may contain a `label` that can be used as a human readable alias for the
+    connection, for example `{'label': \"Bob\"}`
 
     Args:
         json_body (CreateConnectionRequest):  Example: {'label': 'Peter'}.
@@ -129,13 +129,13 @@ async def asyncio_detailed(
     client: Client,
     json_body: CreateConnectionRequest,
 ) -> Response[Union[Connection, ErrorResponse]]:
-    """Creates new connection and returns an invitation.
+    """Creates a new connection record and returns an Out of Band invitation.
 
-     Returns new invitation object and creates new connection state record in `pending` state.
-    Content of invitation depends on DIDComm protocol used, here is an example of how it would look like
-    for `AIP 1.0 connection/v1` protocol.
-    Once connection invitation is accepted, Agent should filter all additional attempts to accept it.
-    We consider mult-party connections as out of scope for now.
+     Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-
+    messaging/spec/v2.0/#out-of-band-messages) invitation.
+    It returns a new connection record in `InvitationGenerated` state.
+    The request body may contain a `label` that can be used as a human readable alias for the
+    connection, for example `{'label': \"Bob\"}`
 
     Args:
         json_body (CreateConnectionRequest):  Example: {'label': 'Peter'}.
@@ -164,13 +164,13 @@ async def asyncio(
     client: Client,
     json_body: CreateConnectionRequest,
 ) -> Optional[Union[Connection, ErrorResponse]]:
-    """Creates new connection and returns an invitation.
+    """Creates a new connection record and returns an Out of Band invitation.
 
-     Returns new invitation object and creates new connection state record in `pending` state.
-    Content of invitation depends on DIDComm protocol used, here is an example of how it would look like
-    for `AIP 1.0 connection/v1` protocol.
-    Once connection invitation is accepted, Agent should filter all additional attempts to accept it.
-    We consider mult-party connections as out of scope for now.
+     Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-
+    messaging/spec/v2.0/#out-of-band-messages) invitation.
+    It returns a new connection record in `InvitationGenerated` state.
+    The request body may contain a `label` that can be used as a human readable alias for the
+    connection, for example `{'label': \"Bob\"}`
 
     Args:
         json_body (CreateConnectionRequest):  Example: {'label': 'Peter'}.

@@ -15,14 +15,16 @@ T = TypeVar("T", bound="VerificationPolicyPage")
 class VerificationPolicyPage:
     """
     Example:
-        {'pageOf': 'pageOf', 'next': 'next', 'previous': 'previous', 'contents': [{'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'kind':
-            'kind', 'name': 'name', 'self': 'self', 'credentialTypes': ['credentialTypes', 'credentialTypes'], 'attributes':
-            ['attributes', 'attributes'], 'id': 'id', 'updatedAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc)}, {'issuerDIDs': ['issuerDIDs', 'issuerDIDs'], 'createdAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'kind': 'kind', 'name': 'name', 'self':
-            'self', 'credentialTypes': ['credentialTypes', 'credentialTypes'], 'attributes': ['attributes', 'attributes'],
-            'id': 'id', 'updatedAt': datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}], 'kind':
+        {'pageOf': 'pageOf', 'next': 'next', 'previous': 'previous', 'contents': [{'createdAt': datetime.datetime(2000,
+            1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'kind': 'kind', 'name': 'name', 'self': 'self', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'nonce': 0, 'constraints': [{'trustedIssuers':
+            ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}, {'trustedIssuers': ['trustedIssuers',
+            'trustedIssuers'], 'schemaId': 'schemaId'}], 'updatedAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
+            tzinfo=datetime.timezone.utc)}, {'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
+            tzinfo=datetime.timezone.utc), 'kind': 'kind', 'name': 'name', 'self': 'self', 'description': 'description',
+            'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'nonce': 0, 'constraints': [{'trustedIssuers': ['trustedIssuers',
+            'trustedIssuers'], 'schemaId': 'schemaId'}, {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId':
+            'schemaId'}], 'updatedAt': datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}], 'kind':
             'kind', 'self': 'self'}
 
     Attributes:

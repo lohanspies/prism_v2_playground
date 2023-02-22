@@ -60,7 +60,7 @@ export interface UpdateManagedDidRequest {
 export class DIDRegistrarApi extends runtime.BaseAPI {
 
     /**
-     * Create unpublished DID and store it inside PrismAgent\'s wallet. The private keys of the DID is managed by PrismAgent. The DID can later be published to blockchain using publications endpoint. 
+     * Create unpublished DID and store it inside PrismAgent\'s wallet. The private keys of the DID is managed by PrismAgent. The DID can later be published to the VDR using publications endpoint. 
      * Create unpublished DID and store it in PrismAgent\'s wallet
      */
     async createManagedDidRaw(requestParameters: CreateManagedDidOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateManagedDIDResponse>> {
@@ -90,7 +90,7 @@ export class DIDRegistrarApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create unpublished DID and store it inside PrismAgent\'s wallet. The private keys of the DID is managed by PrismAgent. The DID can later be published to blockchain using publications endpoint. 
+     * Create unpublished DID and store it inside PrismAgent\'s wallet. The private keys of the DID is managed by PrismAgent. The DID can later be published to the VDR using publications endpoint. 
      * Create unpublished DID and store it in PrismAgent\'s wallet
      */
     async createManagedDid(requestParameters: CreateManagedDidOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateManagedDIDResponse> {
@@ -167,8 +167,8 @@ export class DIDRegistrarApi extends runtime.BaseAPI {
     }
 
     /**
-     * Publish the DID stored in PrismAgent\'s wallet to the blockchain. 
-     * Publish the DID stored in PrismAgent\'s wallet to the blockchain
+     * Publish the DID stored in PrismAgent\'s wallet to the VDR. 
+     * Publish the DID stored in PrismAgent\'s wallet to the VDR
      */
     async publishManagedDidRaw(requestParameters: PublishManagedDidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DIDOperationResponse>> {
         if (requestParameters.didRef === null || requestParameters.didRef === undefined) {
@@ -194,8 +194,8 @@ export class DIDRegistrarApi extends runtime.BaseAPI {
     }
 
     /**
-     * Publish the DID stored in PrismAgent\'s wallet to the blockchain. 
-     * Publish the DID stored in PrismAgent\'s wallet to the blockchain
+     * Publish the DID stored in PrismAgent\'s wallet to the VDR. 
+     * Publish the DID stored in PrismAgent\'s wallet to the VDR
      */
     async publishManagedDid(requestParameters: PublishManagedDidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DIDOperationResponse> {
         const response = await this.publishManagedDidRaw(requestParameters, initOverrides);
@@ -203,8 +203,8 @@ export class DIDRegistrarApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update DID in PrismAgent\'s wallet and post update operation to blockchain. This endpoint updates the DID document from last confirmed operation. Submitting multiple update operations without waiting for confirmation will result in some operation being rejected as only one operation can be appended from last confirmed operation. 
-     * Update DID in PrismAgent\'s wallet and post update operation to blockchain
+     * Update DID in PrismAgent\'s wallet and post update operation to the VDR. This endpoint updates the DID document from last confirmed operation. Submitting multiple update operations without waiting for confirmation will result in some operation being rejected as only one operation can be appended from last confirmed operation. 
+     * Update DID in PrismAgent\'s wallet and post update operation to the VDR
      */
     async updateManagedDidRaw(requestParameters: UpdateManagedDidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DIDOperationResponse>> {
         if (requestParameters.didRef === null || requestParameters.didRef === undefined) {
@@ -237,8 +237,8 @@ export class DIDRegistrarApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update DID in PrismAgent\'s wallet and post update operation to blockchain. This endpoint updates the DID document from last confirmed operation. Submitting multiple update operations without waiting for confirmation will result in some operation being rejected as only one operation can be appended from last confirmed operation. 
-     * Update DID in PrismAgent\'s wallet and post update operation to blockchain
+     * Update DID in PrismAgent\'s wallet and post update operation to the VDR. This endpoint updates the DID document from last confirmed operation. Submitting multiple update operations without waiting for confirmation will result in some operation being rejected as only one operation can be appended from last confirmed operation. 
+     * Update DID in PrismAgent\'s wallet and post update operation to the VDR
      */
     async updateManagedDid(requestParameters: UpdateManagedDidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DIDOperationResponse> {
         const response = await this.updateManagedDidRaw(requestParameters, initOverrides);

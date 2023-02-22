@@ -4,7 +4,6 @@ apis/DIDApi.ts
 apis/DIDRegistrarApi.ts
 apis/IssueCredentialsProtocolApi.ts
 apis/PresentProofApi.ts
-apis/RevocationRegistryApi.ts
 apis/SchemaRegistryApi.ts
 apis/VerificationApi.ts
 apis/index.ts
@@ -17,6 +16,7 @@ models/ConnectionCollection.ts
 models/ConnectionInvitation.ts
 models/CreateConnectionRequest.ts
 models/CreateIssueCredentialRecordRequest.ts
+models/CreateIssueCredentialRecordRequestAllOf.ts
 models/CreateManagedDIDResponse.ts
 models/CreateManagedDidRequest.ts
 models/CreateManagedDidRequestDocumentTemplate.ts
@@ -29,10 +29,12 @@ models/ErrorResponse.ts
 models/InternalServerError.ts
 models/IssueCredentialRecord.ts
 models/IssueCredentialRecordAllOf.ts
+models/IssueCredentialRecordBase.ts
 models/IssueCredentialRecordCollection.ts
 models/ListManagedDIDResponseInner.ts
 models/ManagedDIDKeyTemplate.ts
 models/NotFound.ts
+models/Options.ts
 models/PresentationStatus.ts
 models/Proof.ts
 models/ProofRequestAux.ts
@@ -40,7 +42,6 @@ models/PublicKeyJwk.ts
 models/RequestPresentationAction.ts
 models/RequestPresentationInput.ts
 models/RequestPresentationOutput.ts
-models/RevocationStatus.ts
 models/Service.ts
 models/UpdateManagedDIDRequest.ts
 models/UpdateManagedDIDRequestActionsInner.ts
@@ -53,10 +54,8 @@ models/VerificationCredentialSchemaInput.ts
 models/VerificationMethod.ts
 models/VerificationMethodOrRef.ts
 models/VerificationPolicy.ts
+models/VerificationPolicyConstraint.ts
 models/VerificationPolicyInput.ts
 models/VerificationPolicyPage.ts
-models/W3CCredentialRevocationRequest.ts
-models/W3CCredentialRevocationResponse.ts
-models/W3CCredentialStatus.ts
 models/index.ts
 runtime.ts

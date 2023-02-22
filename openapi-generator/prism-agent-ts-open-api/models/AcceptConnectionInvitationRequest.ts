@@ -14,13 +14,13 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * The request used by an invitee to accept a connection invitation received from an inviter, using out-of-band mechanism.
  * @export
  * @interface AcceptConnectionInvitationRequest
  */
 export interface AcceptConnectionInvitationRequest {
     /**
-     * 
+     * The base64-encoded raw invitation.
      * @type {string}
      * @memberof AcceptConnectionInvitationRequest
      */

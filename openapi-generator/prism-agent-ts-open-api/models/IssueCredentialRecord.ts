@@ -14,89 +14,84 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * An issue credential record to store the state of the protocol execution
+ * An issue credential record that stores the state of the protocol execution.
  * @export
  * @interface IssueCredentialRecord
  */
 export interface IssueCredentialRecord {
     /**
-     * Identifier of the VC Schema associated with this object
+     * The unique identifier of the schema used for this credential offer.
      * @type {string}
      * @memberof IssueCredentialRecord
      */
     schemaId?: string;
     /**
-     * Subject DID of the verifiable credentials object
+     * The identifier (e.g DID) of the subject to which the verifiable credential will be issued.
      * @type {string}
      * @memberof IssueCredentialRecord
      */
     subjectId: string;
     /**
-     * The validity period in seconds of the verifiable credential
+     * The validity period in seconds of the verifiable credential that will be issued.
      * @type {number}
      * @memberof IssueCredentialRecord
      */
     validityPeriod?: number;
     /**
-     * Claims that will be associated with given verifiable credentials
+     * The claims that will be associated with the issued verifiable credential.
      * @type {{ [key: string]: string; }}
      * @memberof IssueCredentialRecord
      */
     claims: { [key: string]: string; };
     /**
-     * 
+     * Specifies whether or not the credential should be automatically generated and issued when receiving the `CredentialRequest` from the holder.
+     * If set to `false`, a manual approval by the issuer via API call will be required for the VC to be issued.
      * @type {boolean}
      * @memberof IssueCredentialRecord
      */
     automaticIssuance?: boolean;
     /**
-     * 
-     * @type {boolean}
-     * @memberof IssueCredentialRecord
-     */
-    awaitConfirmation?: boolean;
-    /**
-     * 
+     * The unique identifier of the issue credential record.
      * @type {string}
      * @memberof IssueCredentialRecord
      */
     recordId: string;
     /**
-     * 
+     * The date and time when the issue credential record was created.
      * @type {Date}
      * @memberof IssueCredentialRecord
      */
     createdAt: Date;
     /**
-     * 
+     * The date and time when the issue credential record was last updated.
      * @type {Date}
      * @memberof IssueCredentialRecord
      */
     updatedAt?: Date;
     /**
-     * 
+     * The role played by the Prism agent in the credential issuance flow.
      * @type {string}
      * @memberof IssueCredentialRecord
      */
     role: IssueCredentialRecordRoleEnum;
     /**
-     * 
+     * The current state of the issue credential protocol execution.
      * @type {string}
      * @memberof IssueCredentialRecord
      */
     protocolState: IssueCredentialRecordProtocolStateEnum;
     /**
-     * 
-     * @type {string}
-     * @memberof IssueCredentialRecord
-     */
-    publicationState?: IssueCredentialRecordPublicationStateEnum;
-    /**
-     * 
+     * The base64-encoded JWT verifiable credential that has been sent by the issuer.
      * @type {string}
      * @memberof IssueCredentialRecord
      */
     jwtCredential?: string;
+    /**
+     * Issuer DID of the verifiable credential object.
+     * @type {string}
+     * @memberof IssueCredentialRecord
+     */
+    issuingDID?: string;
 }
 
 
@@ -127,16 +122,6 @@ export const IssueCredentialRecordProtocolStateEnum = {
     CredentialReceived: 'CredentialReceived'
 } as const;
 export type IssueCredentialRecordProtocolStateEnum = typeof IssueCredentialRecordProtocolStateEnum[keyof typeof IssueCredentialRecordProtocolStateEnum];
-
-/**
- * @export
- */
-export const IssueCredentialRecordPublicationStateEnum = {
-    PublicationPending: 'PublicationPending',
-    PublicationQueued: 'PublicationQueued',
-    Published: 'Published'
-} as const;
-export type IssueCredentialRecordPublicationStateEnum = typeof IssueCredentialRecordPublicationStateEnum[keyof typeof IssueCredentialRecordPublicationStateEnum];
 
 
 /**
@@ -169,14 +154,13 @@ export function IssueCredentialRecordFromJSONTyped(json: any, ignoreDiscriminato
         'validityPeriod': !exists(json, 'validityPeriod') ? undefined : json['validityPeriod'],
         'claims': json['claims'],
         'automaticIssuance': !exists(json, 'automaticIssuance') ? undefined : json['automaticIssuance'],
-        'awaitConfirmation': !exists(json, 'awaitConfirmation') ? undefined : json['awaitConfirmation'],
         'recordId': json['recordId'],
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': !exists(json, 'updatedAt') ? undefined : (new Date(json['updatedAt'])),
         'role': json['role'],
         'protocolState': json['protocolState'],
-        'publicationState': !exists(json, 'publicationState') ? undefined : json['publicationState'],
         'jwtCredential': !exists(json, 'jwtCredential') ? undefined : json['jwtCredential'],
+        'issuingDID': !exists(json, 'issuingDID') ? undefined : json['issuingDID'],
     };
 }
 
@@ -194,14 +178,13 @@ export function IssueCredentialRecordToJSON(value?: IssueCredentialRecord | null
         'validityPeriod': value.validityPeriod,
         'claims': value.claims,
         'automaticIssuance': value.automaticIssuance,
-        'awaitConfirmation': value.awaitConfirmation,
         'recordId': value.recordId,
         'createdAt': (value.createdAt.toISOString()),
         'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt.toISOString()),
         'role': value.role,
         'protocolState': value.protocolState,
-        'publicationState': value.publicationState,
         'jwtCredential': value.jwtCredential,
+        'issuingDID': value.issuingDID,
     };
 }
 

@@ -62,9 +62,9 @@ def sync_detailed(
     *,
     client: Client,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in PrismAgent's wallet to the blockchain
+    """Publish the DID stored in PrismAgent's wallet to the VDR
 
-     Publish the DID stored in PrismAgent's wallet to the blockchain.
+     Publish the DID stored in PrismAgent's wallet to the VDR.
 
     Args:
         did_ref (str):
@@ -95,9 +95,9 @@ def sync(
     *,
     client: Client,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in PrismAgent's wallet to the blockchain
+    """Publish the DID stored in PrismAgent's wallet to the VDR
 
-     Publish the DID stored in PrismAgent's wallet to the blockchain.
+     Publish the DID stored in PrismAgent's wallet to the VDR.
 
     Args:
         did_ref (str):
@@ -121,9 +121,9 @@ async def asyncio_detailed(
     *,
     client: Client,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in PrismAgent's wallet to the blockchain
+    """Publish the DID stored in PrismAgent's wallet to the VDR
 
-     Publish the DID stored in PrismAgent's wallet to the blockchain.
+     Publish the DID stored in PrismAgent's wallet to the VDR.
 
     Args:
         did_ref (str):
@@ -152,9 +152,9 @@ async def asyncio(
     *,
     client: Client,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in PrismAgent's wallet to the blockchain
+    """Publish the DID stored in PrismAgent's wallet to the VDR
 
-     Publish the DID stored in PrismAgent's wallet to the blockchain.
+     Publish the DID stored in PrismAgent's wallet to the VDR.
 
     Args:
         did_ref (str):

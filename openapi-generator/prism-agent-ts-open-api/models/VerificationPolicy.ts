@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { VerificationPolicyConstraint } from './VerificationPolicyConstraint';
+import {
+    VerificationPolicyConstraintFromJSON,
+    VerificationPolicyConstraintFromJSONTyped,
+    VerificationPolicyConstraintToJSON,
+} from './VerificationPolicyConstraint';
+
 /**
  * 
  * @export
@@ -39,28 +46,22 @@ export interface VerificationPolicy {
     id: string;
     /**
      * 
+     * @type {number}
+     * @memberof VerificationPolicy
+     */
+    nonce: number;
+    /**
+     * 
      * @type {string}
      * @memberof VerificationPolicy
      */
     name: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof VerificationPolicy
      */
-    attributes?: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof VerificationPolicy
-     */
-    issuerDIDs?: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof VerificationPolicy
-     */
-    credentialTypes?: Array<string>;
+    description: string;
     /**
      * 
      * @type {Date}
@@ -73,6 +74,12 @@ export interface VerificationPolicy {
      * @memberof VerificationPolicy
      */
     updatedAt: Date;
+    /**
+     * 
+     * @type {Array<VerificationPolicyConstraint>}
+     * @memberof VerificationPolicy
+     */
+    constraints?: Array<VerificationPolicyConstraint>;
 }
 
 /**
@@ -83,7 +90,9 @@ export function instanceOfVerificationPolicy(value: object): boolean {
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
     isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "nonce" in value;
     isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "description" in value;
     isInstance = isInstance && "createdAt" in value;
     isInstance = isInstance && "updatedAt" in value;
 
@@ -103,12 +112,12 @@ export function VerificationPolicyFromJSONTyped(json: any, ignoreDiscriminator: 
         'self': json['self'],
         'kind': json['kind'],
         'id': json['id'],
+        'nonce': json['nonce'],
         'name': json['name'],
-        'attributes': !exists(json, 'attributes') ? undefined : json['attributes'],
-        'issuerDIDs': !exists(json, 'issuerDIDs') ? undefined : json['issuerDIDs'],
-        'credentialTypes': !exists(json, 'credentialTypes') ? undefined : json['credentialTypes'],
+        'description': json['description'],
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
+        'constraints': !exists(json, 'constraints') ? undefined : ((json['constraints'] as Array<any>).map(VerificationPolicyConstraintFromJSON)),
     };
 }
 
@@ -124,12 +133,12 @@ export function VerificationPolicyToJSON(value?: VerificationPolicy | null): any
         'self': value.self,
         'kind': value.kind,
         'id': value.id,
+        'nonce': value.nonce,
         'name': value.name,
-        'attributes': value.attributes,
-        'issuerDIDs': value.issuerDIDs,
-        'credentialTypes': value.credentialTypes,
+        'description': value.description,
         'createdAt': (value.createdAt.toISOString()),
         'updatedAt': (value.updatedAt.toISOString()),
+        'constraints': value.constraints === undefined ? undefined : ((value.constraints as Array<any>).map(VerificationPolicyConstraintToJSON)),
     };
 }
 

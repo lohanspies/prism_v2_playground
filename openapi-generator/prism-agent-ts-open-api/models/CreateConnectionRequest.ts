@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateConnectionRequest {
     /**
-     * 
+     * A human readable alias for the connection.
      * @type {string}
      * @memberof CreateConnectionRequest
      */

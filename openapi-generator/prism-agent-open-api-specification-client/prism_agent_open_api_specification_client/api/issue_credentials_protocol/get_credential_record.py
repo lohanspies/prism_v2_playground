@@ -62,7 +62,7 @@ def sync_detailed(
     *,
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
-    """Get a credential record by Id
+    """Gets an existing issue credential record by its unique identifier.
 
     Args:
         record_id (str):
@@ -93,7 +93,7 @@ def sync(
     *,
     client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
-    """Get a credential record by Id
+    """Gets an existing issue credential record by its unique identifier.
 
     Args:
         record_id (str):
@@ -117,7 +117,7 @@ async def asyncio_detailed(
     *,
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
-    """Get a credential record by Id
+    """Gets an existing issue credential record by its unique identifier.
 
     Args:
         record_id (str):
@@ -146,7 +146,7 @@ async def asyncio(
     *,
     client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
-    """Get a credential record by Id
+    """Gets an existing issue credential record by its unique identifier.
 
     Args:
         record_id (str):

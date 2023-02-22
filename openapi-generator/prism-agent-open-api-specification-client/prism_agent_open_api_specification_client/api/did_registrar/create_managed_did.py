@@ -69,7 +69,7 @@ def sync_detailed(
     """Create unpublished DID and store it in PrismAgent's wallet
 
      Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to blockchain using publications endpoint.
+    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
@@ -108,7 +108,7 @@ def sync(
     """Create unpublished DID and store it in PrismAgent's wallet
 
      Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to blockchain using publications endpoint.
+    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
@@ -140,7 +140,7 @@ async def asyncio_detailed(
     """Create unpublished DID and store it in PrismAgent's wallet
 
      Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to blockchain using publications endpoint.
+    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
@@ -177,7 +177,7 @@ async def asyncio(
     """Create unpublished DID and store it in PrismAgent's wallet
 
      Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to blockchain using publications endpoint.
+    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':

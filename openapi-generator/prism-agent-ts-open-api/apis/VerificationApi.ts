@@ -43,6 +43,7 @@ export interface CreateVerificationPolicyRequest {
 
 export interface DeleteVerificationPolicyByIdRequest {
     id: string;
+    nonce: number;
 }
 
 export interface GetVerificationPolicyByIdRequest {
@@ -51,9 +52,6 @@ export interface GetVerificationPolicyByIdRequest {
 
 export interface LookupVerificationPoliciesByQueryRequest {
     name?: string;
-    attributes?: string;
-    issuerDIDs?: string;
-    credentialTypes?: string;
     offset?: number;
     limit?: number;
     order?: string;
@@ -61,6 +59,7 @@ export interface LookupVerificationPoliciesByQueryRequest {
 
 export interface UpdateVerificationPolicyRequest {
     id: string;
+    nonce: number;
     verificationPolicyInput: VerificationPolicyInput;
 }
 
@@ -117,7 +116,15 @@ export class VerificationApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteVerificationPolicyById.');
         }
 
+        if (requestParameters.nonce === null || requestParameters.nonce === undefined) {
+            throw new runtime.RequiredError('nonce','Required parameter requestParameters.nonce was null or undefined when calling deleteVerificationPolicyById.');
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters.nonce !== undefined) {
+            queryParameters['nonce'] = requestParameters.nonce;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -180,7 +187,7 @@ export class VerificationApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lookup verification policies by `name`, `attributes`, `issuerDIDs`, and `credentialTypes` and control the pagination by `offset` and `limit` parameters
+     * Lookup verification policies by `name`, and control the pagination by `offset` and `limit` parameters
      * Lookup verification policies by query
      */
     async lookupVerificationPoliciesByQueryRaw(requestParameters: LookupVerificationPoliciesByQueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VerificationPolicyPage>> {
@@ -188,18 +195,6 @@ export class VerificationApi extends runtime.BaseAPI {
 
         if (requestParameters.name !== undefined) {
             queryParameters['name'] = requestParameters.name;
-        }
-
-        if (requestParameters.attributes !== undefined) {
-            queryParameters['attributes'] = requestParameters.attributes;
-        }
-
-        if (requestParameters.issuerDIDs !== undefined) {
-            queryParameters['issuerDIDs'] = requestParameters.issuerDIDs;
-        }
-
-        if (requestParameters.credentialTypes !== undefined) {
-            queryParameters['credentialTypes'] = requestParameters.credentialTypes;
         }
 
         if (requestParameters.offset !== undefined) {
@@ -231,7 +226,7 @@ export class VerificationApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lookup verification policies by `name`, `attributes`, `issuerDIDs`, and `credentialTypes` and control the pagination by `offset` and `limit` parameters
+     * Lookup verification policies by `name`, and control the pagination by `offset` and `limit` parameters
      * Lookup verification policies by query
      */
     async lookupVerificationPoliciesByQuery(requestParameters: LookupVerificationPoliciesByQueryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerificationPolicyPage> {
@@ -240,7 +235,7 @@ export class VerificationApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update the fields of the verification policy entry: `attributes`, `issuerDIDs`, `name`, `credentialTypes`, 
+     * Update the verification policy entry
      * Update the verification policy object by id
      */
     async updateVerificationPolicyRaw(requestParameters: UpdateVerificationPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VerificationPolicy>> {
@@ -248,11 +243,19 @@ export class VerificationApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateVerificationPolicy.');
         }
 
+        if (requestParameters.nonce === null || requestParameters.nonce === undefined) {
+            throw new runtime.RequiredError('nonce','Required parameter requestParameters.nonce was null or undefined when calling updateVerificationPolicy.');
+        }
+
         if (requestParameters.verificationPolicyInput === null || requestParameters.verificationPolicyInput === undefined) {
             throw new runtime.RequiredError('verificationPolicyInput','Required parameter requestParameters.verificationPolicyInput was null or undefined when calling updateVerificationPolicy.');
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.nonce !== undefined) {
+            queryParameters['nonce'] = requestParameters.nonce;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -274,7 +277,7 @@ export class VerificationApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update the fields of the verification policy entry: `attributes`, `issuerDIDs`, `name`, `credentialTypes`, 
+     * Update the verification policy entry
      * Update the verification policy object by id
      */
     async updateVerificationPolicy(requestParameters: UpdateVerificationPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerificationPolicy> {

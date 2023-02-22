@@ -66,13 +66,11 @@ def sync_detailed(
     client: Client,
     json_body: CreateIssueCredentialRecordRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC issuer, create a new credential offer to be sent to a VC holder
+    """As a credential issuer, create a new credential offer to be sent to a holder.
 
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
-            credential record" Example: {'validityPeriod': 3600, 'awaitConfirmation': True,
-            'schemaId': 'schemaId', 'claims': {'key': 'claims'}, 'automaticIssuance': True,
-            'subjectId': 'did:prism:subjectofverifiablecredentials'}.
+            credential record".
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -100,13 +98,11 @@ def sync(
     client: Client,
     json_body: CreateIssueCredentialRecordRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC issuer, create a new credential offer to be sent to a VC holder
+    """As a credential issuer, create a new credential offer to be sent to a holder.
 
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
-            credential record" Example: {'validityPeriod': 3600, 'awaitConfirmation': True,
-            'schemaId': 'schemaId', 'claims': {'key': 'claims'}, 'automaticIssuance': True,
-            'subjectId': 'did:prism:subjectofverifiablecredentials'}.
+            credential record".
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -127,13 +123,11 @@ async def asyncio_detailed(
     client: Client,
     json_body: CreateIssueCredentialRecordRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC issuer, create a new credential offer to be sent to a VC holder
+    """As a credential issuer, create a new credential offer to be sent to a holder.
 
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
-            credential record" Example: {'validityPeriod': 3600, 'awaitConfirmation': True,
-            'schemaId': 'schemaId', 'claims': {'key': 'claims'}, 'automaticIssuance': True,
-            'subjectId': 'did:prism:subjectofverifiablecredentials'}.
+            credential record".
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -159,13 +153,11 @@ async def asyncio(
     client: Client,
     json_body: CreateIssueCredentialRecordRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC issuer, create a new credential offer to be sent to a VC holder
+    """As a credential issuer, create a new credential offer to be sent to a holder.
 
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
-            credential record" Example: {'validityPeriod': 3600, 'awaitConfirmation': True,
-            'schemaId': 'schemaId', 'claims': {'key': 'claims'}, 'automaticIssuance': True,
-            'subjectId': 'did:prism:subjectofverifiablecredentials'}.
+            credential record".
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

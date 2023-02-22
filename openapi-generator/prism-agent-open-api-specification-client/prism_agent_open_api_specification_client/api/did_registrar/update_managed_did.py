@@ -68,9 +68,9 @@ def sync_detailed(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to blockchain
+    """Update DID in PrismAgent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to blockchain.
+     Update DID in PrismAgent's wallet and post update operation to the VDR.
     This endpoint updates the DID document from last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
     some operation being rejected as only one operation can be appended from last confirmed operation.
@@ -117,9 +117,9 @@ def sync(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to blockchain
+    """Update DID in PrismAgent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to blockchain.
+     Update DID in PrismAgent's wallet and post update operation to the VDR.
     This endpoint updates the DID document from last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
     some operation being rejected as only one operation can be appended from last confirmed operation.
@@ -159,9 +159,9 @@ async def asyncio_detailed(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to blockchain
+    """Update DID in PrismAgent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to blockchain.
+     Update DID in PrismAgent's wallet and post update operation to the VDR.
     This endpoint updates the DID document from last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
     some operation being rejected as only one operation can be appended from last confirmed operation.
@@ -206,9 +206,9 @@ async def asyncio(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to blockchain
+    """Update DID in PrismAgent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to blockchain.
+     Update DID in PrismAgent's wallet and post update operation to the VDR.
     This endpoint updates the DID document from last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
     some operation being rejected as only one operation can be appended from last confirmed operation.

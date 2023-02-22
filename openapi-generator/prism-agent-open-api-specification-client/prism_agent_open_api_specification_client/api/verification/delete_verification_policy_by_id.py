@@ -8,18 +8,24 @@ from ...client import Client
 from ...models.bad_request import BadRequest
 from ...models.internal_server_error import InternalServerError
 from ...models.not_found import NotFound
-from ...types import Response
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
     id: str,
     *,
     client: Client,
+    nonce: int,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies/{id}".format(client.base_url, id=id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
+
+    params: Dict[str, Any] = {}
+    params["nonce"] = nonce
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
         "method": "delete",
@@ -27,6 +33,7 @@ def _get_kwargs(
         "headers": headers,
         "cookies": cookies,
         "timeout": client.get_timeout(),
+        "params": params,
     }
 
 
@@ -69,6 +76,7 @@ def sync_detailed(
     id: str,
     *,
     client: Client,
+    nonce: int,
 ) -> Response[Union[Any, BadRequest, InternalServerError, NotFound]]:
     """Delete the verification policy by id
 
@@ -76,6 +84,7 @@ def sync_detailed(
 
     Args:
         id (str):
+        nonce (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -88,6 +97,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         id=id,
         client=client,
+        nonce=nonce,
     )
 
     response = httpx.request(
@@ -102,6 +112,7 @@ def sync(
     id: str,
     *,
     client: Client,
+    nonce: int,
 ) -> Optional[Union[Any, BadRequest, InternalServerError, NotFound]]:
     """Delete the verification policy by id
 
@@ -109,6 +120,7 @@ def sync(
 
     Args:
         id (str):
+        nonce (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -121,6 +133,7 @@ def sync(
     return sync_detailed(
         id=id,
         client=client,
+        nonce=nonce,
     ).parsed
 
 
@@ -128,6 +141,7 @@ async def asyncio_detailed(
     id: str,
     *,
     client: Client,
+    nonce: int,
 ) -> Response[Union[Any, BadRequest, InternalServerError, NotFound]]:
     """Delete the verification policy by id
 
@@ -135,6 +149,7 @@ async def asyncio_detailed(
 
     Args:
         id (str):
+        nonce (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -147,6 +162,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         id=id,
         client=client,
+        nonce=nonce,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -159,6 +175,7 @@ async def asyncio(
     id: str,
     *,
     client: Client,
+    nonce: int,
 ) -> Optional[Union[Any, BadRequest, InternalServerError, NotFound]]:
     """Delete the verification policy by id
 
@@ -166,6 +183,7 @@ async def asyncio(
 
     Args:
         id (str):
+        nonce (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -179,5 +197,6 @@ async def asyncio(
         await asyncio_detailed(
             id=id,
             client=client,
+            nonce=nonce,
         )
     ).parsed

@@ -58,7 +58,7 @@ def sync_detailed(
     *,
     client: Client,
 ) -> Response[Union[Connection, ErrorResponse]]:
-    """Returns an existing connection record by id.
+    """Gets an existing connection record by its unique identifier.
 
     Args:
         connection_id (str):
@@ -89,7 +89,7 @@ def sync(
     *,
     client: Client,
 ) -> Optional[Union[Connection, ErrorResponse]]:
-    """Returns an existing connection record by id.
+    """Gets an existing connection record by its unique identifier.
 
     Args:
         connection_id (str):
@@ -113,7 +113,7 @@ async def asyncio_detailed(
     *,
     client: Client,
 ) -> Response[Union[Connection, ErrorResponse]]:
-    """Returns an existing connection record by id.
+    """Gets an existing connection record by its unique identifier.
 
     Args:
         connection_id (str):
@@ -142,7 +142,7 @@ async def asyncio(
     *,
     client: Client,
 ) -> Optional[Union[Connection, ErrorResponse]]:
-    """Returns an existing connection record by id.
+    """Gets an existing connection record by its unique identifier.
 
     Args:
         connection_id (str):

@@ -62,7 +62,9 @@ def sync_detailed(
     *,
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC holder, accept a credential offer received from an issuer
+    """As a holder, accepts a credential offer received from an issuer.
+
+     Accepts a credential offer received from a VC issuer and sends back a credential request.
 
     Args:
         record_id (str):
@@ -93,7 +95,9 @@ def sync(
     *,
     client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC holder, accept a credential offer received from an issuer
+    """As a holder, accepts a credential offer received from an issuer.
+
+     Accepts a credential offer received from a VC issuer and sends back a credential request.
 
     Args:
         record_id (str):
@@ -117,7 +121,9 @@ async def asyncio_detailed(
     *,
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC holder, accept a credential offer received from an issuer
+    """As a holder, accepts a credential offer received from an issuer.
+
+     Accepts a credential offer received from a VC issuer and sends back a credential request.
 
     Args:
         record_id (str):
@@ -146,7 +152,9 @@ async def asyncio(
     *,
     client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
-    """As a VC holder, accept a credential offer received from an issuer
+    """As a holder, accepts a credential offer received from an issuer.
+
+     Accepts a credential offer received from a VC issuer and sends back a credential request.
 
     Args:
         record_id (str):

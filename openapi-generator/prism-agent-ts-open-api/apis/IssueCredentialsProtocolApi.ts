@@ -53,7 +53,8 @@ export interface IssueCredentialRequest {
 export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
 
     /**
-     * As a VC holder, accept a credential offer received from an issuer
+     * Accepts a credential offer received from a VC issuer and sends back a credential request.
+     * As a holder, accepts a credential offer received from an issuer.
      */
     async acceptCredentialOfferRaw(requestParameters: AcceptCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
         if (requestParameters.recordId === null || requestParameters.recordId === undefined) {
@@ -79,7 +80,8 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * As a VC holder, accept a credential offer received from an issuer
+     * Accepts a credential offer received from a VC issuer and sends back a credential request.
+     * As a holder, accepts a credential offer received from an issuer.
      */
     async acceptCredentialOffer(requestParameters: AcceptCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
         const response = await this.acceptCredentialOfferRaw(requestParameters, initOverrides);
@@ -87,7 +89,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * As a VC issuer, create a new credential offer to be sent to a VC holder
+     * As a credential issuer, create a new credential offer to be sent to a holder.
      */
     async createCredentialOfferRaw(requestParameters: CreateCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
         if (requestParameters.createIssueCredentialRecordRequest === null || requestParameters.createIssueCredentialRecordRequest === undefined) {
@@ -116,7 +118,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * As a VC issuer, create a new credential offer to be sent to a VC holder
+     * As a credential issuer, create a new credential offer to be sent to a holder.
      */
     async createCredentialOffer(requestParameters: CreateCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
         const response = await this.createCredentialOfferRaw(requestParameters, initOverrides);
@@ -124,7 +126,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get a credential record by Id
+     * Gets an existing issue credential record by its unique identifier.
      */
     async getCredentialRecordRaw(requestParameters: GetCredentialRecordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
         if (requestParameters.recordId === null || requestParameters.recordId === undefined) {
@@ -150,7 +152,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get a credential record by Id
+     * Gets an existing issue credential record by its unique identifier.
      */
     async getCredentialRecord(requestParameters: GetCredentialRecordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
         const response = await this.getCredentialRecordRaw(requestParameters, initOverrides);
@@ -158,7 +160,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get credential records
+     * Gets the list of issue credential records.
      */
     async getCredentialRecordsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecordCollection>> {
         const queryParameters: any = {};
@@ -180,7 +182,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get credential records
+     * Gets the list of issue credential records.
      */
     async getCredentialRecords(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecordCollection> {
         const response = await this.getCredentialRecordsRaw(initOverrides);
@@ -188,7 +190,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * As a VC issuer, issue the VC for the specified issue credential record
+     * As an issuer, issues the verifiable credential related to the specified record.
      */
     async issueCredentialRaw(requestParameters: IssueCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
         if (requestParameters.recordId === null || requestParameters.recordId === undefined) {
@@ -214,7 +216,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
-     * As a VC issuer, issue the VC for the specified issue credential record
+     * As an issuer, issues the verifiable credential related to the specified record.
      */
     async issueCredential(requestParameters: IssueCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
         const response = await this.issueCredentialRaw(requestParameters, initOverrides);

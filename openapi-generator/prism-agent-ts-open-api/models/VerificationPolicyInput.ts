@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { VerificationPolicyConstraint } from './VerificationPolicyConstraint';
+import {
+    VerificationPolicyConstraintFromJSON,
+    VerificationPolicyConstraintFromJSONTyped,
+    VerificationPolicyConstraintToJSON,
+} from './VerificationPolicyConstraint';
+
 /**
  * 
  * @export
@@ -33,34 +40,16 @@ export interface VerificationPolicyInput {
     name: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof VerificationPolicyInput
      */
-    attributes?: Array<string>;
+    description: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<VerificationPolicyConstraint>}
      * @memberof VerificationPolicyInput
      */
-    issuerDIDs?: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof VerificationPolicyInput
-     */
-    credentialTypes?: Array<string>;
-    /**
-     * 
-     * @type {Date}
-     * @memberof VerificationPolicyInput
-     */
-    createdAt?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof VerificationPolicyInput
-     */
-    updatedAt?: Date;
+    constraints?: Array<VerificationPolicyConstraint>;
 }
 
 /**
@@ -69,6 +58,7 @@ export interface VerificationPolicyInput {
 export function instanceOfVerificationPolicyInput(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "description" in value;
 
     return isInstance;
 }
@@ -85,11 +75,8 @@ export function VerificationPolicyInputFromJSONTyped(json: any, ignoreDiscrimina
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': json['name'],
-        'attributes': !exists(json, 'attributes') ? undefined : json['attributes'],
-        'issuerDIDs': !exists(json, 'issuerDIDs') ? undefined : json['issuerDIDs'],
-        'credentialTypes': !exists(json, 'credentialTypes') ? undefined : json['credentialTypes'],
-        'createdAt': !exists(json, 'createdAt') ? undefined : (new Date(json['createdAt'])),
-        'updatedAt': !exists(json, 'updatedAt') ? undefined : (new Date(json['updatedAt'])),
+        'description': json['description'],
+        'constraints': !exists(json, 'constraints') ? undefined : ((json['constraints'] as Array<any>).map(VerificationPolicyConstraintFromJSON)),
     };
 }
 
@@ -104,11 +91,8 @@ export function VerificationPolicyInputToJSON(value?: VerificationPolicyInput | 
         
         'id': value.id,
         'name': value.name,
-        'attributes': value.attributes,
-        'issuerDIDs': value.issuerDIDs,
-        'credentialTypes': value.credentialTypes,
-        'createdAt': value.createdAt === undefined ? undefined : (value.createdAt.toISOString()),
-        'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt.toISOString()),
+        'description': value.description,
+        'constraints': value.constraints === undefined ? undefined : ((value.constraints as Array<any>).map(VerificationPolicyConstraintToJSON)),
     };
 }
 

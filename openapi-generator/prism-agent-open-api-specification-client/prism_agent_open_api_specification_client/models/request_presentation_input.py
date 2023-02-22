@@ -1,8 +1,11 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..types import UNSET, Unset
+
 if TYPE_CHECKING:
+    from ..models.options import Options
     from ..models.proof_request_aux import ProofRequestAux
 
 
@@ -16,15 +19,20 @@ class RequestPresentationInput:
     Example:
         {'proofs': [{'schemaId': 'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
             'did.prism:123', 'did:prism:...']}, {'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId'}
+            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}], 'options': {'domain':
+            'https://example-verifier.com', 'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId':
+            'connectionId'}
 
     Attributes:
         connection_id (str):
         proofs (List['ProofRequestAux']):
+        options (Union[Unset, Options]):  Example: {'domain': 'https://example-verifier.com', 'challenge':
+            '11c91493-01b3-4c4d-ac36-b336bab5bddf'}.
     """
 
     connection_id: str
     proofs: List["ProofRequestAux"]
+    options: Union[Unset, "Options"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -35,6 +43,10 @@ class RequestPresentationInput:
 
             proofs.append(proofs_item)
 
+        options: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.options, Unset):
+            options = self.options.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -43,11 +55,14 @@ class RequestPresentationInput:
                 "proofs": proofs,
             }
         )
+        if options is not UNSET:
+            field_dict["options"] = options
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.options import Options
         from ..models.proof_request_aux import ProofRequestAux
 
         d = src_dict.copy()
@@ -60,9 +75,17 @@ class RequestPresentationInput:
 
             proofs.append(proofs_item)
 
+        _options = d.pop("options", UNSET)
+        options: Union[Unset, Options]
+        if isinstance(_options, Unset):
+            options = UNSET
+        else:
+            options = Options.from_dict(_options)
+
         request_presentation_input = cls(
             connection_id=connection_id,
             proofs=proofs,
+            options=options,
         )
 
         request_presentation_input.additional_properties = d

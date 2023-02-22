@@ -2,12 +2,12 @@ from typing import Any, Dict, List, Type, TypeVar
 
 import attr
 
-T = TypeVar("T", bound="CreateIssueCredentialRecordRequestClaims")
+T = TypeVar("T", bound="IssueCredentialRecordBaseClaims")
 
 
 @attr.s(auto_attribs=True)
-class CreateIssueCredentialRecordRequestClaims:
-    """Claims that will be associated with given verifiable credentials"""
+class IssueCredentialRecordBaseClaims:
+    """The claims that will be associated with the issued verifiable credential."""
 
     additional_properties: Dict[str, str] = attr.ib(init=False, factory=dict)
 
@@ -22,10 +22,10 @@ class CreateIssueCredentialRecordRequestClaims:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        create_issue_credential_record_request_claims = cls()
+        issue_credential_record_base_claims = cls()
 
-        create_issue_credential_record_request_claims.additional_properties = d
-        return create_issue_credential_record_request_claims
+        issue_credential_record_base_claims.additional_properties = d
+        return issue_credential_record_base_claims
 
     @property
     def additional_keys(self) -> List[str]:

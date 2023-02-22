@@ -21,35 +21,17 @@ import {
 } from './IssueCredentialRecord';
 
 /**
- * A collection of issue credential records
+ * A collection of issue credential records.
  * @export
  * @interface IssueCredentialRecordCollection
  */
 export interface IssueCredentialRecordCollection {
     /**
-     * 
+     * The array containing the list of issue credential records.
      * @type {Array<IssueCredentialRecord>}
      * @memberof IssueCredentialRecordCollection
      */
-    items: Array<IssueCredentialRecord>;
-    /**
-     * 
-     * @type {number}
-     * @memberof IssueCredentialRecordCollection
-     */
-    offset: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof IssueCredentialRecordCollection
-     */
-    limit: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof IssueCredentialRecordCollection
-     */
-    count: number;
+    contents: Array<IssueCredentialRecord>;
 }
 
 /**
@@ -57,10 +39,7 @@ export interface IssueCredentialRecordCollection {
  */
 export function instanceOfIssueCredentialRecordCollection(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "items" in value;
-    isInstance = isInstance && "offset" in value;
-    isInstance = isInstance && "limit" in value;
-    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "contents" in value;
 
     return isInstance;
 }
@@ -75,10 +54,7 @@ export function IssueCredentialRecordCollectionFromJSONTyped(json: any, ignoreDi
     }
     return {
         
-        'items': ((json['items'] as Array<any>).map(IssueCredentialRecordFromJSON)),
-        'offset': json['offset'],
-        'limit': json['limit'],
-        'count': json['count'],
+        'contents': ((json['contents'] as Array<any>).map(IssueCredentialRecordFromJSON)),
     };
 }
 
@@ -91,10 +67,7 @@ export function IssueCredentialRecordCollectionToJSON(value?: IssueCredentialRec
     }
     return {
         
-        'items': ((value.items as Array<any>).map(IssueCredentialRecordToJSON)),
-        'offset': value.offset,
-        'limit': value.limit,
-        'count': value.count,
+        'contents': ((value.contents as Array<any>).map(IssueCredentialRecordToJSON)),
     };
 }
 

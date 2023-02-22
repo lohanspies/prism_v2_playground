@@ -21,65 +21,71 @@ import {
 } from './ConnectionInvitation';
 
 /**
- * 
+ * A connection record.
  * @export
  * @interface Connection
  */
 export interface Connection {
     /**
-     * 
+     * A human readable alias for the connection.
      * @type {string}
      * @memberof Connection
      */
     label?: string;
     /**
-     * 
+     * The reference to the connection resource.
      * @type {string}
      * @memberof Connection
      */
     self: string;
     /**
-     * 
+     * The type of object returned. In this case a `Connection`.
      * @type {string}
      * @memberof Connection
      */
     kind: string;
     /**
-     * 
+     * The unique identifier of the connection.
      * @type {string}
      * @memberof Connection
      */
     connectionId: string;
     /**
-     * 
+     * The DID representing me as the inviter or invitee in this specific connection.
      * @type {string}
      * @memberof Connection
      */
     myDid?: string;
     /**
-     * 
+     * The DID representing the other peer as the an inviter or invitee in this specific connection.
      * @type {string}
      * @memberof Connection
      */
     theirDid?: string;
     /**
-     * 
+     * The current state of the connection protocol execution.
      * @type {string}
      * @memberof Connection
      */
     state: ConnectionStateEnum;
     /**
-     * 
+     * The date and time the connection record was created.
      * @type {Date}
      * @memberof Connection
      */
     createdAt: Date;
     /**
-     * 
+     * The date and time the connection record was last updated.
      * @type {Date}
      * @memberof Connection
      */
     updatedAt?: Date;
+    /**
+     * The role played by the Prism agent in the connection flow.
+     * @type {string}
+     * @memberof Connection
+     */
+    role: ConnectionRoleEnum;
     /**
      * 
      * @type {ConnectionInvitation}
@@ -93,11 +99,28 @@ export interface Connection {
  * @export
  */
 export const ConnectionStateEnum = {
-    Pending: 'pending',
-    Success: 'success',
-    Failed: 'failed'
+    InvitationGenerated: 'InvitationGenerated',
+    InvitationReceived: 'InvitationReceived',
+    ConnectionRequestPending: 'ConnectionRequestPending',
+    ConnectionRequestSent: 'ConnectionRequestSent',
+    ConnectionRequestReceived: 'ConnectionRequestReceived',
+    ConnectionResponsePending: 'ConnectionResponsePending',
+    ConnectionResponseSent: 'ConnectionResponseSent',
+    ConnectionResponseReceived: 'ConnectionResponseReceived',
+    ProblemReportPending: 'ProblemReportPending',
+    ProblemReportSent: 'ProblemReportSent',
+    ProblemReportReceived: 'ProblemReportReceived'
 } as const;
 export type ConnectionStateEnum = typeof ConnectionStateEnum[keyof typeof ConnectionStateEnum];
+
+/**
+ * @export
+ */
+export const ConnectionRoleEnum = {
+    Inviter: 'Inviter',
+    Invitee: 'Invitee'
+} as const;
+export type ConnectionRoleEnum = typeof ConnectionRoleEnum[keyof typeof ConnectionRoleEnum];
 
 
 /**
@@ -110,6 +133,7 @@ export function instanceOfConnection(value: object): boolean {
     isInstance = isInstance && "connectionId" in value;
     isInstance = isInstance && "state" in value;
     isInstance = isInstance && "createdAt" in value;
+    isInstance = isInstance && "role" in value;
     isInstance = isInstance && "invitation" in value;
 
     return isInstance;
@@ -134,6 +158,7 @@ export function ConnectionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'state': json['state'],
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': !exists(json, 'updatedAt') ? undefined : (new Date(json['updatedAt'])),
+        'role': json['role'],
         'invitation': ConnectionInvitationFromJSON(json['invitation']),
     };
 }
@@ -156,6 +181,7 @@ export function ConnectionToJSON(value?: Connection | null): any {
         'state': value.state,
         'createdAt': (value.createdAt.toISOString()),
         'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt.toISOString()),
+        'role': value.role,
         'invitation': ConnectionInvitationToJSON(value.invitation),
     };
 }

@@ -5,7 +5,6 @@ import attr
 from dateutil.parser import isoparse
 
 from ..models.issue_credential_record_all_of_protocol_state import IssueCredentialRecordAllOfProtocolState
-from ..models.issue_credential_record_all_of_publication_state import IssueCredentialRecordAllOfPublicationState
 from ..models.issue_credential_record_all_of_role import IssueCredentialRecordAllOfRole
 from ..types import UNSET, Unset
 
@@ -16,13 +15,17 @@ T = TypeVar("T", bound="IssueCredentialRecordAllOf")
 class IssueCredentialRecordAllOf:
     """
     Attributes:
-        record_id (str):
-        created_at (datetime.datetime):
-        role (IssueCredentialRecordAllOfRole):
-        protocol_state (IssueCredentialRecordAllOfProtocolState):
-        updated_at (Union[Unset, datetime.datetime]):
-        publication_state (Union[Unset, IssueCredentialRecordAllOfPublicationState]):
-        jwt_credential (Union[Unset, str]):
+        record_id (str): The unique identifier of the issue credential record.
+        created_at (datetime.datetime): The date and time when the issue credential record was created.
+        role (IssueCredentialRecordAllOfRole): The role played by the Prism agent in the credential issuance flow.
+        protocol_state (IssueCredentialRecordAllOfProtocolState): The current state of the issue credential protocol
+            execution.
+        updated_at (Union[Unset, datetime.datetime]): The date and time when the issue credential record was last
+            updated.
+        jwt_credential (Union[Unset, str]): The base64-encoded JWT verifiable credential that has been sent by the
+            issuer.
+        issuing_did (Union[Unset, str]): Issuer DID of the verifiable credential object. Example:
+            did:prism:issuerofverifiablecredentials.
     """
 
     record_id: str
@@ -30,8 +33,8 @@ class IssueCredentialRecordAllOf:
     role: IssueCredentialRecordAllOfRole
     protocol_state: IssueCredentialRecordAllOfProtocolState
     updated_at: Union[Unset, datetime.datetime] = UNSET
-    publication_state: Union[Unset, IssueCredentialRecordAllOfPublicationState] = UNSET
     jwt_credential: Union[Unset, str] = UNSET
+    issuing_did: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -46,11 +49,8 @@ class IssueCredentialRecordAllOf:
         if not isinstance(self.updated_at, Unset):
             updated_at = self.updated_at.isoformat()
 
-        publication_state: Union[Unset, str] = UNSET
-        if not isinstance(self.publication_state, Unset):
-            publication_state = self.publication_state.value
-
         jwt_credential = self.jwt_credential
+        issuing_did = self.issuing_did
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,10 +64,10 @@ class IssueCredentialRecordAllOf:
         )
         if updated_at is not UNSET:
             field_dict["updatedAt"] = updated_at
-        if publication_state is not UNSET:
-            field_dict["publicationState"] = publication_state
         if jwt_credential is not UNSET:
             field_dict["jwtCredential"] = jwt_credential
+        if issuing_did is not UNSET:
+            field_dict["issuingDID"] = issuing_did
 
         return field_dict
 
@@ -89,14 +89,9 @@ class IssueCredentialRecordAllOf:
         else:
             updated_at = isoparse(_updated_at)
 
-        _publication_state = d.pop("publicationState", UNSET)
-        publication_state: Union[Unset, IssueCredentialRecordAllOfPublicationState]
-        if isinstance(_publication_state, Unset):
-            publication_state = UNSET
-        else:
-            publication_state = IssueCredentialRecordAllOfPublicationState(_publication_state)
-
         jwt_credential = d.pop("jwtCredential", UNSET)
+
+        issuing_did = d.pop("issuingDID", UNSET)
 
         issue_credential_record_all_of = cls(
             record_id=record_id,
@@ -104,8 +99,8 @@ class IssueCredentialRecordAllOf:
             role=role,
             protocol_state=protocol_state,
             updated_at=updated_at,
-            publication_state=publication_state,
             jwt_credential=jwt_credential,
+            issuing_did=issuing_did,
         )
 
         issue_credential_record_all_of.additional_properties = d

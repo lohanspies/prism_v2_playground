@@ -15,9 +15,6 @@ def _get_kwargs(
     *,
     client: Client,
     name: Union[Unset, None, str] = UNSET,
-    attributes: Union[Unset, None, str] = UNSET,
-    issuer_di_ds: Union[Unset, None, str] = UNSET,
-    credential_types: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
@@ -29,12 +26,6 @@ def _get_kwargs(
 
     params: Dict[str, Any] = {}
     params["name"] = name
-
-    params["attributes"] = attributes
-
-    params["issuerDIDs"] = issuer_di_ds
-
-    params["credentialTypes"] = credential_types
 
     params["offset"] = offset
 
@@ -90,23 +81,17 @@ def sync_detailed(
     *,
     client: Client,
     name: Union[Unset, None, str] = UNSET,
-    attributes: Union[Unset, None, str] = UNSET,
-    issuer_di_ds: Union[Unset, None, str] = UNSET,
-    credential_types: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, `attributes`, `issuerDIDs`, and `credentialTypes` and
-    control the pagination by `offset` and `limit` parameters
+     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
+    parameters
 
     Args:
         name (Union[Unset, None, str]):
-        attributes (Union[Unset, None, str]):
-        issuer_di_ds (Union[Unset, None, str]):
-        credential_types (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
@@ -122,9 +107,6 @@ def sync_detailed(
     kwargs = _get_kwargs(
         client=client,
         name=name,
-        attributes=attributes,
-        issuer_di_ds=issuer_di_ds,
-        credential_types=credential_types,
         offset=offset,
         limit=limit,
         order=order,
@@ -142,23 +124,17 @@ def sync(
     *,
     client: Client,
     name: Union[Unset, None, str] = UNSET,
-    attributes: Union[Unset, None, str] = UNSET,
-    issuer_di_ds: Union[Unset, None, str] = UNSET,
-    credential_types: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, `attributes`, `issuerDIDs`, and `credentialTypes` and
-    control the pagination by `offset` and `limit` parameters
+     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
+    parameters
 
     Args:
         name (Union[Unset, None, str]):
-        attributes (Union[Unset, None, str]):
-        issuer_di_ds (Union[Unset, None, str]):
-        credential_types (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
@@ -174,9 +150,6 @@ def sync(
     return sync_detailed(
         client=client,
         name=name,
-        attributes=attributes,
-        issuer_di_ds=issuer_di_ds,
-        credential_types=credential_types,
         offset=offset,
         limit=limit,
         order=order,
@@ -187,23 +160,17 @@ async def asyncio_detailed(
     *,
     client: Client,
     name: Union[Unset, None, str] = UNSET,
-    attributes: Union[Unset, None, str] = UNSET,
-    issuer_di_ds: Union[Unset, None, str] = UNSET,
-    credential_types: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, `attributes`, `issuerDIDs`, and `credentialTypes` and
-    control the pagination by `offset` and `limit` parameters
+     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
+    parameters
 
     Args:
         name (Union[Unset, None, str]):
-        attributes (Union[Unset, None, str]):
-        issuer_di_ds (Union[Unset, None, str]):
-        credential_types (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
@@ -219,9 +186,6 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         client=client,
         name=name,
-        attributes=attributes,
-        issuer_di_ds=issuer_di_ds,
-        credential_types=credential_types,
         offset=offset,
         limit=limit,
         order=order,
@@ -237,23 +201,17 @@ async def asyncio(
     *,
     client: Client,
     name: Union[Unset, None, str] = UNSET,
-    attributes: Union[Unset, None, str] = UNSET,
-    issuer_di_ds: Union[Unset, None, str] = UNSET,
-    credential_types: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, `attributes`, `issuerDIDs`, and `credentialTypes` and
-    control the pagination by `offset` and `limit` parameters
+     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
+    parameters
 
     Args:
         name (Union[Unset, None, str]):
-        attributes (Union[Unset, None, str]):
-        issuer_di_ds (Union[Unset, None, str]):
-        credential_types (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
@@ -270,9 +228,6 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             name=name,
-            attributes=attributes,
-            issuer_di_ds=issuer_di_ds,
-            credential_types=credential_types,
             offset=offset,
             limit=limit,
             order=order,

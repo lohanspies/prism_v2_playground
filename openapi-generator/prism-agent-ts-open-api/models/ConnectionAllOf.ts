@@ -27,53 +27,59 @@ import {
  */
 export interface ConnectionAllOf {
     /**
-     * 
+     * The reference to the connection resource.
      * @type {string}
      * @memberof ConnectionAllOf
      */
     self: string;
     /**
-     * 
+     * The type of object returned. In this case a `Connection`.
      * @type {string}
      * @memberof ConnectionAllOf
      */
     kind: string;
     /**
-     * 
+     * The unique identifier of the connection.
      * @type {string}
      * @memberof ConnectionAllOf
      */
     connectionId: string;
     /**
-     * 
+     * The DID representing me as the inviter or invitee in this specific connection.
      * @type {string}
      * @memberof ConnectionAllOf
      */
     myDid?: string;
     /**
-     * 
+     * The DID representing the other peer as the an inviter or invitee in this specific connection.
      * @type {string}
      * @memberof ConnectionAllOf
      */
     theirDid?: string;
     /**
-     * 
+     * The current state of the connection protocol execution.
      * @type {string}
      * @memberof ConnectionAllOf
      */
     state: ConnectionAllOfStateEnum;
     /**
-     * 
+     * The date and time the connection record was created.
      * @type {Date}
      * @memberof ConnectionAllOf
      */
     createdAt: Date;
     /**
-     * 
+     * The date and time the connection record was last updated.
      * @type {Date}
      * @memberof ConnectionAllOf
      */
     updatedAt?: Date;
+    /**
+     * The role played by the Prism agent in the connection flow.
+     * @type {string}
+     * @memberof ConnectionAllOf
+     */
+    role: ConnectionAllOfRoleEnum;
     /**
      * 
      * @type {ConnectionInvitation}
@@ -87,11 +93,28 @@ export interface ConnectionAllOf {
  * @export
  */
 export const ConnectionAllOfStateEnum = {
-    Pending: 'pending',
-    Success: 'success',
-    Failed: 'failed'
+    InvitationGenerated: 'InvitationGenerated',
+    InvitationReceived: 'InvitationReceived',
+    ConnectionRequestPending: 'ConnectionRequestPending',
+    ConnectionRequestSent: 'ConnectionRequestSent',
+    ConnectionRequestReceived: 'ConnectionRequestReceived',
+    ConnectionResponsePending: 'ConnectionResponsePending',
+    ConnectionResponseSent: 'ConnectionResponseSent',
+    ConnectionResponseReceived: 'ConnectionResponseReceived',
+    ProblemReportPending: 'ProblemReportPending',
+    ProblemReportSent: 'ProblemReportSent',
+    ProblemReportReceived: 'ProblemReportReceived'
 } as const;
 export type ConnectionAllOfStateEnum = typeof ConnectionAllOfStateEnum[keyof typeof ConnectionAllOfStateEnum];
+
+/**
+ * @export
+ */
+export const ConnectionAllOfRoleEnum = {
+    Inviter: 'Inviter',
+    Invitee: 'Invitee'
+} as const;
+export type ConnectionAllOfRoleEnum = typeof ConnectionAllOfRoleEnum[keyof typeof ConnectionAllOfRoleEnum];
 
 
 /**
@@ -104,6 +127,7 @@ export function instanceOfConnectionAllOf(value: object): boolean {
     isInstance = isInstance && "connectionId" in value;
     isInstance = isInstance && "state" in value;
     isInstance = isInstance && "createdAt" in value;
+    isInstance = isInstance && "role" in value;
     isInstance = isInstance && "invitation" in value;
 
     return isInstance;
@@ -127,6 +151,7 @@ export function ConnectionAllOfFromJSONTyped(json: any, ignoreDiscriminator: boo
         'state': json['state'],
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': !exists(json, 'updatedAt') ? undefined : (new Date(json['updatedAt'])),
+        'role': json['role'],
         'invitation': ConnectionInvitationFromJSON(json['invitation']),
     };
 }
@@ -148,6 +173,7 @@ export function ConnectionAllOfToJSON(value?: ConnectionAllOf | null): any {
         'state': value.state,
         'createdAt': (value.createdAt.toISOString()),
         'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt.toISOString()),
+        'role': value.role,
         'invitation': ConnectionInvitationToJSON(value.invitation),
     };
 }

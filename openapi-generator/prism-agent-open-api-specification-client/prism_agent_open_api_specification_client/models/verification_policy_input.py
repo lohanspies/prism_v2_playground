@@ -1,10 +1,12 @@
-import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.verification_policy_constraint import VerificationPolicyConstraint
+
 
 T = TypeVar("T", bound="VerificationPolicyInput")
 
@@ -13,110 +15,73 @@ T = TypeVar("T", bound="VerificationPolicyInput")
 class VerificationPolicyInput:
     """
     Example:
-        {'issuerDIDs': ['issuerDIDs', 'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes', 'credentialTypes'],
-            'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc)}
+        {'name': 'name', 'description': 'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}, {'trustedIssuers':
+            ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}
 
     Attributes:
         name (str):
+        description (str):
         id (Union[Unset, str]):
-        attributes (Union[Unset, List[str]]):
-        issuer_di_ds (Union[Unset, List[str]]):
-        credential_types (Union[Unset, List[str]]):
-        created_at (Union[Unset, datetime.datetime]):
-        updated_at (Union[Unset, datetime.datetime]):
+        constraints (Union[Unset, List['VerificationPolicyConstraint']]):
     """
 
     name: str
+    description: str
     id: Union[Unset, str] = UNSET
-    attributes: Union[Unset, List[str]] = UNSET
-    issuer_di_ds: Union[Unset, List[str]] = UNSET
-    credential_types: Union[Unset, List[str]] = UNSET
-    created_at: Union[Unset, datetime.datetime] = UNSET
-    updated_at: Union[Unset, datetime.datetime] = UNSET
+    constraints: Union[Unset, List["VerificationPolicyConstraint"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         name = self.name
+        description = self.description
         id = self.id
-        attributes: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.attributes, Unset):
-            attributes = self.attributes
+        constraints: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.constraints, Unset):
+            constraints = []
+            for constraints_item_data in self.constraints:
+                constraints_item = constraints_item_data.to_dict()
 
-        issuer_di_ds: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.issuer_di_ds, Unset):
-            issuer_di_ds = self.issuer_di_ds
-
-        credential_types: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.credential_types, Unset):
-            credential_types = self.credential_types
-
-        created_at: Union[Unset, str] = UNSET
-        if not isinstance(self.created_at, Unset):
-            created_at = self.created_at.isoformat()
-
-        updated_at: Union[Unset, str] = UNSET
-        if not isinstance(self.updated_at, Unset):
-            updated_at = self.updated_at.isoformat()
+                constraints.append(constraints_item)
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "name": name,
+                "description": description,
             }
         )
         if id is not UNSET:
             field_dict["id"] = id
-        if attributes is not UNSET:
-            field_dict["attributes"] = attributes
-        if issuer_di_ds is not UNSET:
-            field_dict["issuerDIDs"] = issuer_di_ds
-        if credential_types is not UNSET:
-            field_dict["credentialTypes"] = credential_types
-        if created_at is not UNSET:
-            field_dict["createdAt"] = created_at
-        if updated_at is not UNSET:
-            field_dict["updatedAt"] = updated_at
+        if constraints is not UNSET:
+            field_dict["constraints"] = constraints
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.verification_policy_constraint import VerificationPolicyConstraint
+
         d = src_dict.copy()
         name = d.pop("name")
 
+        description = d.pop("description")
+
         id = d.pop("id", UNSET)
 
-        attributes = cast(List[str], d.pop("attributes", UNSET))
+        constraints = []
+        _constraints = d.pop("constraints", UNSET)
+        for constraints_item_data in _constraints or []:
+            constraints_item = VerificationPolicyConstraint.from_dict(constraints_item_data)
 
-        issuer_di_ds = cast(List[str], d.pop("issuerDIDs", UNSET))
-
-        credential_types = cast(List[str], d.pop("credentialTypes", UNSET))
-
-        _created_at = d.pop("createdAt", UNSET)
-        created_at: Union[Unset, datetime.datetime]
-        if isinstance(_created_at, Unset):
-            created_at = UNSET
-        else:
-            created_at = isoparse(_created_at)
-
-        _updated_at = d.pop("updatedAt", UNSET)
-        updated_at: Union[Unset, datetime.datetime]
-        if isinstance(_updated_at, Unset):
-            updated_at = UNSET
-        else:
-            updated_at = isoparse(_updated_at)
+            constraints.append(constraints_item)
 
         verification_policy_input = cls(
             name=name,
+            description=description,
             id=id,
-            attributes=attributes,
-            issuer_di_ds=issuer_di_ds,
-            credential_types=credential_types,
-            created_at=created_at,
-            updated_at=updated_at,
+            constraints=constraints,
         )
 
         verification_policy_input.additional_properties = d

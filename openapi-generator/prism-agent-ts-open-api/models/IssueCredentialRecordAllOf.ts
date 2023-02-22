@@ -20,47 +20,47 @@ import { exists, mapValues } from '../runtime';
  */
 export interface IssueCredentialRecordAllOf {
     /**
-     * 
+     * The unique identifier of the issue credential record.
      * @type {string}
      * @memberof IssueCredentialRecordAllOf
      */
     recordId: string;
     /**
-     * 
+     * The date and time when the issue credential record was created.
      * @type {Date}
      * @memberof IssueCredentialRecordAllOf
      */
     createdAt: Date;
     /**
-     * 
+     * The date and time when the issue credential record was last updated.
      * @type {Date}
      * @memberof IssueCredentialRecordAllOf
      */
     updatedAt?: Date;
     /**
-     * 
+     * The role played by the Prism agent in the credential issuance flow.
      * @type {string}
      * @memberof IssueCredentialRecordAllOf
      */
     role: IssueCredentialRecordAllOfRoleEnum;
     /**
-     * 
+     * The current state of the issue credential protocol execution.
      * @type {string}
      * @memberof IssueCredentialRecordAllOf
      */
     protocolState: IssueCredentialRecordAllOfProtocolStateEnum;
     /**
-     * 
-     * @type {string}
-     * @memberof IssueCredentialRecordAllOf
-     */
-    publicationState?: IssueCredentialRecordAllOfPublicationStateEnum;
-    /**
-     * 
+     * The base64-encoded JWT verifiable credential that has been sent by the issuer.
      * @type {string}
      * @memberof IssueCredentialRecordAllOf
      */
     jwtCredential?: string;
+    /**
+     * Issuer DID of the verifiable credential object.
+     * @type {string}
+     * @memberof IssueCredentialRecordAllOf
+     */
+    issuingDID?: string;
 }
 
 
@@ -92,16 +92,6 @@ export const IssueCredentialRecordAllOfProtocolStateEnum = {
 } as const;
 export type IssueCredentialRecordAllOfProtocolStateEnum = typeof IssueCredentialRecordAllOfProtocolStateEnum[keyof typeof IssueCredentialRecordAllOfProtocolStateEnum];
 
-/**
- * @export
- */
-export const IssueCredentialRecordAllOfPublicationStateEnum = {
-    PublicationPending: 'PublicationPending',
-    PublicationQueued: 'PublicationQueued',
-    Published: 'Published'
-} as const;
-export type IssueCredentialRecordAllOfPublicationStateEnum = typeof IssueCredentialRecordAllOfPublicationStateEnum[keyof typeof IssueCredentialRecordAllOfPublicationStateEnum];
-
 
 /**
  * Check if a given object implements the IssueCredentialRecordAllOf interface.
@@ -131,8 +121,8 @@ export function IssueCredentialRecordAllOfFromJSONTyped(json: any, ignoreDiscrim
         'updatedAt': !exists(json, 'updatedAt') ? undefined : (new Date(json['updatedAt'])),
         'role': json['role'],
         'protocolState': json['protocolState'],
-        'publicationState': !exists(json, 'publicationState') ? undefined : json['publicationState'],
         'jwtCredential': !exists(json, 'jwtCredential') ? undefined : json['jwtCredential'],
+        'issuingDID': !exists(json, 'issuingDID') ? undefined : json['issuingDID'],
     };
 }
 
@@ -150,8 +140,8 @@ export function IssueCredentialRecordAllOfToJSON(value?: IssueCredentialRecordAl
         'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt.toISOString()),
         'role': value.role,
         'protocolState': value.protocolState,
-        'publicationState': value.publicationState,
         'jwtCredential': value.jwtCredential,
+        'issuingDID': value.issuingDID,
     };
 }
 

@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Options } from './Options';
+import {
+    OptionsFromJSON,
+    OptionsFromJSONTyped,
+    OptionsToJSON,
+} from './Options';
 import type { ProofRequestAux } from './ProofRequestAux';
 import {
     ProofRequestAuxFromJSON,
@@ -32,6 +38,12 @@ export interface RequestPresentationInput {
      * @memberof RequestPresentationInput
      */
     connectionId: string;
+    /**
+     * 
+     * @type {Options}
+     * @memberof RequestPresentationInput
+     */
+    options?: Options;
     /**
      * 
      * @type {Array<ProofRequestAux>}
@@ -62,6 +74,7 @@ export function RequestPresentationInputFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'connectionId': json['connectionId'],
+        'options': !exists(json, 'options') ? undefined : json['options'],
         'proofs': ((json['proofs'] as Array<any>).map(ProofRequestAuxFromJSON)),
     };
 }
@@ -76,6 +89,7 @@ export function RequestPresentationInputToJSON(value?: RequestPresentationInput 
     return {
         
         'connectionId': value.connectionId,
+        'options': value.options,
         'proofs': ((value.proofs as Array<any>).map(ProofRequestAuxToJSON)),
     };
 }

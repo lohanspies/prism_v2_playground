@@ -21,25 +21,25 @@ import {
 } from './Connection';
 
 /**
- * 
+ * A collection of connection records.
  * @export
  * @interface ConnectionCollection
  */
 export interface ConnectionCollection {
     /**
-     * 
+     * The reference to the connection collection itself.
      * @type {string}
      * @memberof ConnectionCollection
      */
     self: string;
     /**
-     * 
+     * The type of object returned. In this case a `Collection`.
      * @type {string}
      * @memberof ConnectionCollection
      */
     kind: string;
     /**
-     * 
+     * The array containing the list of connection records.
      * @type {Array<Connection>}
      * @memberof ConnectionCollection
      */

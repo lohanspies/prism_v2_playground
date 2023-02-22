@@ -72,7 +72,8 @@ def sync_detailed(
             [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
             ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
+            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -106,7 +107,8 @@ def sync(
             [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
             ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
+            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,7 +135,8 @@ async def asyncio_detailed(
             [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
             ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
+            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -165,7 +168,8 @@ async def asyncio(
             [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
             ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
+            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

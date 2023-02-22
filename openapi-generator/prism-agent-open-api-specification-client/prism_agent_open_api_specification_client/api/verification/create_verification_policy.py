@@ -76,11 +76,10 @@ def sync_detailed(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -113,11 +112,10 @@ def sync(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,11 +141,10 @@ async def asyncio_detailed(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -178,11 +175,10 @@ async def asyncio(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

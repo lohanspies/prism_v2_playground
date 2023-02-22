@@ -1,47 +1,55 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar
 
 import attr
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="CreateConnectionRequest")
+T = TypeVar("T", bound="Options")
 
 
 @attr.s(auto_attribs=True)
-class CreateConnectionRequest:
+class Options:
     """
     Example:
-        {'label': 'Peter'}
+        {'domain': 'https://example-verifier.com', 'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}
 
     Attributes:
-        label (Union[Unset, str]): A human readable alias for the connection. Example: Peter.
+        challenge (str): The challenge should be a randomly generated string. Example:
+            11c91493-01b3-4c4d-ac36-b336bab5bddf.
+        domain (str): The domain value can be any string or URI Example: https://example-verifier.com.
     """
 
-    label: Union[Unset, str] = UNSET
+    challenge: str
+    domain: str
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        label = self.label
+        challenge = self.challenge
+        domain = self.domain
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if label is not UNSET:
-            field_dict["label"] = label
+        field_dict.update(
+            {
+                "challenge": challenge,
+                "domain": domain,
+            }
+        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        label = d.pop("label", UNSET)
+        challenge = d.pop("challenge")
 
-        create_connection_request = cls(
-            label=label,
+        domain = d.pop("domain")
+
+        options = cls(
+            challenge=challenge,
+            domain=domain,
         )
 
-        create_connection_request.additional_properties = d
-        return create_connection_request
+        options.additional_properties = d
+        return options
 
     @property
     def additional_keys(self) -> List[str]:

@@ -7,20 +7,23 @@ T = TypeVar("T", bound="ConnectionInvitation")
 
 @attr.s(auto_attribs=True)
 class ConnectionInvitation:
-    """
+    """A connection invitation.
+
     Attributes:
-        id (str): The invitation identifier used as parent thread ID (pthid) for the response message that follows.
-            Example: 3fa85f64-5717-4562-b3fc-2c963f66afa6.
-        type (str): The DIDComm Message Type URI (MTURI) the invitation message coplies with. Example:
+        id (str): The unique identifier of the invitation. It should be used as parent thread ID (pthid) for the
+            Connection Request message that follows. Example: 3fa85f64-5717-4562-b3fc-2c963f66afa6.
+        type (str): The DIDComm Message Type URI (MTURI) the invitation message complies with. Example:
             https://didcomm.org/out-of-band/2.0/invitation.
         from_ (str): The DID representing the sender to be used by recipients for future interactions. Example:
-            did:prism:1234457.
-        invitation_url (str): The invitation message encoded as a URL. Example: https://domain.com/path?_oob=eyJAaWQiOiI
-            zZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvbXktZmFtaWx5LzEuMC9teS1
-            tZXNzYWdlLXR5cGUiLCJkaWQiOiJXZ1d4cXp0ck5vb0c5MlJYdnhTVFd2IiwiaW1hZ2VVcmwiOiJodHRwOi8vMTkyLjE2OC41Ni4xMDEvaW1nL2x
-            vZ28uanBnIiwibGFiZWwiOiJCb2IiLCJyZWNpcGllbnRLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVB
-            WIl0sInJvdXRpbmdLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInNlcnZpY2VFbmRwb2ludCI
-            6Imh0dHA6Ly8xOTIuMTY4LjU2LjEwMTo4MDIwIn0=.
+            did:peer:1234457.
+        invitation_url (str): The invitation message encoded as a URL. This URL follows the Out of [Band 2.0
+            protocol](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) and can be used to
+            generate a QR code for example. Example: https://domain.com/path?_oob=eyJAaWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy
+            0yYzk2M2Y2NmFmYTYiLCJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvbXktZmFtaWx5LzEuMC9teS1tZXNzYWdlLXR5cGUiLCJkaWQiOiJXZ1
+            d4cXp0ck5vb0c5MlJYdnhTVFd2IiwiaW1hZ2VVcmwiOiJodHRwOi8vMTkyLjE2OC41Ni4xMDEvaW1nL2xvZ28uanBnIiwibGFiZWwiOiJCb2IiLC
+            JyZWNpcGllbnRLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInJvdXRpbmdLZXlzIjpbIkgzQz
+            JBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInNlcnZpY2VFbmRwb2ludCI6Imh0dHA6Ly8xOTIuMTY4LjU2LjEwMT
+            o4MDIwIn0=.
     """
 
     id: str

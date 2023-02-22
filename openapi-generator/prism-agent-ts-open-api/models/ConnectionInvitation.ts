@@ -14,19 +14,19 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * A connection invitation.
  * @export
  * @interface ConnectionInvitation
  */
 export interface ConnectionInvitation {
     /**
-     * The invitation identifier used as parent thread ID (pthid) for the response message that follows.
+     * The unique identifier of the invitation. It should be used as parent thread ID (pthid) for the Connection Request message that follows.
      * @type {string}
      * @memberof ConnectionInvitation
      */
     id: string;
     /**
-     * The DIDComm Message Type URI (MTURI) the invitation message coplies with.
+     * The DIDComm Message Type URI (MTURI) the invitation message complies with.
      * @type {string}
      * @memberof ConnectionInvitation
      */
@@ -38,7 +38,7 @@ export interface ConnectionInvitation {
      */
     from: string;
     /**
-     * The invitation message encoded as a URL.
+     * The invitation message encoded as a URL. This URL follows the Out of [Band 2.0 protocol](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) and can be used to generate a QR code for example.
      * @type {string}
      * @memberof ConnectionInvitation
      */
