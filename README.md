@@ -1,14 +1,12 @@
 # Prism V2 Playground
 
-This repo contains an easy-to configure jupyter notebook that runs from a `docker-compose`. It's useful when you have a
-bunch of docker-compose services running, and you want to easily interact with their APIs via python jupyter-notebook.
+This repo contains a jupyter notebook that runs from a docker container. It's an easy way to interact with the PRISM Agent APIs via python jupyter-notebook.
 
 
 ## Run
-
-All you need to do is use the regular docker-compose command:
-
+Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop/) in your local machine and use the docker-compose command to start the container:
 ```
+cd <path>/prism_v2_playground
 docker-compose up -d
 ```
 
@@ -33,7 +31,7 @@ In order to make the container publicly available, edit `docker-compose.yaml` an
 with `- "8888:8888"`. Remember, changing the port and host inside `jupyter-config.json` will only change the settings
 inside the container, and likely to break the notebook.
 
-##  Configure
+## ℹ️ Configure (Optional steps)
 
 The config files are located in `./config` folder, edit the `jupyter-config.json` for customization.
 
