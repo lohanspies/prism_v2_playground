@@ -5,7 +5,7 @@ plugins:
 consumers:
   - username: default
     plugins:
-      key-auth:
+      key-auth: 
         key: "kxr9i@6XgKBUxe%O"
 
 routes:
@@ -14,25 +14,25 @@ routes:
     plugins:
       proxy-rewrite:
         regex_uri: ["^/prism-agent/(.*)", "/$1"]
-      key-auth:
+      key-auth: {}
   - uri: /prism-agent/schema-registry/*
     upstream_id: 4
     plugins:
       proxy-rewrite:
         regex_uri: ["^/prism-agent/schema-registry/(.*)", "/schema-registry/$1"]
-      key-auth:
+      key-auth: {}
   - uri: /prism-agent/verification/*
     upstream_id: 4
     plugins:
       proxy-rewrite:
         regex_uri: ["^/prism-agent/verification/(.*)", "/verification/$1"]
-      key-auth:
+      key-auth: {}
   - uri: /prism-agent/_system/*
     upstream_id: 6
     plugins:
       proxy-rewrite:
         regex_uri: ["^/prism-agent/_system/(.*)", "/$1"]
-      key-auth:
+      key-auth: {}
   - uri: /prism-agent/didcomm
     upstream_id: 3
     plugins:
@@ -48,7 +48,7 @@ routes:
     plugins:
       proxy-rewrite:
         regex_uri: ["^/mediator/(.*)", "/$1"]
-      key-auth:
+      key-auth: {}
   - uri: /docs/mediator/api/*
     upstream_id: 1
     plugins:
