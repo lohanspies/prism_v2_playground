@@ -49,11 +49,6 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		shift # past value
 		;;
-	--network)
-		NETWORK="$2"
-		shift # past argument
-		shift # past value
-		;;
 	-n|--ngrok)
 		NGROK_TUNNEL=$(curl --silent localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
 		if [ -z "$NGROK_TUNNEL" ]
@@ -94,7 +89,6 @@ fi
 NAME="${NAME:=local}"
 PORT="${PORT:=80}"
 ENV_FILE="${ENV_FILE:=${SCRIPT_DIR}/.env}"
-NETWORK="${NETWORK:=${NAME}-prism}"
 DIDCOMM_SERVICE_ENDPOINT="${DIDCOMM_SERVICE_ENDPOINT:=http://host.docker.internal:${PORT}/didcomm}"
 
 echo "NAME                                = ${NAME}"
@@ -107,7 +101,7 @@ echo "--------------------------------------"
 echo "Starting stack using docker compose"
 echo "--------------------------------------"
 
-PORT=${PORT} NETWORK=${NETWORK} \
+PORT=${PORT} \
 DIDCOMM_SERVICE_ENDPOINT=${DIDCOMM_SERVICE_ENDPOINT} \
 docker compose \
 	-p ${NAME} \

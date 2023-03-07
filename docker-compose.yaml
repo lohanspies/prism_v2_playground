@@ -12,4 +12,5 @@ services:
       - ./config:/home/jovyan/.jupyter/config
 
 networks:
-  prism:
+  default:
+    name: prism
