@@ -15,28 +15,11 @@ services:
       - pg_data_db:/var/lib/postgresql/data
       - ./postgres/init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
       - ./postgres/max_conns.sql:/docker-entrypoint-initdb.d/max_conns.sql
-
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres", "-d", "iris"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    depends_on:
-      db:
-        condition: service_healthy
-    profiles:
-      - debug
 
   ##########################
   # Services
@@ -112,7 +95,3 @@ services:
 volumes:
   pg_data_db:
   pgadmin:
-
-networks:
-  default:
-    name: prism

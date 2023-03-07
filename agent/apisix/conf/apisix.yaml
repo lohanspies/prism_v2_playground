@@ -33,7 +33,7 @@ routes:
       proxy-rewrite:
         regex_uri: ["^/prism-agent/_system/(.*)", "/$1"]
       key-auth: {}
-  - uri: /prism-agent/didcomm
+  - uri: /didcomm
     upstream_id: 3
     plugins:
       proxy-rewrite:
