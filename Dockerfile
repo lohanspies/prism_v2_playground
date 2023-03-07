@@ -2,9 +2,12 @@
 ARG BASE_CONTAINER=jupyter/minimal-notebook
 FROM $BASE_CONTAINER
 
-#USER root
-# Install CURL
-#RUN apt-get install curl jq -y
+USER root
+# Install curl, nestat, jq, netcat, iputils-ping
+RUN apt-get update && \
+    apt-get install -y curl net-tools jq netcat iputils-ping && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 USER jovyan
 # Copy the requirements.txt file
