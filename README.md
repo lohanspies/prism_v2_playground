@@ -14,7 +14,7 @@ To start the Prism Playground you can use the commands below to start and stop t
 cd <path>/prism_v2_playground
 
 # Starting the Jupyter Notebook Server (Prism Playground)
-docker-compose up -d
+docker compose up --build -d
 
 # Starting the local Prism Agents.
 ./run_agents.sh
