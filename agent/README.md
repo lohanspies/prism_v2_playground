@@ -21,7 +21,7 @@ To run the Atala PRISM Cloud Agent - execute the `run.sh` script. This can be ru
 
 ## run.sh
 
-The `run.sh` script allows you to run multipl PRISM Cloud Agents locally. Please run `run.sh --help` for command line options.
+The `run.sh` script allows you to run multiple PRISM Cloud Agents locally. Please run `run.sh --help` for command line options.
 
 Example - Run an instance named `inviter` on port 8080 and an instance named `invitee` on port 8090
 
