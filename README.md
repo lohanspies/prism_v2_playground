@@ -9,17 +9,17 @@ Install and start [Docker Desktop](https://www.docker.com/products/docker-deskto
 To start the Prism Playground you can use the commands below to start and stop the Jupyter Notebook server and Prism Agents.
 
 ## Quick Start Guide
-### 1. Run
+### 1. Run Prism Playground and Local Prism Agents
 ```bash
 cd <path>/prism_v2_playground
 
-# Starting the Jupyter Notebook Server
+# Starting the Jupyter Notebook Server (Prism Playground)
 docker-compose up -d
 
 # Starting the local Prism Agents.
 ./run_agents.sh
 ```
-### 2. Access the Jupyter Notebook
+### 2. Access the Prism Playground Jupyter Notebooks
 The default password is `Prismv2`    
 This is the default location to access the Prism Playground notebooks:
 
@@ -27,11 +27,11 @@ This is the default location to access the Prism Playground notebooks:
 http://127.0.0.1:8888/
 ```
 
-### 3. Stop
+### 3. Stop Prism Playground and Local Prism Agents
 ```bash
 cd <path>/prism_v2_playground
 
-# Stopping the Jupyter Notebook Server
+# Stopping the Jupyter Notebook Server (Prism Playground)
 docker-compose down
 
 # Stopping the local Prism Agents.
@@ -43,6 +43,7 @@ Detailed information on how to run Prism Agent and Prism Node locally can be fou
 
 ## ℹ️ Generating Prism Agent Open API Clients
 Detailed information on how to generate Open API clients for Prism Agents in various programming languages can be found [here](openapi-generator/README.md).
+> NOTE: When updating or generating new clients ensure that you rebuild the Jupyter Notebook docker images.
 
 ## ℹ️ Customise the Jupyter Notebook Environment (Optional steps)
 
