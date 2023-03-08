@@ -8,7 +8,8 @@ It also includes scripts to run local Prism Agents. The default script will star
 Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop/) and `docker-compose` in your local machine and ensure you have an active internet connection.  
 To start the Prism Playground you can use the commands below to start and stop the Jupyter Notebook server and Prism Agents.
 
-## Run
+## Quick Start Guide
+### 1. Run
 ```bash
 cd <path>/prism_v2_playground
 
@@ -18,8 +19,15 @@ docker-compose up -d
 # Starting the local Prism Agents.
 ./run_agents.sh
 ```
+### 2. Access the Jupyter Notebook
+The default password is `Prismv2`    
+This is the default location to access the Prism Playground notebooks:
 
-## Stop
+```bash
+http://127.0.0.1:8888/
+```
+
+### 3. Stop
 ```bash
 cd <path>/prism_v2_playground
 
@@ -30,24 +38,19 @@ docker-compose down
 ./stop_agents.sh
 ```
 
-## Access the Jupyter Notebook
+## ℹ️ Customise Running Prism Agent Locally
+Detailed information on how to run Prism Agent and Prism Node locally can be found [here](agent/README.md).
 
-This is the default location of the notebook:
+## ℹ️ Generating Prism Agent Open API Clients
+Detailed information on how to generate Open API clients for Prism Agents in various programming languages can be found [here](openapi-generator/README.md).
 
-```bash
-http://127.0.0.1:8888/
-```
-
-The default password is `Prismv2`
-
-## ℹ️ Configure Jupyter Notebook Environment (Optional steps)
+## ℹ️ Customise the Jupyter Notebook Environment (Optional steps)
 
 The config files are located in `./config` folder, edit the `jupyter-config.json` for customization.
 
 Remember that the local `./config` dir is mounted as `/home/jovyan/.jupyter/config` within the container.
 
 ### Exposing the Jupyter Notebooks publicly
-> ℹ️ 
 In order to make the container publicly available, edit `docker-compose.yaml` and replace `- "127.0.0.1:8888:8888"` 
 with `- "8888:8888"`. Remember, changing the port and host inside `jupyter-config.json` will only change the settings
 inside the container, and likely to break the notebook.
