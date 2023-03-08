@@ -15,7 +15,7 @@ cd <path>/prism_v2_playground
 # Starting the Jupyter Notebook Server
 docker-compose up -d
 
-# Starting the local Prism Agents. Three agents will be started that represent the issuer, holder and verifier respectively.
+# Starting the local Prism Agents.
 ./run_agents.sh
 ```
 
