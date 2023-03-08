@@ -60,7 +60,7 @@ def sync_detailed(
 ) -> Response[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID
+     Resolve Prism DID to a DID document.
 
     Args:
         did_ref (str):
@@ -93,7 +93,7 @@ def sync(
 ) -> Optional[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID
+     Resolve Prism DID to a DID document.
 
     Args:
         did_ref (str):
@@ -119,7 +119,7 @@ async def asyncio_detailed(
 ) -> Response[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID
+     Resolve Prism DID to a DID document.
 
     Args:
         did_ref (str):
@@ -150,7 +150,7 @@ async def asyncio(
 ) -> Optional[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID
+     Resolve Prism DID to a DID document.
 
     Args:
         did_ref (str):

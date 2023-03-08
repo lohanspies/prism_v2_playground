@@ -62,9 +62,9 @@ def sync_detailed(
     *,
     client: Client,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain
+    """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
-     Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain.
+     Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR.
 
     Args:
         did_ref (str):
@@ -95,9 +95,9 @@ def sync(
     *,
     client: Client,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain
+    """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
-     Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain.
+     Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR.
 
     Args:
         did_ref (str):
@@ -121,9 +121,9 @@ async def asyncio_detailed(
     *,
     client: Client,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain
+    """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
-     Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain.
+     Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR.
 
     Args:
         did_ref (str):
@@ -152,9 +152,9 @@ async def asyncio(
     *,
     client: Client,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain
+    """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
-     Deactivate DID in PrismAgent's wallet and post deactivate operation to blockchain.
+     Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR.
 
     Args:
         did_ref (str):

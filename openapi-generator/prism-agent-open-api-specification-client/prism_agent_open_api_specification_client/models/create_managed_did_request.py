@@ -13,17 +13,17 @@ T = TypeVar("T", bound="CreateManagedDidRequest")
 class CreateManagedDidRequest:
     """
     Example:
-        {'documentTemplate': {'publicKeys': [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication',
-            'id': 'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1', 'serviceEndpoint':
+        {'documentTemplate': {'publicKeys': [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication',
+            'id': 'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}]}}
 
     Attributes:
         document_template (CreateManagedDidRequestDocumentTemplate):  Example: {'publicKeys': [{'purpose':
-            'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id': 'key1'}], 'services': [{'id': 'service1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}]}.
+            'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id': 'key-1'}], 'services': [{'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+            'LinkedDomains'}, {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}]}.
     """
 
     document_template: "CreateManagedDidRequestDocumentTemplate"

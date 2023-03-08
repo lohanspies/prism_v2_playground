@@ -28,13 +28,15 @@ from .issue_credential_record_all_of_role import IssueCredentialRecordAllOfRole
 from .issue_credential_record_base import IssueCredentialRecordBase
 from .issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
 from .issue_credential_record_collection import IssueCredentialRecordCollection
-from .list_managed_did_response_inner import ListManagedDIDResponseInner
-from .list_managed_did_response_inner_status import ListManagedDIDResponseInnerStatus
+from .managed_did import ManagedDID
 from .managed_did_key_template import ManagedDIDKeyTemplate
 from .managed_did_key_template_purpose import ManagedDIDKeyTemplatePurpose
+from .managed_did_page import ManagedDIDPage
+from .managed_did_status import ManagedDIDStatus
 from .not_found import NotFound
 from .options import Options
 from .presentation_status import PresentationStatus
+from .presentation_status_status import PresentationStatusStatus
 from .proof import Proof
 from .proof_request_aux import ProofRequestAux
 from .public_key_jwk import PublicKeyJwk
@@ -93,13 +95,15 @@ __all__ = (
     "IssueCredentialRecordBase",
     "IssueCredentialRecordBaseClaims",
     "IssueCredentialRecordCollection",
-    "ListManagedDIDResponseInner",
-    "ListManagedDIDResponseInnerStatus",
+    "ManagedDID",
     "ManagedDIDKeyTemplate",
     "ManagedDIDKeyTemplatePurpose",
+    "ManagedDIDPage",
+    "ManagedDIDStatus",
     "NotFound",
     "Options",
     "PresentationStatus",
+    "PresentationStatusStatus",
     "Proof",
     "ProofRequestAux",
     "PublicKeyJwk",

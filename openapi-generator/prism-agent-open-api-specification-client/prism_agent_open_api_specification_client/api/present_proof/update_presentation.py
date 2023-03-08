@@ -11,12 +11,12 @@ from ...types import Response
 
 
 def _get_kwargs(
-    id: str,
+    record_id: str,
     *,
     client: Client,
     json_body: RequestPresentationAction,
 ) -> Dict[str, Any]:
-    url = "{}/present-proof/presentations/{id}".format(client.base_url, id=id)
+    url = "{}/present-proof/presentations/{recordId}".format(client.base_url, recordId=record_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -57,16 +57,19 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    id: str,
+    record_id: str,
     *,
     client: Client,
     json_body: RequestPresentationAction,
 ) -> Response[Union[Any, ErrorResponse]]:
-    """
+    """Updates the proof presentation record matching the unique identifier, with the specific action to
+    perform.
+
     Args:
-        id (str):
-        json_body (RequestPresentationAction): Actions on presetations (to update) Example:
-            {'action': 'request-accept', 'proofId': ['proofId', 'proofId']}.
+        record_id (str):
+        json_body (RequestPresentationAction): The action to perform on the proof presentation
+            record. Example: {'action': 'request-accept', 'proofId':
+            ['0d3a0f8d-852e-42d5-a6f8-2281c4be945c', '0d3a0f8d-852e-42d5-a6f8-2281c4be945c']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -77,7 +80,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        record_id=record_id,
         client=client,
         json_body=json_body,
     )
@@ -91,16 +94,19 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
+    record_id: str,
     *,
     client: Client,
     json_body: RequestPresentationAction,
 ) -> Optional[Union[Any, ErrorResponse]]:
-    """
+    """Updates the proof presentation record matching the unique identifier, with the specific action to
+    perform.
+
     Args:
-        id (str):
-        json_body (RequestPresentationAction): Actions on presetations (to update) Example:
-            {'action': 'request-accept', 'proofId': ['proofId', 'proofId']}.
+        record_id (str):
+        json_body (RequestPresentationAction): The action to perform on the proof presentation
+            record. Example: {'action': 'request-accept', 'proofId':
+            ['0d3a0f8d-852e-42d5-a6f8-2281c4be945c', '0d3a0f8d-852e-42d5-a6f8-2281c4be945c']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -111,23 +117,26 @@ def sync(
     """
 
     return sync_detailed(
-        id=id,
+        record_id=record_id,
         client=client,
         json_body=json_body,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: str,
+    record_id: str,
     *,
     client: Client,
     json_body: RequestPresentationAction,
 ) -> Response[Union[Any, ErrorResponse]]:
-    """
+    """Updates the proof presentation record matching the unique identifier, with the specific action to
+    perform.
+
     Args:
-        id (str):
-        json_body (RequestPresentationAction): Actions on presetations (to update) Example:
-            {'action': 'request-accept', 'proofId': ['proofId', 'proofId']}.
+        record_id (str):
+        json_body (RequestPresentationAction): The action to perform on the proof presentation
+            record. Example: {'action': 'request-accept', 'proofId':
+            ['0d3a0f8d-852e-42d5-a6f8-2281c4be945c', '0d3a0f8d-852e-42d5-a6f8-2281c4be945c']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -138,7 +147,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        record_id=record_id,
         client=client,
         json_body=json_body,
     )
@@ -150,16 +159,19 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
+    record_id: str,
     *,
     client: Client,
     json_body: RequestPresentationAction,
 ) -> Optional[Union[Any, ErrorResponse]]:
-    """
+    """Updates the proof presentation record matching the unique identifier, with the specific action to
+    perform.
+
     Args:
-        id (str):
-        json_body (RequestPresentationAction): Actions on presetations (to update) Example:
-            {'action': 'request-accept', 'proofId': ['proofId', 'proofId']}.
+        record_id (str):
+        json_body (RequestPresentationAction): The action to perform on the proof presentation
+            record. Example: {'action': 'request-accept', 'proofId':
+            ['0d3a0f8d-852e-42d5-a6f8-2281c4be945c', '0d3a0f8d-852e-42d5-a6f8-2281c4be945c']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -171,7 +183,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            id=id,
+            record_id=record_id,
             client=client,
             json_body=json_body,
         )

@@ -66,16 +66,16 @@ def sync_detailed(
     client: Client,
     json_body: CreateManagedDidRequest,
 ) -> Response[Union[CreateManagedDIDResponse, ErrorResponse]]:
-    """Create unpublished DID and store it in PrismAgent's wallet
+    """Create unpublished DID and store it in Prism Agent's wallet
 
-     Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
+     Create unpublished DID and store it inside Prism Agent's wallet. The private keys of the DID is
+    managed by Prism Agent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
-            [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
-            'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
+            [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
             'LinkedDomains'}]}}.
 
@@ -105,16 +105,16 @@ def sync(
     client: Client,
     json_body: CreateManagedDidRequest,
 ) -> Optional[Union[CreateManagedDIDResponse, ErrorResponse]]:
-    """Create unpublished DID and store it in PrismAgent's wallet
+    """Create unpublished DID and store it in Prism Agent's wallet
 
-     Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
+     Create unpublished DID and store it inside Prism Agent's wallet. The private keys of the DID is
+    managed by Prism Agent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
-            [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
-            'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
+            [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
             'LinkedDomains'}]}}.
 
@@ -137,16 +137,16 @@ async def asyncio_detailed(
     client: Client,
     json_body: CreateManagedDidRequest,
 ) -> Response[Union[CreateManagedDIDResponse, ErrorResponse]]:
-    """Create unpublished DID and store it in PrismAgent's wallet
+    """Create unpublished DID and store it in Prism Agent's wallet
 
-     Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
+     Create unpublished DID and store it inside Prism Agent's wallet. The private keys of the DID is
+    managed by Prism Agent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
-            [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
-            'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
+            [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
             'LinkedDomains'}]}}.
 
@@ -174,16 +174,16 @@ async def asyncio(
     client: Client,
     json_body: CreateManagedDidRequest,
 ) -> Optional[Union[CreateManagedDIDResponse, ErrorResponse]]:
-    """Create unpublished DID and store it in PrismAgent's wallet
+    """Create unpublished DID and store it in Prism Agent's wallet
 
-     Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-    managed by PrismAgent. The DID can later be published to the VDR using publications endpoint.
+     Create unpublished DID and store it inside Prism Agent's wallet. The private keys of the DID is
+    managed by Prism Agent. The DID can later be published to the VDR using publications endpoint.
 
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
-            [{'purpose': 'authentication', 'id': 'key1'}, {'purpose': 'authentication', 'id':
-            'key1'}], 'services': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service1',
+            [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
             'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
             'LinkedDomains'}]}}.
 

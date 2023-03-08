@@ -7,7 +7,7 @@ T = TypeVar("T", bound="RequestPresentationOutput")
 
 @attr.s(auto_attribs=True)
 class RequestPresentationOutput:
-    """Request Presentation Output
+    """The proof presentation record details. Only the unique identifier for now.
 
     Example:
         {'presentationId': 'presentationId'}

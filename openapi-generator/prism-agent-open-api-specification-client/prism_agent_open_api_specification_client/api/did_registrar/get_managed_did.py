@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.did_operation_response import DIDOperationResponse
 from ...models.error_response import ErrorResponse
+from ...models.managed_did import ManagedDID
 from ...types import Response
 
 
@@ -15,13 +15,13 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/did-registrar/dids/{didRef}/publications".format(client.base_url, didRef=did_ref)
+    url = "{}/did-registrar/dids/{didRef}".format(client.base_url, didRef=did_ref)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
     return {
-        "method": "post",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -29,26 +29,22 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    if response.status_code == HTTPStatus.ACCEPTED:
-        response_202 = DIDOperationResponse.from_dict(response.json())
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Union[ErrorResponse, ManagedDID]]:
+    if response.status_code == HTTPStatus.OK:
+        response_200 = ManagedDID.from_dict(response.json())
 
-        return response_202
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
-        response_422 = ErrorResponse.from_dict(response.json())
+        return response_200
+    if response.status_code == HTTPStatus.NOT_FOUND:
+        response_404 = ErrorResponse.from_dict(response.json())
 
-        return response_422
+        return response_404
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[Union[ErrorResponse, ManagedDID]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -61,10 +57,10 @@ def sync_detailed(
     did_ref: str,
     *,
     client: Client,
-) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in Prism Agent's wallet to the VDR
+) -> Response[Union[ErrorResponse, ManagedDID]]:
+    """Get DID stored in Prism Agent's wallet
 
-     Publish the DID stored in Prism Agent's wallet to the VDR.
+     Get DID stored in Prism Agent's wallet
 
     Args:
         did_ref (str):
@@ -74,7 +70,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[DIDOperationResponse, ErrorResponse]]
+        Response[Union[ErrorResponse, ManagedDID]]
     """
 
     kwargs = _get_kwargs(
@@ -94,10 +90,10 @@ def sync(
     did_ref: str,
     *,
     client: Client,
-) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in Prism Agent's wallet to the VDR
+) -> Optional[Union[ErrorResponse, ManagedDID]]:
+    """Get DID stored in Prism Agent's wallet
 
-     Publish the DID stored in Prism Agent's wallet to the VDR.
+     Get DID stored in Prism Agent's wallet
 
     Args:
         did_ref (str):
@@ -107,7 +103,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[DIDOperationResponse, ErrorResponse]]
+        Response[Union[ErrorResponse, ManagedDID]]
     """
 
     return sync_detailed(
@@ -120,10 +116,10 @@ async def asyncio_detailed(
     did_ref: str,
     *,
     client: Client,
-) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in Prism Agent's wallet to the VDR
+) -> Response[Union[ErrorResponse, ManagedDID]]:
+    """Get DID stored in Prism Agent's wallet
 
-     Publish the DID stored in Prism Agent's wallet to the VDR.
+     Get DID stored in Prism Agent's wallet
 
     Args:
         did_ref (str):
@@ -133,7 +129,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[DIDOperationResponse, ErrorResponse]]
+        Response[Union[ErrorResponse, ManagedDID]]
     """
 
     kwargs = _get_kwargs(
@@ -151,10 +147,10 @@ async def asyncio(
     did_ref: str,
     *,
     client: Client,
-) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Publish the DID stored in Prism Agent's wallet to the VDR
+) -> Optional[Union[ErrorResponse, ManagedDID]]:
+    """Get DID stored in Prism Agent's wallet
 
-     Publish the DID stored in Prism Agent's wallet to the VDR.
+     Get DID stored in Prism Agent's wallet
 
     Args:
         did_ref (str):
@@ -164,7 +160,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[DIDOperationResponse, ErrorResponse]]
+        Response[Union[ErrorResponse, ManagedDID]]
     """
 
     return (

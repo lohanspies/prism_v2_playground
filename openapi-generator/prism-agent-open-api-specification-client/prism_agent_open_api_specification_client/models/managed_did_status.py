@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ListManagedDIDResponseInnerStatus(str, Enum):
+class ManagedDIDStatus(str, Enum):
     CREATED = "CREATED"
     PUBLICATION_PENDING = "PUBLICATION_PENDING"
     PUBLISHED = "PUBLISHED"

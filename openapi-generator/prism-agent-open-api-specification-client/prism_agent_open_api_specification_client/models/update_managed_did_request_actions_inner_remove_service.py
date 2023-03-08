@@ -9,10 +9,10 @@ T = TypeVar("T", bound="UpdateManagedDIDRequestActionsInnerRemoveService")
 class UpdateManagedDIDRequestActionsInnerRemoveService:
     """
     Example:
-        {'id': 'service1'}
+        {'id': 'service-1'}
 
     Attributes:
-        id (str): ID of service to remove from DID document Example: service1.
+        id (str): ID of service to remove from DID document Example: service-1.
     """
 
     id: str

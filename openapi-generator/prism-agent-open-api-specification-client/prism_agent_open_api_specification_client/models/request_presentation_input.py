@@ -14,18 +14,20 @@ T = TypeVar("T", bound="RequestPresentationInput")
 
 @attr.s(auto_attribs=True)
 class RequestPresentationInput:
-    """Request Presentation Input
+    """A request to create a new "proof presentation" record and send it to the prover.
 
     Example:
         {'proofs': [{'schemaId': 'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
             'did.prism:123', 'did:prism:...']}, {'schemaId': 'https://schema.org/Person', 'trustIssuers':
             ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}], 'options': {'domain':
             'https://example-verifier.com', 'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId':
-            'connectionId'}
+            'bc528dc8-69f1-4c5a-a508-5f8019047900'}
 
     Attributes:
-        connection_id (str):
-        proofs (List['ProofRequestAux']):
+        connection_id (str): The unique identifier of an established connection between the verifier and the prover.
+            Example: bc528dc8-69f1-4c5a-a508-5f8019047900.
+        proofs (List['ProofRequestAux']): The type of proofs requested in the context of this proof presentation request
+            (e.g., VC schema, trusted issuers, etc.)
         options (Union[Unset, Options]):  Example: {'domain': 'https://example-verifier.com', 'challenge':
             '11c91493-01b3-4c4d-ac36-b336bab5bddf'}.
     """

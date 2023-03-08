@@ -13,17 +13,19 @@ T = TypeVar("T", bound="UpdateManagedDIDRequest")
 class UpdateManagedDIDRequest:
     """
     Example:
-        {'actions': [{'actionType': 'ADD_KEY', 'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'},
-            'addService': {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key1'}},
-            {'actionType': 'ADD_KEY', 'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'updateService': {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key1'}}]}
+        {'actions': [{'actionType': 'ADD_KEY', 'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'},
+            'addService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}},
+            {'actionType': 'ADD_KEY', 'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService':
+            {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+            'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
+            'https://bar.example.com'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}
 
     Attributes:
-        actions (List['UpdateManagedDIDRequestActionsInner']):
+        actions (List['UpdateManagedDIDRequestActionsInner']): A list of actions to perform on DID document.
+            The field `addKey`, `removeKey`, `addService`, `removeService`, `updateService` must corresponds to
+            the `actionType` specified. For example, `addKey` must be present when `actionType` is `ADD_KEY`.
     """
 
     actions: List["UpdateManagedDIDRequestActionsInner"]

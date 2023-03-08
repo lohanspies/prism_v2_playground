@@ -15,11 +15,11 @@ class UpdateManagedDIDRequestActionsInnerUpdateService:
     """A patch to existing Service. 'type' and 'serviceEndpoint' must not be both empty.
 
     Example:
-        {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+        {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
             'LinkedDomains'}
 
     Attributes:
-        id (str): ID of existing service to update in the DID document Example: service1.
+        id (str): ID of existing service to update in the DID document Example: service-1.
         type (Union[Unset, UpdateManagedDIDRequestActionsInnerUpdateServiceType]):  Example: LinkedDomains.
         service_endpoint (Union[Unset, List[str]]):
     """

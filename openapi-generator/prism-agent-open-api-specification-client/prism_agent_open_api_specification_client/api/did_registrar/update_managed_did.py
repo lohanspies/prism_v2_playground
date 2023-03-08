@@ -68,26 +68,27 @@ def sync_detailed(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to the VDR
+    """Update DID in Prism Agent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to the VDR.
-    This endpoint updates the DID document from last confirmed operation.
+     Update DID in Prism Agent's wallet and post update operation to the VDR.
+    This endpoint updates the DID document from the last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
-    some operation being rejected as only one operation can be appended from last confirmed operation.
+    some operations being rejected as only one operation is allowed to be appended to the last confirmed
+    operation.
 
     Args:
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}, {'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}]}.
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -117,26 +118,27 @@ def sync(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to the VDR
+    """Update DID in Prism Agent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to the VDR.
-    This endpoint updates the DID document from last confirmed operation.
+     Update DID in Prism Agent's wallet and post update operation to the VDR.
+    This endpoint updates the DID document from the last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
-    some operation being rejected as only one operation can be appended from last confirmed operation.
+    some operations being rejected as only one operation is allowed to be appended to the last confirmed
+    operation.
 
     Args:
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}, {'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}]}.
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -159,26 +161,27 @@ async def asyncio_detailed(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to the VDR
+    """Update DID in Prism Agent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to the VDR.
-    This endpoint updates the DID document from last confirmed operation.
+     Update DID in Prism Agent's wallet and post update operation to the VDR.
+    This endpoint updates the DID document from the last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
-    some operation being rejected as only one operation can be appended from last confirmed operation.
+    some operations being rejected as only one operation is allowed to be appended to the last confirmed
+    operation.
 
     Args:
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}, {'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}]}.
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -206,26 +209,27 @@ async def asyncio(
     client: Client,
     json_body: UpdateManagedDIDRequest,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
-    """Update DID in PrismAgent's wallet and post update operation to the VDR
+    """Update DID in Prism Agent's wallet and post update operation to the VDR
 
-     Update DID in PrismAgent's wallet and post update operation to the VDR.
-    This endpoint updates the DID document from last confirmed operation.
+     Update DID in Prism Agent's wallet and post update operation to the VDR.
+    This endpoint updates the DID document from the last confirmed operation.
     Submitting multiple update operations without waiting for confirmation will result in
-    some operation being rejected as only one operation can be appended from last confirmed operation.
+    some operations being rejected as only one operation is allowed to be appended to the last confirmed
+    operation.
 
     Args:
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}, {'actionType': 'ADD_KEY',
-            'removeKey': {'id': 'key1'}, 'removeService': {'id': 'service1'}, 'addService': {'id':
-            'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service1', 'serviceEndpoint':
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
+            'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
             ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
-            'addKey': {'purpose': 'authentication', 'id': 'key1'}}]}.
+            'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

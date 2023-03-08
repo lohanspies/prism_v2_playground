@@ -13,11 +13,11 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas".format(client.base_url)
@@ -26,15 +26,15 @@ def _get_kwargs(
     cookies: Dict[str, Any] = client.get_cookies()
 
     params: Dict[str, Any] = {}
+    params["offset"] = offset
+
+    params["limit"] = limit
+
     params["author"] = author
 
     params["name"] = name
 
     params["tags"] = tags
-
-    params["offset"] = offset
-
-    params["limit"] = limit
 
     params["order"] = order
 
@@ -81,11 +81,11 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -94,11 +94,11 @@ def sync_detailed(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -111,11 +111,11 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         client=client,
+        offset=offset,
+        limit=limit,
         author=author,
         name=name,
         tags=tags,
-        offset=offset,
-        limit=limit,
         order=order,
     )
 
@@ -130,11 +130,11 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -143,11 +143,11 @@ def sync(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -160,11 +160,11 @@ def sync(
 
     return sync_detailed(
         client=client,
+        offset=offset,
+        limit=limit,
         author=author,
         name=name,
         tags=tags,
-        offset=offset,
-        limit=limit,
         order=order,
     ).parsed
 
@@ -172,11 +172,11 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -185,11 +185,11 @@ async def asyncio_detailed(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -202,11 +202,11 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         client=client,
+        offset=offset,
+        limit=limit,
         author=author,
         name=name,
         tags=tags,
-        offset=offset,
-        limit=limit,
         order=order,
     )
 
@@ -219,11 +219,11 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -232,11 +232,11 @@ async def asyncio(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -250,11 +250,11 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
+            offset=offset,
+            limit=limit,
             author=author,
             name=name,
             tags=tags,
-            offset=offset,
-            limit=limit,
             order=order,
         )
     ).parsed

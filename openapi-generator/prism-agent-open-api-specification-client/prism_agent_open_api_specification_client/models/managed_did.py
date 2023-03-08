@@ -2,28 +2,36 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.list_managed_did_response_inner_status import ListManagedDIDResponseInnerStatus
+from ..models.managed_did_status import ManagedDIDStatus
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ListManagedDIDResponseInner")
+T = TypeVar("T", bound="ManagedDID")
 
 
 @attr.s(auto_attribs=True)
-class ListManagedDIDResponseInner:
+class ManagedDID:
     """
     Example:
-        {'longFormDid': 'did:prism:abc:123', 'did': 'did:prism:abc', 'status': 'CREATED'}
+        {'longFormDid': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgt
+            MRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgM
+            ElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQq
+            Nq2xd244txRgsQ', 'did': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'status':
+            'CREATED'}
 
     Attributes:
-        did (str):  Example: did:prism:abc.
-        status (ListManagedDIDResponseInnerStatus): A status indicating whether this is already published from the
-            wallet or not. Does not represent DID full lifecyle (e.g. deactivated, recovered, updated).
+        did (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
+        status (ManagedDIDStatus): A status indicating a publication state of a DID in the wallet (e.g.
+            PUBLICATION_PENDING, PUBLISHED).
+            Does not represent DID a full lifecyle (e.g. deactivated, recovered, updated).
         long_form_did (Union[Unset, str]): A long-form DID. Mandatory when status is not PUBLISHED and optional when
-            status is PUBLISHED Example: did:prism:abc:123.
+            status is PUBLISHED Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsB
+            ElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-
+            zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2
+            azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ.
     """
 
     did: str
-    status: ListManagedDIDResponseInnerStatus
+    status: ManagedDIDStatus
     long_form_did: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -51,18 +59,18 @@ class ListManagedDIDResponseInner:
         d = src_dict.copy()
         did = d.pop("did")
 
-        status = ListManagedDIDResponseInnerStatus(d.pop("status"))
+        status = ManagedDIDStatus(d.pop("status"))
 
         long_form_did = d.pop("longFormDid", UNSET)
 
-        list_managed_did_response_inner = cls(
+        managed_did = cls(
             did=did,
             status=status,
             long_form_did=long_form_did,
         )
 
-        list_managed_did_response_inner.additional_properties = d
-        return list_managed_did_response_inner
+        managed_did.additional_properties = d
+        return managed_did
 
     @property
     def additional_keys(self) -> List[str]:

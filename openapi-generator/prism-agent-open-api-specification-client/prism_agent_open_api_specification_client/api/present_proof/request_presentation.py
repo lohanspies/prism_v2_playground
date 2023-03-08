@@ -66,14 +66,17 @@ def sync_detailed(
     client: Client,
     json_body: RequestPresentationInput,
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
-    """
+    """As a Verifier, create a new proof presentation request and send it to the Prover.
+
     Args:
-        json_body (RequestPresentationInput): Request Presentation Input Example: {'proofs':
-            [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
+        json_body (RequestPresentationInput): A request to create a new "proof presentation"
+            record and send it to the prover. Example: {'proofs': [{'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
-            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}, {'schemaId': 'https://schema.org/Person',
+            'trustIssuers': ['did:web:atalaprism.io/users/testUser', 'did.prism:123',
+            'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com', 'challenge':
+            '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId':
+            'bc528dc8-69f1-4c5a-a508-5f8019047900'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -101,14 +104,17 @@ def sync(
     client: Client,
     json_body: RequestPresentationInput,
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
-    """
+    """As a Verifier, create a new proof presentation request and send it to the Prover.
+
     Args:
-        json_body (RequestPresentationInput): Request Presentation Input Example: {'proofs':
-            [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
+        json_body (RequestPresentationInput): A request to create a new "proof presentation"
+            record and send it to the prover. Example: {'proofs': [{'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
-            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}, {'schemaId': 'https://schema.org/Person',
+            'trustIssuers': ['did:web:atalaprism.io/users/testUser', 'did.prism:123',
+            'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com', 'challenge':
+            '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId':
+            'bc528dc8-69f1-4c5a-a508-5f8019047900'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,14 +135,17 @@ async def asyncio_detailed(
     client: Client,
     json_body: RequestPresentationInput,
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
-    """
+    """As a Verifier, create a new proof presentation request and send it to the Prover.
+
     Args:
-        json_body (RequestPresentationInput): Request Presentation Input Example: {'proofs':
-            [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
+        json_body (RequestPresentationInput): A request to create a new "proof presentation"
+            record and send it to the prover. Example: {'proofs': [{'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
-            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}, {'schemaId': 'https://schema.org/Person',
+            'trustIssuers': ['did:web:atalaprism.io/users/testUser', 'did.prism:123',
+            'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com', 'challenge':
+            '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId':
+            'bc528dc8-69f1-4c5a-a508-5f8019047900'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -162,14 +171,17 @@ async def asyncio(
     client: Client,
     json_body: RequestPresentationInput,
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
-    """
+    """As a Verifier, create a new proof presentation request and send it to the Prover.
+
     Args:
-        json_body (RequestPresentationInput): Request Presentation Input Example: {'proofs':
-            [{'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}, {'schemaId':
+        json_body (RequestPresentationInput): A request to create a new "proof presentation"
+            record and send it to the prover. Example: {'proofs': [{'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser',
-            'did.prism:123', 'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com',
-            'challenge': '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId': 'connectionId'}.
+            'did.prism:123', 'did:prism:...']}, {'schemaId': 'https://schema.org/Person',
+            'trustIssuers': ['did:web:atalaprism.io/users/testUser', 'did.prism:123',
+            'did:prism:...']}], 'options': {'domain': 'https://example-verifier.com', 'challenge':
+            '11c91493-01b3-4c4d-ac36-b336bab5bddf'}, 'connectionId':
+            'bc528dc8-69f1-4c5a-a508-5f8019047900'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

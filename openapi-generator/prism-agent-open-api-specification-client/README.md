@@ -1,5 +1,5 @@
 # prism-agent-open-api-specification-client
-A client library for accessing PrismAgent OpenAPI specification
+A client library for accessing Prism Agent OpenAPI specification
 
 ## Usage
 First, create a client:

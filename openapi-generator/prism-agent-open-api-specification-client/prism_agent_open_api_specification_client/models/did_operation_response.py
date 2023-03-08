@@ -13,10 +13,13 @@ T = TypeVar("T", bound="DIDOperationResponse")
 class DIDOperationResponse:
     """
     Example:
-        {'scheduledOperation': {'id': '123', 'didRef': 'did:prism:123'}}
+        {'scheduledOperation': {'id': '98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b', 'didRef':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff'}}
 
     Attributes:
-        scheduled_operation (DidOperationSubmission):  Example: {'id': '123', 'didRef': 'did:prism:123'}.
+        scheduled_operation (DidOperationSubmission):  Example: {'id':
+            '98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b', 'didRef':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff'}.
     """
 
     scheduled_operation: "DidOperationSubmission"

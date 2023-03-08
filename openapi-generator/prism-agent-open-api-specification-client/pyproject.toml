@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "prism-agent-open-api-specification-client"
-version = "0.1.0"
-description = "A client library for accessing PrismAgent OpenAPI specification"
+version = "0.41.0"
+description = "A client library for accessing Prism Agent OpenAPI specification"
 
 authors = []
 

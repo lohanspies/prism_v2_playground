@@ -9,10 +9,10 @@ T = TypeVar("T", bound="UpdateManagedDIDRequestActionsInnerRemoveKey")
 class UpdateManagedDIDRequestActionsInnerRemoveKey:
     """
     Example:
-        {'id': 'key1'}
+        {'id': 'key-1'}
 
     Attributes:
-        id (str): ID of key to remove from DID document Example: key1.
+        id (str): ID of key to remove from DID document Example: key-1.
     """
 
     id: str

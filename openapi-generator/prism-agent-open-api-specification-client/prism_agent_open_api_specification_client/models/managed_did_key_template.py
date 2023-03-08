@@ -12,10 +12,10 @@ class ManagedDIDKeyTemplate:
     """key-pair template to add to DID document.
 
     Example:
-        {'purpose': 'authentication', 'id': 'key1'}
+        {'purpose': 'authentication', 'id': 'key-1'}
 
     Attributes:
-        id (str): Identifier of a verification material in the DID Document Example: key1.
+        id (str): Identifier of a verification material in the DID Document Example: key-1.
         purpose (ManagedDIDKeyTemplatePurpose):  Example: authentication.
     """
 

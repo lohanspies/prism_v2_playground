@@ -11,11 +11,11 @@ from ...types import Response
 
 
 def _get_kwargs(
-    id: str,
+    record_id: str,
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/present-proof/presentations/{id}".format(client.base_url, id=id)
+    url = "{}/present-proof/presentations/{recordId}".format(client.base_url, recordId=record_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -54,14 +54,15 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    id: str,
+    record_id: str,
     *,
     client: Client,
 ) -> Response[Union[ErrorResponse, PresentationStatus]]:
-    """Returns an existing presentation record by id.
+    """Gets an existing proof presentation record by its unique identifier. More information on the error
+    can be found in the response body.
 
     Args:
-        id (str):
+        record_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -72,7 +73,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        record_id=record_id,
         client=client,
     )
 
@@ -85,14 +86,15 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
+    record_id: str,
     *,
     client: Client,
 ) -> Optional[Union[ErrorResponse, PresentationStatus]]:
-    """Returns an existing presentation record by id.
+    """Gets an existing proof presentation record by its unique identifier. More information on the error
+    can be found in the response body.
 
     Args:
-        id (str):
+        record_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -103,20 +105,21 @@ def sync(
     """
 
     return sync_detailed(
-        id=id,
+        record_id=record_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: str,
+    record_id: str,
     *,
     client: Client,
 ) -> Response[Union[ErrorResponse, PresentationStatus]]:
-    """Returns an existing presentation record by id.
+    """Gets an existing proof presentation record by its unique identifier. More information on the error
+    can be found in the response body.
 
     Args:
-        id (str):
+        record_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -127,7 +130,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        record_id=record_id,
         client=client,
     )
 
@@ -138,14 +141,15 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
+    record_id: str,
     *,
     client: Client,
 ) -> Optional[Union[ErrorResponse, PresentationStatus]]:
-    """Returns an existing presentation record by id.
+    """Gets an existing proof presentation record by its unique identifier. More information on the error
+    can be found in the response body.
 
     Args:
-        id (str):
+        record_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -157,7 +161,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            id=id,
+            record_id=record_id,
             client=client,
         )
     ).parsed
