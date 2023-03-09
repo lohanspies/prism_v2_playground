@@ -10,14 +10,17 @@ T = TypeVar("T", bound="RequestPresentationAction")
 
 @attr.s(auto_attribs=True)
 class RequestPresentationAction:
-    """Actions on presetations (to update)
+    """The action to perform on the proof presentation record.
 
     Example:
-        {'action': 'request-accept', 'proofId': ['proofId', 'proofId']}
+        {'action': 'request-accept', 'proofId': ['0d3a0f8d-852e-42d5-a6f8-2281c4be945c',
+            '0d3a0f8d-852e-42d5-a6f8-2281c4be945c']}
 
     Attributes:
         action (RequestPresentationActionAction):
-        proof_id (Union[Unset, List[str]]): This is to choose what VCs to use
+        proof_id (Union[Unset, List[str]]): The unique identifier of the issue credential record - and hence VC - to use
+            as the prover accepts the presentation request. Only applicable on the prover side when the action is `request-
+            accept`.
     """
 
     action: RequestPresentationActionAction

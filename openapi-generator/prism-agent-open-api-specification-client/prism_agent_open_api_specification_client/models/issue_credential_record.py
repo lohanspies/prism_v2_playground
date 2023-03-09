@@ -5,12 +5,11 @@ import attr
 from dateutil.parser import isoparse
 
 from ..models.issue_credential_record_all_of_protocol_state import IssueCredentialRecordAllOfProtocolState
-from ..models.issue_credential_record_all_of_publication_state import IssueCredentialRecordAllOfPublicationState
 from ..models.issue_credential_record_all_of_role import IssueCredentialRecordAllOfRole
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.create_issue_credential_record_request_claims import CreateIssueCredentialRecordRequestClaims
+    from ..models.issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
 
 
 T = TypeVar("T", bound="IssueCredentialRecord")
@@ -18,29 +17,35 @@ T = TypeVar("T", bound="IssueCredentialRecord")
 
 @attr.s(auto_attribs=True)
 class IssueCredentialRecord:
-    """An issue credential record to store the state of the protocol execution
+    """An issue credential record that stores the state of the protocol execution.
 
     Attributes:
-        subject_id (str): Subject DID of the verifiable credentials object Example:
-            did:prism:subjectofverifiablecredentials.
-        claims (CreateIssueCredentialRecordRequestClaims): Claims that will be associated with given verifiable
-            credentials
-        record_id (str):
-        created_at (datetime.datetime):
-        role (IssueCredentialRecordAllOfRole):
-        protocol_state (IssueCredentialRecordAllOfProtocolState):
-        schema_id (Union[Unset, str]): Identifier of the VC Schema associated with this object
-        validity_period (Union[Unset, float]): The validity period in seconds of the verifiable credential Example:
-            3600.
-        automatic_issuance (Union[Unset, bool]):  Default: True.
-        await_confirmation (Union[Unset, bool]):  Default: True.
-        updated_at (Union[Unset, datetime.datetime]):
-        publication_state (Union[Unset, IssueCredentialRecordAllOfPublicationState]):
-        jwt_credential (Union[Unset, str]):
+        subject_id (str): The identifier (e.g DID) of the subject to which the verifiable credential will be issued.
+            Example: did:prism:subjectofverifiablecredentials.
+        claims (IssueCredentialRecordBaseClaims): The claims that will be associated with the issued verifiable
+            credential.
+        record_id (str): The unique identifier of the issue credential record.
+        created_at (datetime.datetime): The date and time when the issue credential record was created.
+        role (IssueCredentialRecordAllOfRole): The role played by the Prism agent in the credential issuance flow.
+        protocol_state (IssueCredentialRecordAllOfProtocolState): The current state of the issue credential protocol
+            execution.
+        schema_id (Union[Unset, str]): The unique identifier of the schema used for this credential offer.
+        validity_period (Union[Unset, float]): The validity period in seconds of the verifiable credential that will be
+            issued. Example: 3600.
+        automatic_issuance (Union[Unset, bool]): Specifies whether or not the credential should be automatically
+            generated and issued when receiving the `CredentialRequest` from the holder.
+            If set to `false`, a manual approval by the issuer via API call will be required for the VC to be issued.
+             Default: True.
+        updated_at (Union[Unset, datetime.datetime]): The date and time when the issue credential record was last
+            updated.
+        jwt_credential (Union[Unset, str]): The base64-encoded JWT verifiable credential that has been sent by the
+            issuer.
+        issuing_did (Union[Unset, str]): Issuer DID of the verifiable credential object. Example:
+            did:prism:issuerofverifiablecredentials.
     """
 
     subject_id: str
-    claims: "CreateIssueCredentialRecordRequestClaims"
+    claims: "IssueCredentialRecordBaseClaims"
     record_id: str
     created_at: datetime.datetime
     role: IssueCredentialRecordAllOfRole
@@ -48,10 +53,9 @@ class IssueCredentialRecord:
     schema_id: Union[Unset, str] = UNSET
     validity_period: Union[Unset, float] = UNSET
     automatic_issuance: Union[Unset, bool] = True
-    await_confirmation: Union[Unset, bool] = True
     updated_at: Union[Unset, datetime.datetime] = UNSET
-    publication_state: Union[Unset, IssueCredentialRecordAllOfPublicationState] = UNSET
     jwt_credential: Union[Unset, str] = UNSET
+    issuing_did: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -68,16 +72,12 @@ class IssueCredentialRecord:
         schema_id = self.schema_id
         validity_period = self.validity_period
         automatic_issuance = self.automatic_issuance
-        await_confirmation = self.await_confirmation
         updated_at: Union[Unset, str] = UNSET
         if not isinstance(self.updated_at, Unset):
             updated_at = self.updated_at.isoformat()
 
-        publication_state: Union[Unset, str] = UNSET
-        if not isinstance(self.publication_state, Unset):
-            publication_state = self.publication_state.value
-
         jwt_credential = self.jwt_credential
+        issuing_did = self.issuing_did
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -97,25 +97,23 @@ class IssueCredentialRecord:
             field_dict["validityPeriod"] = validity_period
         if automatic_issuance is not UNSET:
             field_dict["automaticIssuance"] = automatic_issuance
-        if await_confirmation is not UNSET:
-            field_dict["awaitConfirmation"] = await_confirmation
         if updated_at is not UNSET:
             field_dict["updatedAt"] = updated_at
-        if publication_state is not UNSET:
-            field_dict["publicationState"] = publication_state
         if jwt_credential is not UNSET:
             field_dict["jwtCredential"] = jwt_credential
+        if issuing_did is not UNSET:
+            field_dict["issuingDID"] = issuing_did
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.create_issue_credential_record_request_claims import CreateIssueCredentialRecordRequestClaims
+        from ..models.issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
 
         d = src_dict.copy()
         subject_id = d.pop("subjectId")
 
-        claims = CreateIssueCredentialRecordRequestClaims.from_dict(d.pop("claims"))
+        claims = IssueCredentialRecordBaseClaims.from_dict(d.pop("claims"))
 
         record_id = d.pop("recordId")
 
@@ -131,8 +129,6 @@ class IssueCredentialRecord:
 
         automatic_issuance = d.pop("automaticIssuance", UNSET)
 
-        await_confirmation = d.pop("awaitConfirmation", UNSET)
-
         _updated_at = d.pop("updatedAt", UNSET)
         updated_at: Union[Unset, datetime.datetime]
         if isinstance(_updated_at, Unset):
@@ -140,14 +136,9 @@ class IssueCredentialRecord:
         else:
             updated_at = isoparse(_updated_at)
 
-        _publication_state = d.pop("publicationState", UNSET)
-        publication_state: Union[Unset, IssueCredentialRecordAllOfPublicationState]
-        if isinstance(_publication_state, Unset):
-            publication_state = UNSET
-        else:
-            publication_state = IssueCredentialRecordAllOfPublicationState(_publication_state)
-
         jwt_credential = d.pop("jwtCredential", UNSET)
+
+        issuing_did = d.pop("issuingDID", UNSET)
 
         issue_credential_record = cls(
             subject_id=subject_id,
@@ -159,10 +150,9 @@ class IssueCredentialRecord:
             schema_id=schema_id,
             validity_period=validity_period,
             automatic_issuance=automatic_issuance,
-            await_confirmation=await_confirmation,
             updated_at=updated_at,
-            publication_state=publication_state,
             jwt_credential=jwt_credential,
+            issuing_did=issuing_did,
         )
 
         issue_credential_record.additional_properties = d

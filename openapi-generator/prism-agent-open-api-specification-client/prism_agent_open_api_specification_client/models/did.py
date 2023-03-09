@@ -7,6 +7,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.service import Service
     from ..models.verification_method import VerificationMethod
+    from ..models.verification_method_or_ref import VerificationMethodOrRef
 
 
 T = TypeVar("T", bound="DID")
@@ -14,64 +15,114 @@ T = TypeVar("T", bound="DID")
 
 @attr.s(auto_attribs=True)
 class DID:
-    """
+    """A core DID data model capable of being transformed into W3C compliant representation.
+
     Example:
-        {'assertionMethod': [{'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'controller': 'did:prism:mainnet:456',
-            'service': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'MediatorService'}, {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}], 'keyAgreement': [{'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'id': 'did:prism:mainnet:123',
-            'verificationMethod': [{'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'capabilityInvocation': [{'controller':
-            'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'authentication': [{'controller':
-            'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}]}
+        {'assertionMethod': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'service': [{'id': 'service-1',
+            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+            'LinkedDomains'}], 'keyAgreement': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'capabilityDelegation':
+            [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'verificationMethod':
+            [{'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}], 'capabilityInvocation': [{'type': 'EMBEDDED', 'verificationMethod':
+            {'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'authentication':
+            [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}]}
 
     Attributes:
-        id (str):  Example: did:prism:mainnet:123.
-        controller (Union[Unset, str]):  Example: did:prism:mainnet:456.
+        id (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
+        controller (Union[Unset, str]):  Example:
+            did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
         verification_method (Union[Unset, List['VerificationMethod']]):
-        authentication (Union[Unset, List['VerificationMethod']]):
-        assertion_method (Union[Unset, List['VerificationMethod']]):
-        key_agreement (Union[Unset, List['VerificationMethod']]):
-        capability_invocation (Union[Unset, List['VerificationMethod']]):
+        authentication (Union[Unset, List['VerificationMethodOrRef']]):
+        assertion_method (Union[Unset, List['VerificationMethodOrRef']]):
+        key_agreement (Union[Unset, List['VerificationMethodOrRef']]):
+        capability_invocation (Union[Unset, List['VerificationMethodOrRef']]):
+        capability_delegation (Union[Unset, List['VerificationMethodOrRef']]):
         service (Union[Unset, List['Service']]):
     """
 
     id: str
     controller: Union[Unset, str] = UNSET
     verification_method: Union[Unset, List["VerificationMethod"]] = UNSET
-    authentication: Union[Unset, List["VerificationMethod"]] = UNSET
-    assertion_method: Union[Unset, List["VerificationMethod"]] = UNSET
-    key_agreement: Union[Unset, List["VerificationMethod"]] = UNSET
-    capability_invocation: Union[Unset, List["VerificationMethod"]] = UNSET
+    authentication: Union[Unset, List["VerificationMethodOrRef"]] = UNSET
+    assertion_method: Union[Unset, List["VerificationMethodOrRef"]] = UNSET
+    key_agreement: Union[Unset, List["VerificationMethodOrRef"]] = UNSET
+    capability_invocation: Union[Unset, List["VerificationMethodOrRef"]] = UNSET
+    capability_delegation: Union[Unset, List["VerificationMethodOrRef"]] = UNSET
     service: Union[Unset, List["Service"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -118,6 +169,14 @@ class DID:
 
                 capability_invocation.append(capability_invocation_item)
 
+        capability_delegation: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.capability_delegation, Unset):
+            capability_delegation = []
+            for capability_delegation_item_data in self.capability_delegation:
+                capability_delegation_item = capability_delegation_item_data.to_dict()
+
+                capability_delegation.append(capability_delegation_item)
+
         service: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.service, Unset):
             service = []
@@ -145,6 +204,8 @@ class DID:
             field_dict["keyAgreement"] = key_agreement
         if capability_invocation is not UNSET:
             field_dict["capabilityInvocation"] = capability_invocation
+        if capability_delegation is not UNSET:
+            field_dict["capabilityDelegation"] = capability_delegation
         if service is not UNSET:
             field_dict["service"] = service
 
@@ -154,6 +215,7 @@ class DID:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.service import Service
         from ..models.verification_method import VerificationMethod
+        from ..models.verification_method_or_ref import VerificationMethodOrRef
 
         d = src_dict.copy()
         id = d.pop("id")
@@ -170,30 +232,37 @@ class DID:
         authentication = []
         _authentication = d.pop("authentication", UNSET)
         for authentication_item_data in _authentication or []:
-            authentication_item = VerificationMethod.from_dict(authentication_item_data)
+            authentication_item = VerificationMethodOrRef.from_dict(authentication_item_data)
 
             authentication.append(authentication_item)
 
         assertion_method = []
         _assertion_method = d.pop("assertionMethod", UNSET)
         for assertion_method_item_data in _assertion_method or []:
-            assertion_method_item = VerificationMethod.from_dict(assertion_method_item_data)
+            assertion_method_item = VerificationMethodOrRef.from_dict(assertion_method_item_data)
 
             assertion_method.append(assertion_method_item)
 
         key_agreement = []
         _key_agreement = d.pop("keyAgreement", UNSET)
         for key_agreement_item_data in _key_agreement or []:
-            key_agreement_item = VerificationMethod.from_dict(key_agreement_item_data)
+            key_agreement_item = VerificationMethodOrRef.from_dict(key_agreement_item_data)
 
             key_agreement.append(key_agreement_item)
 
         capability_invocation = []
         _capability_invocation = d.pop("capabilityInvocation", UNSET)
         for capability_invocation_item_data in _capability_invocation or []:
-            capability_invocation_item = VerificationMethod.from_dict(capability_invocation_item_data)
+            capability_invocation_item = VerificationMethodOrRef.from_dict(capability_invocation_item_data)
 
             capability_invocation.append(capability_invocation_item)
+
+        capability_delegation = []
+        _capability_delegation = d.pop("capabilityDelegation", UNSET)
+        for capability_delegation_item_data in _capability_delegation or []:
+            capability_delegation_item = VerificationMethodOrRef.from_dict(capability_delegation_item_data)
+
+            capability_delegation.append(capability_delegation_item)
 
         service = []
         _service = d.pop("service", UNSET)
@@ -210,6 +279,7 @@ class DID:
             assertion_method=assertion_method,
             key_agreement=key_agreement,
             capability_invocation=capability_invocation,
+            capability_delegation=capability_delegation,
             service=service,
         )
 

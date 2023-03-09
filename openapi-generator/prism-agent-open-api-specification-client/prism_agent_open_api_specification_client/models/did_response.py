@@ -14,83 +14,177 @@ T = TypeVar("T", bound="DIDResponse")
 class DIDResponse:
     """
     Example:
-        {'metadata': {'deactivated': True}, 'did': {'assertionMethod': [{'controller': 'did:prism:456', 'publicKeyJwk':
-            {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'controller': 'did:prism:mainnet:456',
-            'service': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'MediatorService'}, {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}], 'keyAgreement': [{'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'id': 'did:prism:mainnet:123',
-            'verificationMethod': [{'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'capabilityInvocation': [{'controller':
-            'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'authentication': [{'controller':
-            'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}]}}
+        {'metadata': {'canonicalId': 'canonicalId', 'deactivated': True}, 'did': {'assertionMethod': [{'type':
+            'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'service': [{'id': 'service-1',
+            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+            'LinkedDomains'}], 'keyAgreement': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'capabilityDelegation':
+            [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'verificationMethod':
+            [{'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}], 'capabilityInvocation': [{'type': 'EMBEDDED', 'verificationMethod':
+            {'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'authentication':
+            [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}]}}
 
     Attributes:
-        did (DID):  Example: {'assertionMethod': [{'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'controller': 'did:prism:mainnet:456',
-            'service': [{'id': 'service1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'MediatorService'}, {'id': 'service1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'MediatorService'}], 'keyAgreement': [{'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456',
-            'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'id': 'did:prism:mainnet:123',
-            'verificationMethod': [{'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'capabilityInvocation': [{'controller':
-            'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}], 'authentication': [{'controller':
-            'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'kid':
-            '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id': 'did:prism:123#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}, {'controller': 'did:prism:456', 'publicKeyJwk': {'kty': 'EC', 'crv':
-            'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:123#key-1', 'type': 'EcdsaSecp256k1VerificationKey2019'}]}.
-        metadata (DIDDocumentMetadata):  Example: {'deactivated': True}.
+        did (DID): A core DID data model capable of being transformed into W3C compliant representation.
+             Example: {'assertionMethod': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'service': [{'id': 'service-1',
+            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+            'LinkedDomains'}], 'keyAgreement': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'capabilityDelegation':
+            [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'verificationMethod':
+            [{'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}], 'capabilityInvocation': [{'type': 'EMBEDDED', 'verificationMethod':
+            {'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'authentication':
+            [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}, {'type': 'EMBEDDED',
+            'verificationMethod': {'controller':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
+            'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+            'EcdsaSecp256k1VerificationKey2019'}, 'uri':
+            'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}]}.
+        metadata (DIDDocumentMetadata):  Example: {'canonicalId': 'canonicalId', 'deactivated': True}.
     """
 
     did: "DID"

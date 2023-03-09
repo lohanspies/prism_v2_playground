@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
+from ..models.presentation_status_status import PresentationStatusStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -13,25 +14,28 @@ T = TypeVar("T", bound="PresentationStatus")
 
 @attr.s(auto_attribs=True)
 class PresentationStatus:
-    """Presentation Status
+    """The proof presentation record.
 
     Example:
-        {'presentationId': 'presentationId', 'data': ['data', 'data'], 'proofs': [{'schemaId':
+        {'presentationId': '3c6d9fa5-d277-431e-a6cb-d3956e47e610', 'data': ['data', 'data'], 'proofs': [{'schemaId':
             'https://schema.org/Person', 'trustIssuers': ['did:web:atalaprism.io/users/testUser', 'did.prism:123',
             'did:prism:...']}, {'schemaId': 'https://schema.org/Person', 'trustIssuers':
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}], 'connectionId': 'connectionId',
-            'status': 'status'}
+            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...']}], 'connectionId':
+            'bc528dc8-69f1-4c5a-a508-5f8019047900', 'status': 'RequestPending'}
 
     Attributes:
-        presentation_id (str):
-        status (str):
-        proofs (List['ProofRequestAux']):
-        data (List[str]):
-        connection_id (Union[Unset, str]):
+        presentation_id (str): The unique identifier of the presentation record. Example:
+            3c6d9fa5-d277-431e-a6cb-d3956e47e610.
+        status (PresentationStatusStatus): The current state of the proof presentation record.
+        proofs (List['ProofRequestAux']): The type of proofs requested in the context of this proof presentation request
+            (e.g., VC schema, trusted issuers, etc.)
+        data (List[str]): The list of proofs presented by the prover to the verifier.
+        connection_id (Union[Unset, str]): The unique identifier of an established connection between the verifier and
+            the prover. Example: bc528dc8-69f1-4c5a-a508-5f8019047900.
     """
 
     presentation_id: str
-    status: str
+    status: PresentationStatusStatus
     proofs: List["ProofRequestAux"]
     data: List[str]
     connection_id: Union[Unset, str] = UNSET
@@ -39,7 +43,8 @@ class PresentationStatus:
 
     def to_dict(self) -> Dict[str, Any]:
         presentation_id = self.presentation_id
-        status = self.status
+        status = self.status.value
+
         proofs = []
         for proofs_item_data in self.proofs:
             proofs_item = proofs_item_data.to_dict()
@@ -72,7 +77,7 @@ class PresentationStatus:
         d = src_dict.copy()
         presentation_id = d.pop("presentationId")
 
-        status = d.pop("status")
+        status = PresentationStatusStatus(d.pop("status"))
 
         proofs = []
         _proofs = d.pop("proofs")

@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
+from ... import errors
 from ...client import Client
 from ...models.not_found import NotFound
 from ...models.verifiable_credential_schema import VerifiableCredentialSchema
@@ -28,7 +29,9 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, response: httpx.Response) -> Optional[Union[NotFound, VerifiableCredentialSchema]]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[Union[NotFound, VerifiableCredentialSchema]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = VerifiableCredentialSchema.from_dict(response.json())
 
@@ -37,15 +40,20 @@ def _parse_response(*, response: httpx.Response) -> Optional[Union[NotFound, Ver
         response_404 = NotFound.from_dict(response.json())
 
         return response_404
-    return None
+    if client.raise_on_unexpected_status:
+        raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
+    else:
+        return None
 
 
-def _build_response(*, response: httpx.Response) -> Response[Union[NotFound, VerifiableCredentialSchema]]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[Union[NotFound, VerifiableCredentialSchema]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
         headers=response.headers,
-        parsed=_parse_response(response=response),
+        parsed=_parse_response(client=client, response=response),
     )
 
 
@@ -61,6 +69,10 @@ def sync_detailed(
     Args:
         id (str):
 
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
     Returns:
         Response[Union[NotFound, VerifiableCredentialSchema]]
     """
@@ -75,7 +87,7 @@ def sync_detailed(
         **kwargs,
     )
 
-    return _build_response(response=response)
+    return _build_response(client=client, response=response)
 
 
 def sync(
@@ -89,6 +101,10 @@ def sync(
 
     Args:
         id (str):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[NotFound, VerifiableCredentialSchema]]
@@ -112,6 +128,10 @@ async def asyncio_detailed(
     Args:
         id (str):
 
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
     Returns:
         Response[Union[NotFound, VerifiableCredentialSchema]]
     """
@@ -124,7 +144,7 @@ async def asyncio_detailed(
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
         response = await _client.request(**kwargs)
 
-    return _build_response(response=response)
+    return _build_response(client=client, response=response)
 
 
 async def asyncio(
@@ -138,6 +158,10 @@ async def asyncio(
 
     Args:
         id (str):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[NotFound, VerifiableCredentialSchema]]

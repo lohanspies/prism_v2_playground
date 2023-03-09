@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 import attr
 from dateutil.parser import isoparse
 
+from ..models.connection_all_of_role import ConnectionAllOfRole
 from ..models.connection_all_of_state import ConnectionAllOfState
 from ..types import UNSET, Unset
 
@@ -16,18 +17,25 @@ T = TypeVar("T", bound="Connection")
 
 @attr.s(auto_attribs=True)
 class Connection:
-    """
+    """A connection record.
+
     Attributes:
-        self_ (str):  Example: https://atala-prism-products.io/connections/ABCD-1234.
-        kind (str):  Example: ConnectionState.
-        connection_id (str):
-        state (ConnectionAllOfState):
-        created_at (datetime.datetime):  Example: 2021-10-31 09:22:23+00:00.
-        invitation (ConnectionInvitation):
-        label (Union[Unset, str]):  Example: Peter.
-        my_did (Union[Unset, str]):  Example: did:prism:12345.
-        their_did (Union[Unset, str]):  Example: did:peer:12345.
-        updated_at (Union[Unset, datetime.datetime]):
+        self_ (str): The reference to the connection resource. Example: https://atala-prism-
+            products.io/connections/ABCD-1234.
+        kind (str): The type of object returned. In this case a `Connection`. Example: Connection.
+        connection_id (str): The unique identifier of the connection. Example: 3fa85f64-5717-4562-b3fc-2c963f66afa6.
+        state (ConnectionAllOfState): The current state of the connection protocol execution.
+        created_at (datetime.datetime): The date and time the connection record was created. Example: 2021-10-31
+            09:22:23+00:00.
+        role (ConnectionAllOfRole): The role played by the Prism agent in the connection flow.
+        invitation (ConnectionInvitation): A connection invitation.
+        label (Union[Unset, str]): A human readable alias for the connection. Example: Peter.
+        my_did (Union[Unset, str]): The DID representing me as the inviter or invitee in this specific connection.
+            Example: did:peer:12345.
+        their_did (Union[Unset, str]): The DID representing the other peer as the an inviter or invitee in this specific
+            connection. Example: did:peer:67890.
+        updated_at (Union[Unset, datetime.datetime]): The date and time the connection record was last updated. Example:
+            2021-12-31 13:59:59+00:00.
     """
 
     self_: str
@@ -35,6 +43,7 @@ class Connection:
     connection_id: str
     state: ConnectionAllOfState
     created_at: datetime.datetime
+    role: ConnectionAllOfRole
     invitation: "ConnectionInvitation"
     label: Union[Unset, str] = UNSET
     my_did: Union[Unset, str] = UNSET
@@ -49,6 +58,8 @@ class Connection:
         state = self.state.value
 
         created_at = self.created_at.isoformat()
+
+        role = self.role.value
 
         invitation = self.invitation.to_dict()
 
@@ -68,6 +79,7 @@ class Connection:
                 "connectionId": connection_id,
                 "state": state,
                 "createdAt": created_at,
+                "role": role,
                 "invitation": invitation,
             }
         )
@@ -97,6 +109,8 @@ class Connection:
 
         created_at = isoparse(d.pop("createdAt"))
 
+        role = ConnectionAllOfRole(d.pop("role"))
+
         invitation = ConnectionInvitation.from_dict(d.pop("invitation"))
 
         label = d.pop("label", UNSET)
@@ -118,6 +132,7 @@ class Connection:
             connection_id=connection_id,
             state=state,
             created_at=created_at,
+            role=role,
             invitation=invitation,
             label=label,
             my_did=my_did,

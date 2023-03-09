@@ -9,11 +9,12 @@ T = TypeVar("T", bound="DidOperationSubmission")
 class DidOperationSubmission:
     """
     Example:
-        {'id': '123', 'didRef': 'did:prism:123'}
+        {'id': '98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b', 'didRef':
+            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff'}
 
     Attributes:
-        id (str):  Example: 123.
-        did_ref (str):  Example: did:prism:123.
+        id (str):  Example: 98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b.
+        did_ref (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
     """
 
     id: str

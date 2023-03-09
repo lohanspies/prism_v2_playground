@@ -11,14 +11,16 @@ T = TypeVar("T", bound="ConnectionCollection")
 
 @attr.s(auto_attribs=True)
 class ConnectionCollection:
-    """
+    """A collection of connection records.
+
     Example:
         {'contents': [None, None], 'kind': 'Collection', 'self': 'https://atala-prism-products.io/connections'}
 
     Attributes:
-        self_ (str):  Example: https://atala-prism-products.io/connections.
-        kind (str):  Example: Collection.
-        contents (List['Connection']):
+        self_ (str): The reference to the connection collection itself. Example: https://atala-prism-
+            products.io/connections.
+        kind (str): The type of object returned. In this case a `Collection`. Example: Collection.
+        contents (List['Connection']): The array containing the list of connection records.
     """
 
     self_: str

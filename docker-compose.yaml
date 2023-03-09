@@ -10,6 +10,3 @@ services:
       - ./work:/home/jovyan/work
       - ./config/jupyter-config.json:/home/jovyan/.jupyter/jupyter_notebook_config.json
       - ./config:/home/jovyan/.jupyter/config
-
-networks:
-  prism:

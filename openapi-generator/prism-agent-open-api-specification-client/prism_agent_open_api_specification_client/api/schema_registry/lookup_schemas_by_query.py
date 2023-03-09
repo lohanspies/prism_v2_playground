@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
+from ... import errors
 from ...client import Client
 from ...models.internal_server_error import InternalServerError
 from ...models.verifiable_credential_schema_page import VerifiableCredentialSchemaPage
@@ -12,11 +13,11 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas".format(client.base_url)
@@ -25,15 +26,15 @@ def _get_kwargs(
     cookies: Dict[str, Any] = client.get_cookies()
 
     params: Dict[str, Any] = {}
+    params["offset"] = offset
+
+    params["limit"] = limit
+
     params["author"] = author
 
     params["name"] = name
 
     params["tags"] = tags
-
-    params["offset"] = offset
-
-    params["limit"] = limit
 
     params["order"] = order
 
@@ -50,7 +51,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = VerifiableCredentialSchemaPage.from_dict(response.json())
@@ -60,28 +61,31 @@ def _parse_response(
         response_500 = InternalServerError.from_dict(response.json())
 
         return response_500
-    return None
+    if client.raise_on_unexpected_status:
+        raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
+    else:
+        return None
 
 
 def _build_response(
-    *, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
         headers=response.headers,
-        parsed=_parse_response(response=response),
+        parsed=_parse_response(client=client, response=response),
     )
 
 
 def sync_detailed(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -90,12 +94,16 @@ def sync_detailed(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
@@ -103,11 +111,11 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         client=client,
+        offset=offset,
+        limit=limit,
         author=author,
         name=name,
         tags=tags,
-        offset=offset,
-        limit=limit,
         order=order,
     )
 
@@ -116,17 +124,17 @@ def sync_detailed(
         **kwargs,
     )
 
-    return _build_response(response=response)
+    return _build_response(client=client, response=response)
 
 
 def sync(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -135,12 +143,16 @@ def sync(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
@@ -148,11 +160,11 @@ def sync(
 
     return sync_detailed(
         client=client,
+        offset=offset,
+        limit=limit,
         author=author,
         name=name,
         tags=tags,
-        offset=offset,
-        limit=limit,
         order=order,
     ).parsed
 
@@ -160,11 +172,11 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -173,12 +185,16 @@ async def asyncio_detailed(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
@@ -186,28 +202,28 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         client=client,
+        offset=offset,
+        limit=limit,
         author=author,
         name=name,
         tags=tags,
-        offset=offset,
-        limit=limit,
         order=order,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
         response = await _client.request(**kwargs)
 
-    return _build_response(response=response)
+    return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
     client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
     """Lookup schemas by indexed fields
@@ -216,12 +232,16 @@ async def asyncio(
     `limit` parameters
 
     Args:
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
@@ -230,11 +250,11 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
+            offset=offset,
+            limit=limit,
             author=author,
             name=name,
             tags=tags,
-            offset=offset,
-            limit=limit,
             order=order,
         )
     ).parsed

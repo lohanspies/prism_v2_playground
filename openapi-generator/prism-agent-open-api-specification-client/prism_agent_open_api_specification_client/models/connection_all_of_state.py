@@ -2,16 +2,17 @@ from enum import Enum
 
 
 class ConnectionAllOfState(str, Enum):
-    PENDING = "pending"
-    SUCCESS = "success"
-    FAILED = "failed"
+    INVITATIONGENERATED = "InvitationGenerated"
+    INVITATIONRECEIVED = "InvitationReceived"
+    CONNECTIONREQUESTPENDING = "ConnectionRequestPending"
+    CONNECTIONREQUESTSENT = "ConnectionRequestSent"
+    CONNECTIONREQUESTRECEIVED = "ConnectionRequestReceived"
+    CONNECTIONRESPONSEPENDING = "ConnectionResponsePending"
+    CONNECTIONRESPONSESENT = "ConnectionResponseSent"
+    CONNECTIONRESPONSERECEIVED = "ConnectionResponseReceived"
+    PROBLEMREPORTPENDING = "ProblemReportPending"
+    PROBLEMREPORTSENT = "ProblemReportSent"
+    PROBLEMREPORTRECEIVED = "ProblemReportReceived"
 
-    INVITATIONGENERATED = 'InvitationGenerated'
-    CONNECTIONRESPONSEPENDING = 'ConnectionResponsePending'
-    CONNECTIONRESPONSESENT = 'ConnectionResponseSent'
-    CONNECTIONREQUESTSENT = 'ConnectionRequestSent'
-    CONNECTIONREQUESTPENDING = 'ConnectionRequestPending'
-    CONNECTIONRESPONSERECEIVED = 'ConnectionResponseReceived'
-    CONNECTIONREQUESTRECEIVED = 'ConnectionRequestReceived'
     def __str__(self) -> str:
         return str(self.value)

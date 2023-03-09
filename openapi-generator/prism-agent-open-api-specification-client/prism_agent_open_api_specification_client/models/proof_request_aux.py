@@ -13,9 +13,10 @@ class ProofRequestAux:
             'did.prism:123', 'did:prism:...']}
 
     Attributes:
-        schema_id (str): Ex ID card or driving licence Example: https://schema.org/Person.
-        trust_issuers (List[str]): Issuer that the verifier trust trust Example:
-            ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...'].
+        schema_id (str): The unique identifier of a schema the VC should comply with. Example:
+            https://schema.org/Person.
+        trust_issuers (List[str]): One or more issuers that are trusted by the verifier emitting the proof presentation
+            request. Example: ['did:web:atalaprism.io/users/testUser', 'did.prism:123', 'did:prism:...'].
     """
 
     schema_id: str

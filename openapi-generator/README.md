@@ -26,3 +26,8 @@ If client library already exist then update the current version
 ```bash
 ./update_client_library.sh 
 ```
+
+## 6. ℹ️ Generate Open API Clients for Various Programming Languages
+For detailed information on how to use `openapi-generator-cli` please refer to the [documentation](https://openapi-generator.tech/docs/usage/). 
+
+A full list of available generators can be found [here](https://openapi-generator.tech/docs/generators/).

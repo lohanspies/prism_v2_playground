@@ -11,22 +11,20 @@ T = TypeVar("T", bound="PublicKeyJwk")
 class PublicKeyJwk:
     """
     Example:
-        {'kty': 'EC', 'crv': 'secp256k1', 'kid': '_TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}
+        {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}
 
     Attributes:
         kty (str):  Example: EC.
         crv (Union[Unset, str]):  Example: secp256k1.
         x (Union[Unset, str]):  Example: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8.
         y (Union[Unset, str]):  Example: nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4.
-        kid (Union[Unset, str]):  Example: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw.
     """
 
     kty: str
     crv: Union[Unset, str] = UNSET
     x: Union[Unset, str] = UNSET
     y: Union[Unset, str] = UNSET
-    kid: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -34,7 +32,6 @@ class PublicKeyJwk:
         crv = self.crv
         x = self.x
         y = self.y
-        kid = self.kid
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,8 +46,6 @@ class PublicKeyJwk:
             field_dict["x"] = x
         if y is not UNSET:
             field_dict["y"] = y
-        if kid is not UNSET:
-            field_dict["kid"] = kid
 
         return field_dict
 
@@ -65,14 +60,11 @@ class PublicKeyJwk:
 
         y = d.pop("y", UNSET)
 
-        kid = d.pop("kid", UNSET)
-
         public_key_jwk = cls(
             kty=kty,
             crv=crv,
             x=x,
             y=y,
-            kid=kid,
         )
 
         public_key_jwk.additional_properties = d

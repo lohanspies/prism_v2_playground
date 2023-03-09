@@ -14,7 +14,7 @@ class CreateConnectionRequest:
         {'label': 'Peter'}
 
     Attributes:
-        label (Union[Unset, str]):  Example: Peter.
+        label (Union[Unset, str]): A human readable alias for the connection. Example: Peter.
     """
 
     label: Union[Unset, str] = UNSET

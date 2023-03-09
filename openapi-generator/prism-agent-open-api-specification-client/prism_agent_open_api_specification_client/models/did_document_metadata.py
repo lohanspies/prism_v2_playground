@@ -1,6 +1,8 @@
-from typing import Any, Dict, List, Type, TypeVar
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
+
+from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DIDDocumentMetadata")
 
@@ -9,19 +11,22 @@ T = TypeVar("T", bound="DIDDocumentMetadata")
 class DIDDocumentMetadata:
     """
     Example:
-        {'deactivated': True}
+        {'canonicalId': 'canonicalId', 'deactivated': True}
 
     Attributes:
         deactivated (bool): If a DID has been deactivated, DID document metadata MUST include this property with the
             boolean value true. If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the
             boolean value false.
+        canonical_id (Union[Unset, str]): A DID in canonical form
     """
 
     deactivated: bool
+    canonical_id: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         deactivated = self.deactivated
+        canonical_id = self.canonical_id
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -30,6 +35,8 @@ class DIDDocumentMetadata:
                 "deactivated": deactivated,
             }
         )
+        if canonical_id is not UNSET:
+            field_dict["canonicalId"] = canonical_id
 
         return field_dict
 
@@ -38,8 +45,11 @@ class DIDDocumentMetadata:
         d = src_dict.copy()
         deactivated = d.pop("deactivated")
 
+        canonical_id = d.pop("canonicalId", UNSET)
+
         did_document_metadata = cls(
             deactivated=deactivated,
+            canonical_id=canonical_id,
         )
 
         did_document_metadata.additional_properties = d

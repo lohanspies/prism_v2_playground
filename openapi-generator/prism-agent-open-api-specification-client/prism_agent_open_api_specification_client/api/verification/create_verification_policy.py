@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
+from ... import errors
 from ...client import Client
 from ...models.bad_request import BadRequest
 from ...models.internal_server_error import InternalServerError
@@ -34,7 +35,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[BadRequest, InternalServerError, VerificationPolicy]]:
     if response.status_code == HTTPStatus.CREATED:
         response_201 = VerificationPolicy.from_dict(response.json())
@@ -48,17 +49,20 @@ def _parse_response(
         response_500 = InternalServerError.from_dict(response.json())
 
         return response_500
-    return None
+    if client.raise_on_unexpected_status:
+        raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
+    else:
+        return None
 
 
 def _build_response(
-    *, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[BadRequest, InternalServerError, VerificationPolicy]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
         headers=response.headers,
-        parsed=_parse_response(response=response),
+        parsed=_parse_response(client=client, response=response),
     )
 
 
@@ -72,11 +76,14 @@ def sync_detailed(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[BadRequest, InternalServerError, VerificationPolicy]]
@@ -92,7 +99,7 @@ def sync_detailed(
         **kwargs,
     )
 
-    return _build_response(response=response)
+    return _build_response(client=client, response=response)
 
 
 def sync(
@@ -105,11 +112,14 @@ def sync(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[BadRequest, InternalServerError, VerificationPolicy]]
@@ -131,11 +141,14 @@ async def asyncio_detailed(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[BadRequest, InternalServerError, VerificationPolicy]]
@@ -149,7 +162,7 @@ async def asyncio_detailed(
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
         response = await _client.request(**kwargs)
 
-    return _build_response(response=response)
+    return _build_response(client=client, response=response)
 
 
 async def asyncio(
@@ -162,11 +175,14 @@ async def asyncio(
      Create the new verification policy
 
     Args:
-        json_body (VerificationPolicyInput):  Example: {'issuerDIDs': ['issuerDIDs',
-            'issuerDIDs'], 'createdAt': datetime.datetime(2000, 1, 23, 4, 56, 7,
-            tzinfo=datetime.timezone.utc), 'name': 'name', 'credentialTypes': ['credentialTypes',
-            'credentialTypes'], 'attributes': ['attributes', 'attributes'], 'id': 'id', 'updatedAt':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc)}.
+        json_body (VerificationPolicyInput):  Example: {'name': 'name', 'description':
+            'description', 'id': '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'constraints':
+            [{'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'},
+            {'trustedIssuers': ['trustedIssuers', 'trustedIssuers'], 'schemaId': 'schemaId'}]}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
         Response[Union[BadRequest, InternalServerError, VerificationPolicy]]

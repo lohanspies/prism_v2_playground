@@ -4,19 +4,17 @@ info:
     email: atala-coredid@iohk.io
     name: Core DID
   description: OpenAPI specification for Decentralized Identifiers (DID) Operations
-  title: PrismAgent OpenAPI specification
-  version: 0.1.0
+  title: Prism Agent OpenAPI specification
+  version: 0.41.0
 servers:
 - url: https://k8s-dev.atalaprism.io/prism-agent/
 - url: http://localhost/prism-agent
 security:
 - ApiKeyAuth: []
 tags:
-- description: Generic DID Endpoints
+- description: DID REST API
   name: DID
-- description: DID Authentication REST API
-  name: DID Authentication
-- description: DID Endpoints where keys are managed by PrismAgent
+- description: DID Registrar REST API (Prism Agent managed DID)
   name: DID Registrar
 - description: Schema Registry REST API
   name: Schema Registry
@@ -24,15 +22,17 @@ tags:
   name: Verification
 - description: Present Proof REST API
   name: Present Proof
-- description: API for driving connection process.
+- description: "Manage [DIDComm v2](https://identity.foundation/didcomm-messaging/spec/v2.0/)\
+    \ connections"
   name: Connections Management
 paths:
   /dids/{didRef}:
     get:
-      description: Resolve Prism DID
+      description: Resolve Prism DID to a DID document.
       operationId: getDid
       parameters:
       - description: DID reference.
+        example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
         required: true
@@ -54,87 +54,46 @@ paths:
       summary: Resolve Prism DID
       tags:
       - DID
-  /authentication/challenges:
-    post:
-      deprecated: true
-      description: |
-        Create a new authentication challenge that will be later verified
-        by Castor for a relying-party.
-      operationId: createDidAuthenticationChallenge
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAuthenticationChallengeRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateAuthenticationChallengeResponse'
-          description: Authentication challenge created successfully
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: A create AuthenticationChallenge payload is malformed
-      summary: Create a new authentication challenge
-      tags:
-      - DID Authentication
-  /authentication/challenge-submissions:
-    post:
-      deprecated: true
-      description: |
-        Submit a challenge submission that will be verified by Castor for a relying-party.
-      operationId: createDidAuthenticationChallengeSubmission
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthenticationChallengeSubmissionRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthenticationChallengeSubmissionResponse'
-          description: Authentication challenge has been successfully verified
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: ChallengeSubmission is malformed
-      summary: Create a verification from challenge
-      tags:
-      - DID Authentication
   /did-registrar/dids:
     get:
-      description: List all DIDs stored in PrismAgent's wallet
+      description: |
+        List all DIDs stored in Prism Agent's wallet.
+        Return a paginated items ordered by created timestamp.
+        If the `limit` parameter is not set, it defaults to 100 items per page.
       operationId: listManagedDid
+      parameters:
+      - in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListManagedDIDResponse'
-          description: List managed DIDs
+                $ref: '#/components/schemas/ManagedDIDPage'
+          description: List Prism Agent managed DIDs
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Error.
-      summary: List all DIDs stored in PrismAgent's wallet
+      summary: List all DIDs stored in Prism Agent's wallet
       tags:
       - DID Registrar
     post:
       description: |
-        Create unpublished DID and store it inside PrismAgent's wallet. The private keys of the DID is
-        managed by PrismAgent. The DID can later be published to blockchain using publications endpoint.
+        Create unpublished DID and store it inside Prism Agent's wallet. The private keys of the DID is
+        managed by Prism Agent. The DID can later be published to the VDR using publications endpoint.
       operationId: createManagedDid
       requestBody:
         content:
@@ -155,16 +114,113 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: The DID creation failed.
-      summary: Create unpublished DID and store it in PrismAgent's wallet
+      summary: Create unpublished DID and store it in Prism Agent's wallet
+      tags:
+      - DID Registrar
+  /did-registrar/dids/{didRef}:
+    get:
+      description: Get DID stored in Prism Agent's wallet
+      operationId: getManagedDid
+      parameters:
+      - description: DID reference.
+        example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+        in: path
+        name: didRef
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManagedDID'
+          description: Get Prism Agent managed DID
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: There is no DID existing for the 'didRef'.
+      summary: Get DID stored in Prism Agent's wallet
       tags:
       - DID Registrar
   /did-registrar/dids/{didRef}/publications:
     post:
       description: |
-        Publish the DID stored in PrismAgent's wallet to the blockchain.
+        Publish the DID stored in Prism Agent's wallet to the VDR.
       operationId: publishManagedDid
       parameters:
       - description: DID reference.
+        example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+        in: path
+        name: didRef
+        required: true
+        schema:
+          type: string
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DIDOperationResponse'
+          description: Publishing DID to the VDR.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The DID publication failed.
+      summary: Publish the DID stored in Prism Agent's wallet to the VDR
+      tags:
+      - DID Registrar
+  /did-registrar/dids/{didRef}/updates:
+    post:
+      description: |
+        Update DID in Prism Agent's wallet and post update operation to the VDR.
+        This endpoint updates the DID document from the last confirmed operation.
+        Submitting multiple update operations without waiting for confirmation will result in
+        some operations being rejected as only one operation is allowed to be appended to the last confirmed operation.
+      operationId: updateManagedDid
+      parameters:
+      - description: DID reference.
+        example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+        in: path
+        name: didRef
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateManagedDIDRequest'
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DIDOperationResponse'
+          description: Publishing DID to the VDR.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The DID update failed.
+      summary: Update DID in Prism Agent's wallet and post update operation to the
+        VDR
+      tags:
+      - DID Registrar
+  /did-registrar/dids/{didRef}/deactivations:
+    post:
+      description: |
+        Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR.
+      operationId: deactivateManagedDid
+      parameters:
+      - description: DID reference.
+        example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
         required: true
@@ -182,8 +238,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The DID publication failed.
-      summary: Publish the DID stored in PrismAgent's wallet to the blockchain
+          description: The DID deactivation failed.
+      summary: Deactivate DID in Prism Agent's wallet and post deactivate operation
+        to the VDR
       tags:
       - DID Registrar
   /schema-registry/schemas:
@@ -192,6 +249,18 @@ paths:
         \ the pagination by `offset` and `limit` parameters "
       operationId: lookupSchemasByQuery
       parameters:
+      - in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
       - explode: true
         in: query
         name: author
@@ -212,22 +281,6 @@ paths:
         required: false
         schema:
           type: string
-        style: form
-      - explode: true
-        in: query
-        name: offset
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: limit
-        required: false
-        schema:
-          format: int32
-          type: integer
         style: form
       - explode: true
         in: query
@@ -334,35 +387,13 @@ paths:
       - Schema Registry
   /verification/policies:
     get:
-      description: "Lookup verification policies by `name`, `attributes`, `issuerDIDs`,\
-        \ and `credentialTypes` and control the pagination by `offset` and `limit`\
-        \ parameters"
+      description: "Lookup verification policies by `name`, and control the pagination\
+        \ by `offset` and `limit` parameters"
       operationId: lookupVerificationPoliciesByQuery
       parameters:
       - explode: true
         in: query
         name: name
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: attributes
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: issuerDIDs
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: credentialTypes
         required: false
         schema:
           type: string
@@ -455,8 +486,18 @@ paths:
         name: id
         required: true
         schema:
+          format: uuid
           type: string
         style: simple
+      - description: Nonce of the previous VerificationPolicy
+        explode: true
+        in: query
+        name: nonce
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
       responses:
         "200":
           description: ""
@@ -491,6 +532,7 @@ paths:
         name: id
         required: true
         schema:
+          format: uuid
           type: string
         style: simple
       responses:
@@ -522,8 +564,7 @@ paths:
       tags:
       - Verification
     put:
-      description: "Update the fields of the verification policy entry: `attributes`,\
-        \ `issuerDIDs`, `name`, `credentialTypes`, "
+      description: Update the verification policy entry
       operationId: updateVerificationPolicy
       parameters:
       - explode: false
@@ -531,8 +572,18 @@ paths:
         name: id
         required: true
         schema:
+          format: uuid
           type: string
         style: simple
+      - description: Nonce of the previous VerificationPolicy
+        explode: true
+        in: query
+        name: nonce
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
       requestBody:
         content:
           application/json:
@@ -576,7 +627,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateIssueCredentialRecordRequest'
-        description: CredentialOffer object with schema identifier and claims
+        description: The credential offer object.
         required: true
       responses:
         "201":
@@ -584,14 +635,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueCredentialRecord'
-          description: The issue credential record
+          description: "The issue credential record was created successfully, and\
+            \ is returned in the response body."
         "422":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The issue credential record creation failed.
-      summary: "As a VC issuer, create a new credential offer to be sent to a VC holder"
+          description: The issue credential record creation failed. More information
+            on the error can be found in the response body.
+      summary: "As a credential issuer, create a new credential offer to be sent to\
+        \ a holder."
       tags:
       - Issue Credentials Protocol
   /issue-credentials/records:
@@ -603,22 +657,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueCredentialRecordCollection'
-          description: The issue credential records
+          description: The list of issue credential records.
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Retrieving the issue credential records failed for an unexpected
-            reason.
-      summary: Get credential records
+            reason. More information on the error can be found in the response body.
+      summary: Gets the list of issue credential records.
       tags:
       - Issue Credentials Protocol
   /issue-credentials/records/{recordId}:
     get:
       operationId: getCredentialRecord
       parameters:
-      - description: The issue credential record Id.
+      - description: The unique identifier of the issue credential record.
         in: path
         name: recordId
         required: true
@@ -631,21 +685,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueCredentialRecord'
-          description: The issue credential record
+          description: The issue credential record.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record matching the given 'recordId'.
-      summary: Get a credential record by Id
+          description: There is no issue credential record matching the given identifier.
+      summary: Gets an existing issue credential record by its unique identifier.
       tags:
       - Issue Credentials Protocol
   /issue-credentials/records/{recordId}/accept-offer:
     post:
+      description: Accepts a credential offer received from a VC issuer and sends
+        back a credential request.
       operationId: acceptCredentialOffer
       parameters:
-      - description: The issue credential record Id.
+      - description: The unique identifier of the issue credential record.
         in: path
         name: recordId
         required: true
@@ -658,21 +714,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueCredentialRecord'
-          description: The issue credential offer has been accepted
+          description: The issue credential offer was successfully accepted.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record maatching the given 'recordId'.
-      summary: "As a VC holder, accept a credential offer received from an issuer"
+          description: There is no issue credential record matching the given identifier.
+      summary: "As a holder, accepts a credential offer received from an issuer."
       tags:
       - Issue Credentials Protocol
   /issue-credentials/records/{recordId}/issue-credential:
     post:
       operationId: issueCredential
       parameters:
-      - description: The issue credential record Id.
+      - description: The unique identifier of the issue credential record.
         in: path
         name: recordId
         required: true
@@ -685,89 +741,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueCredentialRecord'
-          description: The VC has been issued
+          description: The request was processed successfully and the credential will
+            be issued asynchronously.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record maatching the given 'recordId'.
-      summary: "As a VC issuer, issue the VC for the specified issue credential record"
+          description: There is no issue credential record matching the given identifier.
+      summary: "As an issuer, issues the verifiable credential related to the specified\
+        \ record."
       tags:
       - Issue Credentials Protocol
-  /revocation-registry/credential-status/{id}:
-    get:
-      description: Get credentials revocation status by credential id
-      operationId: getCredentialRevocationStatusById
-      parameters:
-      - description: Verifiable Credential Id
-        example: abcde12345
-        explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/W3CCredentialStatus'
-          description: Status request processed successfully
-      summary: Get credentials revocation status by credential id
-      tags:
-      - Revocation Registry
-  /revocation-registry/revoke:
-    post:
-      description: Revoke credential by id
-      operationId: revokeCredentialById
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/W3CCredentialRevocationRequest'
-        required: true
-      responses:
-        "202":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/W3CCredentialRevocationResponse'
-          description: Revocation request successfully submitted
-          headers:
-            Location:
-              description: URL to access credential revocation status.
-              explode: false
-              schema:
-                type: string
-              style: simple
-      summary: Revoke credential by id
-      tags:
-      - Revocation Registry
-  /revocation-registry/operations/{id}:
-    get:
-      description: Get revocation operation status by id
-      operationId: getRevocationOperationStatusById
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RevocationStatus'
-          description: "Success, operation status is returned"
-      summary: Get revocation operation status by id
-      tags:
-      - Revocation Registry
   /present-proof/presentations:
     get:
       operationId: getAllPresentation
@@ -779,13 +764,15 @@ paths:
                 items:
                   $ref: '#/components/schemas/PresentationStatus'
                 type: array
-          description: List of presentations and status
-        "404":
+          description: The list of proof presentation records.
+        "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no presentations record
+          description: Retrieving the proof presentation records failed for an unexpected
+            reason. More information on the error can be found in the response body.
+      summary: Gets the list of proof presentation records.
       tags:
       - Present Proof
     post:
@@ -795,7 +782,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RequestPresentationInput'
-        description: Request presentation of some type of Proof or Proofs (VC)
+        description: The present proof creation request.
         required: true
       responses:
         "201":
@@ -803,71 +790,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestPresentationOutput'
-          description: The new presentation is created
+          description: The proof presentation request was created successfully and
+            will be sent asynchronously to the Prover.
         "422":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Failed to create a presentation request.
+          description: Creating the proof presentation request failed for an unexpected
+            reason. More information on the error can be found in the response body.
+      summary: "As a Verifier, create a new proof presentation request and send it\
+        \ to the Prover."
       tags:
       - Present Proof
-  /present-proof/presentations/{id}:
+  /present-proof/presentations/{recordId}:
     get:
       operationId: getPresentation
       parameters:
-      - description: Unique identifier of the presentation
-        example: 06e126d1-fa44-4882-a243-1e326fbe21db
-        explode: false
+      - description: The unique identifier of the proof presentation record.
         in: path
-        name: id
+        name: recordId
         required: true
         schema:
+          format: uuid
           type: string
-        style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PresentationStatus'
-          description: Presentation state record
+          description: The proof presentation record.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no presentation record matching the given 'id'.
-      summary: Returns an existing presentation record by id.
+          description: There is no presentation record matching the given identifier.
+            More information on the error can be found in the response body.
+      summary: Gets an existing proof presentation record by its unique identifier.
+        More information on the error can be found in the response body.
       tags:
       - Present Proof
     patch:
       operationId: updatePresentation
       parameters:
-      - description: Unique identifier of the presentation
-        example: 06e126d1-fa44-4882-a243-1e326fbe21db
-        explode: false
+      - description: The unique identifier of the proof presentation record.
         in: path
-        name: id
+        name: recordId
         required: true
         schema:
+          format: uuid
           type: string
-        style: simple
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RequestPresentationAction'
+        description: The action to perform on the proof presentation record.
         required: true
       responses:
         "200":
-          description: Update the presentation record
+          description: The proof presentation record was successfully updated.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no presentation record existing with the 'id'
+          description: There is no presentation record matching the given identifier.
+      summary: "Updates the proof presentation record matching the unique identifier,\
+        \ with the specific action to perform."
       tags:
       - Present Proof
   /connections:
@@ -879,23 +871,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnectionCollection'
-          description: List of connection state objects
+          description: The list of connection records.
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Retrieving the connection records failed for an unexpected
-            reason.
-      summary: Returns a list of connections.
+            reason. More information on the error can be found in the response body.
+      summary: Gets the list of connection records.
       tags:
       - Connections Management
     post:
-      description: |-
-        Returns new invitation object and creates new connection state record in `pending` state.
-        Content of invitation depends on DIDComm protocol used, here is an example of how it would look like for `AIP 1.0 connection/v1` protocol.
-        Once connection invitation is accepted, Agent should filter all additional attempts to accept it.
-        We consider mult-party connections as out of scope for now.
+      description: |
+        Generates a new Peer DID and creates an [Out of Band 2.0](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) invitation.
+        It returns a new connection record in `InvitationGenerated` state.
+        The request body may contain a `label` that can be used as a human readable alias for the connection, for example `{'label': "Bob"}`
       operationId: createConnection
       requestBody:
         content:
@@ -909,42 +900,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Connection'
-          description: The connection record
+          description: "The connection record was created successfully, and is returned\
+            \ in the response body."
         "422":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The connection record creation failed.
-      summary: Creates new connection and returns an invitation.
+          description: The connection record creation failed. More information on
+            the error can be found in the response body.
+      summary: Creates a new connection record and returns an Out of Band invitation.
       tags:
       - Connections Management
   /connections/{connectionId}:
-    delete:
-      description: "Just deletes connection state in the Agent, it does not include\
-        \ notifing other party that connection is deleted. We should consider this\
-        \ feature for the future. If additional action is attempted over deleted connection,\
-        \ it should thow error (no matter which side deleted connection)."
-      operationId: deleteConnection
-      parameters:
-      - description: Id of connection state record.
-        in: path
-        name: connectionId
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Successful delete
-        "404":
-          description: Connection state record not found for given `connectionId`
-      summary: Deletes existing connection record.
-      tags:
-      - Connections Management
     get:
       operationId: getConnection
       parameters:
-      - description: Id of connection state record.
+      - description: The unique identifier of the connection record.
         in: path
         name: connectionId
         required: true
@@ -956,22 +928,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Connection'
-          description: Connection state record
+          description: The connection record.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record matching the given 'recordId'.
-      summary: Returns an existing connection record by id.
+          description: There is no connection record matching the given identifier.
+      summary: Gets an existing connection record by its unique identifier.
       tags:
       - Connections Management
   /connection-invitations:
     post:
-      description: "Creates new connection state record in `pending` state. It is\
-        \ assumed that application would first decode and validate the invitation.\
-        \ When it is accepted in the application side, it should be submitted in raw\
-        \ format to this API."
+      description: |
+        Accepts an [Out of Band 2.0](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages) invitation, generates a new Peer DID,
+        and submits a Connection Request to the inviter.
+        It returns a connection object in `ConnectionRequestPending` state, until the Connection Request is eventually sent to the inviter by the prism-agent's background process. The connection object state will then automatically move to `ConnectionRequestSent`.
       operationId: acceptConnectionInvitation
       requestBody:
         content:
@@ -985,28 +957,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Connection'
-          description: Invitation successfully accepted.
+          description: The invitation was successfully accepted.
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Storing the connection invitation failed for an unexpected
-            reason.
-      summary: Accepts externally received invitation.
+            reason. More information on the error can be found in the response body.
+      summary: Accepts an Out of Band invitation.
       tags:
       - Connections Management
 components:
   parameters:
     didRefInPath:
       description: DID reference.
+      example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
       in: path
       name: didRef
       required: true
       schema:
         type: string
+    offset:
+      in: query
+      name: offset
+      required: false
+      schema:
+        format: int32
+        type: integer
+    limit:
+      in: query
+      name: limit
+      required: false
+      schema:
+        format: int32
+        type: integer
     issueCredentialRecordIdInPath:
-      description: The issue credential record Id.
+      description: The unique identifier of the issue credential record.
+      in: path
+      name: recordId
+      required: true
+      schema:
+        format: uuid
+        type: string
+    presentationRecordIdInPath:
+      description: The unique identifier of the proof presentation record.
       in: path
       name: recordId
       required: true
@@ -1014,7 +1009,7 @@ components:
         format: uuid
         type: string
     connectionId:
-      description: Id of connection state record.
+      description: The unique identifier of the connection record.
       in: path
       name: connectionId
       required: true
@@ -1024,116 +1019,154 @@ components:
     DIDResponse:
       example:
         metadata:
+          canonicalId: canonicalId
           deactivated: true
         did:
           assertionMethod:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          controller: did:prism:mainnet:456
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           service:
-          - id: service1
+          - id: service-1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
-          - id: service1
+            type: LinkedDomains
+          - id: service-1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
+            type: LinkedDomains
           keyAgreement:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          id: did:prism:mainnet:123
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          capabilityDelegation:
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           verificationMethod:
-          - controller: did:prism:456
+          - controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
             publicKeyJwk:
               kty: EC
               crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
               x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
               "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
             type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
+          - controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
             publicKeyJwk:
               kty: EC
               crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
               x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
               "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
             type: EcdsaSecp256k1VerificationKey2019
           capabilityInvocation:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
           authentication:
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
-          - controller: did:prism:456
-            publicKeyJwk:
-              kty: EC
-              crv: secp256k1
-              kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-            id: did:prism:123#key-1
-            type: EcdsaSecp256k1VerificationKey2019
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          - type: EMBEDDED
+            verificationMethod:
+              controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+              publicKeyJwk:
+                kty: EC
+                crv: secp256k1
+                x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+                "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+              id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+              type: EcdsaSecp256k1VerificationKey2019
+            uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
       properties:
         did:
           $ref: '#/components/schemas/DID'
@@ -1144,121 +1177,160 @@ components:
       - metadata
       type: object
     DID:
+      description: |
+        A core DID data model capable of being transformed into W3C compliant representation.
       example:
         assertionMethod:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        controller: did:prism:mainnet:456
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         service:
-        - id: service1
+        - id: service-1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
-        - id: service1
+          type: LinkedDomains
+        - id: service-1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
+          type: LinkedDomains
         keyAgreement:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        id: did:prism:mainnet:123
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        capabilityDelegation:
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         verificationMethod:
-        - controller: did:prism:456
+        - controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           publicKeyJwk:
             kty: EC
             crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
             x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
             "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
+          id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
           type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
+        - controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           publicKeyJwk:
             kty: EC
             crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
             x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
             "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
+          id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
           type: EcdsaSecp256k1VerificationKey2019
         capabilityInvocation:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
         authentication:
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
-        - controller: did:prism:456
-          publicKeyJwk:
-            kty: EC
-            crv: secp256k1
-            kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
-            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-          id: did:prism:123#key-1
-          type: EcdsaSecp256k1VerificationKey2019
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+        - type: EMBEDDED
+          verificationMethod:
+            controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+            publicKeyJwk:
+              kty: EC
+              crv: secp256k1
+              x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+              "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+            id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            type: EcdsaSecp256k1VerificationKey2019
+          uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
       properties:
         id:
-          example: did:prism:mainnet:123
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
         controller:
-          example: did:prism:mainnet:456
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
         verificationMethod:
           items:
@@ -1266,19 +1338,23 @@ components:
           type: array
         authentication:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         assertionMethod:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         keyAgreement:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         capabilityInvocation:
           items:
-            $ref: '#/components/schemas/VerificationMethod'
+            $ref: '#/components/schemas/VerificationMethodOrRef'
+          type: array
+        capabilityDelegation:
+          items:
+            $ref: '#/components/schemas/VerificationMethodOrRef'
           type: array
         service:
           items:
@@ -1289,24 +1365,23 @@ components:
       type: object
     VerificationMethod:
       example:
-        controller: did:prism:456
+        controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         publicKeyJwk:
           kty: EC
           crv: secp256k1
-          kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
           x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
           "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
-        id: did:prism:123#key-1
+        id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
         type: EcdsaSecp256k1VerificationKey2019
       properties:
         id:
-          example: did:prism:123#key-1
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
           type: string
         type:
           example: EcdsaSecp256k1VerificationKey2019
           type: string
         controller:
-          example: did:prism:456
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
         publicKeyJwk:
           $ref: '#/components/schemas/PublicKeyJwk'
@@ -1320,7 +1395,6 @@ components:
       example:
         kty: EC
         crv: secp256k1
-        kid: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
         x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
         "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
       properties:
@@ -1336,27 +1410,57 @@ components:
         kty:
           example: EC
           type: string
-        kid:
-          example: _TKzHv2jFIyvdTGF1Dsgwngfdg3SH6TpDv0Ta1aOEkw
-          type: string
       required:
       - kty
       type: object
+    VerificationMethodOrRef:
+      description: |
+        An embedded verificationMethod as JSON or a referenced key as a URI.
+        Referenced key and embedded key are mutually exclusive.
+        If the type is EMBEDDED, `uri` field must be present.
+        Otherwise `verificationMethod` field must be present.
+      example:
+        type: EMBEDDED
+        verificationMethod:
+          controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+          publicKeyJwk:
+            kty: EC
+            crv: secp256k1
+            x: 38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8
+            "y": nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4
+          id: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+          type: EcdsaSecp256k1VerificationKey2019
+        uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+      properties:
+        type:
+          enum:
+          - EMBEDDED
+          - REFERENCED
+          example: EMBEDDED
+          type: string
+        uri:
+          example: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
+          type: string
+        verificationMethod:
+          $ref: '#/components/schemas/VerificationMethod'
+      required:
+      - type
+      type: object
     Service:
       example:
-        id: service1
+        id: service-1
         serviceEndpoint:
         - https://bar.example.com
         - https://bar.example.com
-        type: MediatorService
+        type: LinkedDomains
       properties:
         id:
-          example: service1
+          example: service-1
           type: string
         type:
           enum:
-          - MediatorService
-          example: MediatorService
+          - LinkedDomains
+          example: LinkedDomains
           type: string
         serviceEndpoint:
           items:
@@ -1370,6 +1474,7 @@ components:
       type: object
     DIDDocumentMetadata:
       example:
+        canonicalId: canonicalId
         deactivated: true
       properties:
         deactivated:
@@ -1378,6 +1483,9 @@ components:
             \ been deactivated, this property is OPTIONAL, but if included, MUST have\
             \ the boolean value false."
           type: boolean
+        canonicalId:
+          description: A DID in canonical form
+          type: string
       required:
       - deactivated
       type: object
@@ -1418,156 +1526,131 @@ components:
       - title
       - type
       type: object
-    CreateAuthenticationChallengeRequest:
+    ManagedDIDPage:
       example:
-        subject: did:example:123456789abcdefghi
-        state: qrcode#123
-        ttl: 900
+        pageOf: pageOf
+        next: next
+        previous: previous
+        contents:
+        - longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
+          did: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+          status: CREATED
+        - longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
+          did: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+          status: CREATED
+        kind: kind
+        self: self
       properties:
-        ttl:
-          description: A number of seconds that challenge will be considered valid.
-          example: 900
-          type: number
-        state:
-          description: |
-            An opaque string provided by a relying-party indicating the purpose of
-            this challenge in order to avoid repurposing the challenge submission.
-          example: qrcode#123
+        self:
           type: string
-        subject:
+        kind:
+          type: string
+        pageOf:
+          type: string
+        next:
+          type: string
+        previous:
+          type: string
+        contents:
+          items:
+            $ref: '#/components/schemas/ManagedDID'
+          type: array
+      required:
+      - kind
+      - pageOf
+      - self
+      type: object
+    ManagedDID:
+      example:
+        longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
+        did: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+        status: CREATED
+      properties:
+        did:
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+          type: string
+        longFormDid:
+          description: A long-form DID. Mandatory when status is not PUBLISHED and
+            optional when status is PUBLISHED
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
+          type: string
+        status:
           description: |
-            A challenged subject that must complete the challenge.
-            May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-            is used, it must be inside the authentication verification relationship.
-          example: did:example:123456789abcdefghi
+            A status indicating a publication state of a DID in the wallet (e.g. PUBLICATION_PENDING, PUBLISHED).
+            Does not represent DID a full lifecyle (e.g. deactivated, recovered, updated).
+          enum:
+          - CREATED
+          - PUBLICATION_PENDING
+          - PUBLISHED
           type: string
       required:
-      - ttl
+      - did
+      - status
       type: object
-    AuthenticationChallengeSubject:
-      description: |
-        A challenged subject that must complete the challenge.
-        May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-        is used, it must be inside the authentication verification relationship.
-      example: did:example:123456789abcdefghi
-      type: string
-    CreateAuthenticationChallengeResponse:
-      example:
-        subject: did:example:123456789abcdefghi
-        challenge: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-      properties:
-        challenge:
-          description: |
-            A JWT challenge that a user must provide to Castor SDK to create a ChallengeSubmission.
-            JWT payload contains nonce, state, expiration, issuer
-          example: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-          type: string
-        subject:
-          description: |
-            A challenged subject that must complete the challenge.
-            May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-            is used, it must be inside the authentication verification relationship.
-          example: did:example:123456789abcdefghi
-          type: string
-      required:
-      - challenge
-      type: object
-    AuthenticationChallengeJwt:
-      description: |
-        A JWT challenge that a user must provide to Castor SDK to create a ChallengeSubmission.
-        JWT payload contains nonce, state, expiration, issuer
-      example: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-      type: string
-    AuthenticationChallengeSubmissionRequest:
-      example:
-        signature: 243b9ed6561ab3...5d497f609b8cd04
-        subject: did:example:123456789abcdefghi
-        challenge: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-      properties:
-        challenge:
-          description: |
-            A JWT challenge that a user must provide to Castor SDK to create a ChallengeSubmission.
-            JWT payload contains nonce, state, expiration, issuer
-          example: eyJhbGciOiJIUzI1NiIsInR5c...0eu8Ri_WSPSsBTlCes2YMpuB1mHU
-          type: string
-        subject:
-          description: |
-            A challenged subject that must complete the challenge.
-            May refer to DID or VerificationMethod inside a DID. If VerificationMethod
-            is used, it must be inside the authentication verification relationship.
-          example: did:example:123456789abcdefghi
-          type: string
-        signature:
-          example: 243b9ed6561ab3...5d497f609b8cd04
-          type: string
-      required:
-      - challenge
-      - signature
-      - subject
-      type: object
-    AuthenticationChallengeSubmissionResponse:
-      example:
-        success: true
-        state: qrcode#123
-      properties:
-        success:
-          example: true
-          type: boolean
-        state:
-          description: |
-            An opaque string provided by a relying-party indicating the purpose of
-            this challenge in order to avoid repurposing the challenge submission.
-          example: qrcode#123
-          type: string
-      required:
-      - success
-      type: object
-    ListManagedDIDResponse:
-      items:
-        $ref: '#/components/schemas/ListManagedDIDResponse_inner'
-      type: array
     CreateManagedDidRequest:
       example:
         documentTemplate:
           publicKeys:
           - purpose: authentication
-            id: key1
+            id: key-1
           - purpose: authentication
-            id: key1
+            id: key-1
           services:
-          - id: service1
+          - id: service-1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
-          - id: service1
+            type: LinkedDomains
+          - id: service-1
             serviceEndpoint:
             - https://bar.example.com
             - https://bar.example.com
-            type: MediatorService
+            type: LinkedDomains
       properties:
         documentTemplate:
           $ref: '#/components/schemas/CreateManagedDidRequest_documentTemplate'
       required:
       - documentTemplate
       type: object
+    ManagedDIDKeyTemplate:
+      description: key-pair template to add to DID document.
+      example:
+        purpose: authentication
+        id: key-1
+      properties:
+        id:
+          description: Identifier of a verification material in the DID Document
+          example: key-1
+          type: string
+        purpose:
+          enum:
+          - authentication
+          - assertionMethod
+          - keyAgreement
+          - capabilityInvocation
+          - capabilityDelegation
+          example: authentication
+          type: string
+      required:
+      - id
+      - purpose
+      type: object
     CreateManagedDIDResponse:
       example:
-        longFormDid: did:prism:1:abc123:abc123
+        longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
       properties:
         longFormDid:
           description: A long-form DID for the created DID
-          example: did:prism:1:abc123:abc123
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
           type: string
       required:
-      - did
       - longFormDid
       type: object
     DIDOperationResponse:
       example:
         scheduledOperation:
-          id: "123"
-          didRef: did:prism:123
+          id: 98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b
+          didRef: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
       properties:
         scheduledOperation:
           $ref: '#/components/schemas/DidOperationSubmission'
@@ -1576,18 +1659,73 @@ components:
       type: object
     DidOperationSubmission:
       example:
-        id: "123"
-        didRef: did:prism:123
+        id: 98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b
+        didRef: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
       properties:
         id:
-          example: "123"
+          example: 98e6a4db10e58fcc011dd8def5ce99fd8b52af39e61e5fb436dc28259139818b
           type: string
         didRef:
-          example: did:prism:123
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
       required:
       - didRef
       - id
+      type: object
+    UpdateManagedDIDRequest:
+      example:
+        actions:
+        - actionType: ADD_KEY
+          removeKey:
+            id: key-1
+          removeService:
+            id: service-1
+          addService:
+            id: service-1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          updateService:
+            id: service-1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          addKey:
+            purpose: authentication
+            id: key-1
+        - actionType: ADD_KEY
+          removeKey:
+            id: key-1
+          removeService:
+            id: service-1
+          addService:
+            id: service-1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          updateService:
+            id: service-1
+            serviceEndpoint:
+            - https://bar.example.com
+            - https://bar.example.com
+            type: LinkedDomains
+          addKey:
+            purpose: authentication
+            id: key-1
+      properties:
+        actions:
+          description: |
+            A list of actions to perform on DID document.
+            The field `addKey`, `removeKey`, `addService`, `removeService`, `updateService` must corresponds to
+            the `actionType` specified. For example, `addKey` must be present when `actionType` is `ADD_KEY`.
+          items:
+            $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner'
+          type: array
+      required:
+      - actions
       type: object
     VerifiableCredentialSchemaPage:
       example:
@@ -1795,35 +1933,39 @@ components:
         next: next
         previous: previous
         contents:
-        - issuerDIDs:
-          - issuerDIDs
-          - issuerDIDs
-          createdAt: 2000-01-23T04:56:07.000+00:00
+        - createdAt: 2000-01-23T04:56:07.000+00:00
           kind: kind
           name: name
           self: self
-          credentialTypes:
-          - credentialTypes
-          - credentialTypes
-          attributes:
-          - attributes
-          - attributes
-          id: id
+          description: description
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          nonce: 0
+          constraints:
+          - trustedIssuers:
+            - trustedIssuers
+            - trustedIssuers
+            schemaId: schemaId
+          - trustedIssuers:
+            - trustedIssuers
+            - trustedIssuers
+            schemaId: schemaId
           updatedAt: 2000-01-23T04:56:07.000+00:00
-        - issuerDIDs:
-          - issuerDIDs
-          - issuerDIDs
-          createdAt: 2000-01-23T04:56:07.000+00:00
+        - createdAt: 2000-01-23T04:56:07.000+00:00
           kind: kind
           name: name
           self: self
-          credentialTypes:
-          - credentialTypes
-          - credentialTypes
-          attributes:
-          - attributes
-          - attributes
-          id: id
+          description: description
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          nonce: 0
+          constraints:
+          - trustedIssuers:
+            - trustedIssuers
+            - trustedIssuers
+            schemaId: schemaId
+          - trustedIssuers:
+            - trustedIssuers
+            - trustedIssuers
+            schemaId: schemaId
           updatedAt: 2000-01-23T04:56:07.000+00:00
         kind: kind
         self: self
@@ -1849,20 +1991,22 @@ components:
       type: object
     VerificationPolicy:
       example:
-        issuerDIDs:
-        - issuerDIDs
-        - issuerDIDs
         createdAt: 2000-01-23T04:56:07.000+00:00
         kind: kind
         name: name
         self: self
-        credentialTypes:
-        - credentialTypes
-        - credentialTypes
-        attributes:
-        - attributes
-        - attributes
-        id: id
+        description: description
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        nonce: 0
+        constraints:
+        - trustedIssuers:
+          - trustedIssuers
+          - trustedIssuers
+          schemaId: schemaId
+        - trustedIssuers:
+          - trustedIssuers
+          - trustedIssuers
+          schemaId: schemaId
         updatedAt: 2000-01-23T04:56:07.000+00:00
       properties:
         self:
@@ -1870,34 +2014,50 @@ components:
         kind:
           type: string
         id:
+          format: uuid
           type: string
+        nonce:
+          format: int32
+          type: integer
         name:
           type: string
-        attributes:
-          items:
-            type: string
-          type: array
-        issuerDIDs:
-          items:
-            type: string
-          type: array
-        credentialTypes:
-          items:
-            type: string
-          type: array
+        description:
+          type: string
         createdAt:
           format: date-time
           type: string
         updatedAt:
           format: date-time
           type: string
+        constraints:
+          items:
+            $ref: '#/components/schemas/VerificationPolicyConstraint'
+          type: array
       required:
       - createdAt
+      - description
       - id
       - kind
       - name
+      - nonce
       - self
       - updatedAt
+      type: object
+    VerificationPolicyConstraint:
+      example:
+        trustedIssuers:
+        - trustedIssuers
+        - trustedIssuers
+        schemaId: schemaId
+      properties:
+        schemaId:
+          type: string
+        trustedIssuers:
+          items:
+            type: string
+          type: array
+      required:
+      - schemaId
       type: object
     BadRequest:
       properties:
@@ -1912,186 +2072,96 @@ components:
       type: object
     VerificationPolicyInput:
       example:
-        issuerDIDs:
-        - issuerDIDs
-        - issuerDIDs
-        createdAt: 2000-01-23T04:56:07.000+00:00
         name: name
-        credentialTypes:
-        - credentialTypes
-        - credentialTypes
-        attributes:
-        - attributes
-        - attributes
-        id: id
-        updatedAt: 2000-01-23T04:56:07.000+00:00
+        description: description
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        constraints:
+        - trustedIssuers:
+          - trustedIssuers
+          - trustedIssuers
+          schemaId: schemaId
+        - trustedIssuers:
+          - trustedIssuers
+          - trustedIssuers
+          schemaId: schemaId
       properties:
         id:
+          format: uuid
           type: string
         name:
           type: string
-        attributes:
-          items:
-            type: string
-          type: array
-        issuerDIDs:
-          items:
-            type: string
-          type: array
-        credentialTypes:
-          items:
-            type: string
-          type: array
-        createdAt:
-          format: date-time
+        description:
           type: string
-        updatedAt:
-          format: date-time
-          type: string
+        constraints:
+          items:
+            $ref: '#/components/schemas/VerificationPolicyConstraint'
+          type: array
       required:
+      - description
       - name
       type: object
     CreateIssueCredentialRecordRequest:
-      description: A request to create a new "issue credential record"
-      example:
-        validityPeriod: 3600
-        awaitConfirmation: true
-        schemaId: schemaId
-        claims:
-          key: claims
-        automaticIssuance: true
-        subjectId: did:prism:subjectofverifiablecredentials
+      allOf:
+      - $ref: '#/components/schemas/IssueCredentialRecordBase'
+      - $ref: '#/components/schemas/CreateIssueCredentialRecordRequest_allOf'
+      description: A request to create a new "issue credential record".
+      type: object
+    IssueCredentialRecordBase:
       properties:
         schemaId:
-          description: Identifier of the VC Schema associated with this object
+          description: The unique identifier of the schema used for this credential
+            offer.
           type: string
         subjectId:
-          description: Subject DID of the verifiable credentials object
+          description: The identifier (e.g DID) of the subject to which the verifiable
+            credential will be issued.
           example: did:prism:subjectofverifiablecredentials
           type: string
         validityPeriod:
           description: The validity period in seconds of the verifiable credential
+            that will be issued.
           example: 3600
           type: number
         claims:
           additionalProperties:
             type: string
-          description: Claims that will be associated with given verifiable credentials
+          description: The claims that will be associated with the issued verifiable
+            credential.
           type: object
         automaticIssuance:
           default: true
-          type: boolean
-        awaitConfirmation:
-          default: true
+          description: |
+            Specifies whether or not the credential should be automatically generated and issued when receiving the `CredentialRequest` from the holder.
+            If set to `false`, a manual approval by the issuer via API call will be required for the VC to be issued.
           type: boolean
       required:
       - claims
       - subjectId
     IssueCredentialRecord:
       allOf:
-      - $ref: '#/components/schemas/CreateIssueCredentialRecordRequest'
+      - $ref: '#/components/schemas/IssueCredentialRecordBase'
       - $ref: '#/components/schemas/IssueCredentialRecord_allOf'
-      description: An issue credential record to store the state of the protocol execution
+      description: An issue credential record that stores the state of the protocol
+        execution.
       type: object
     IssueCredentialRecordCollection:
-      description: A collection of issue credential records
+      description: A collection of issue credential records.
       example:
-        offset: 0
-        limit: 6
-        count: 1
-        items:
+        contents:
         - null
         - null
       properties:
-        items:
+        contents:
+          description: The array containing the list of issue credential records.
           items:
             $ref: '#/components/schemas/IssueCredentialRecord'
           type: array
-        offset:
-          type: integer
-        limit:
-          type: integer
-        count:
-          type: integer
       required:
-      - count
-      - items
-      - limit
-      - offset
-    W3CCredentialStatus:
-      description: Verifiable Credential revocation status
-      example:
-        description: Issued by did:prism:issuer12354 on 2022-02-01
-        status: issued
-      properties:
-        status:
-          description: Status name
-          enum:
-          - issued
-          - revoked
-          example: issued
-          type: string
-        description:
-          description: Description about the status
-          example: Issued by did:prism:issuer12354 on 2022-02-01
-          type: string
-      required:
-      - status
-    W3CCredentialRevocationRequest:
-      additionalProperties: false
-      description: Credential revocation request. Contain credential id and other
-        information required for revocation
-      example:
-        credentialId: abcde-12345
-      properties:
-        credentialId:
-          description: Credential identity
-          example: abcde-12345
-          type: string
-      required:
-      - credentialId
-      type: object
-    W3CCredentialRevocationResponse:
-      description: Credential revocation response. Contain credential id and revocation
-        operation for tracing the completion
-      example:
-        credentialId: abcde-12345
-        operation:
-          id: operation1235
-          status: scheduled
-      properties:
-        credentialId:
-          description: Credential identity
-          example: abcde-12345
-          type: string
-        operation:
-          $ref: '#/components/schemas/RevocationStatus'
-      required:
-      - credentialId
-      - operationId
-      - status
-    RevocationStatus:
-      description: Revocation status record
-      example:
-        id: operation1235
-        status: scheduled
-      properties:
-        id:
-          description: Operation id
-          example: operation1235
-          type: string
-        status:
-          description: Operation status
-          enum:
-          - scheduled
-          - pending
-          - completed
-          - failed
-          type: string
+      - contents
     PresentationStatus:
-      description: Presentation Status
+      description: The proof presentation record.
       example:
-        presentationId: presentationId
+        presentationId: 3c6d9fa5-d277-431e-a6cb-d3956e47e610
         data:
         - data
         - data
@@ -2106,22 +2176,46 @@ components:
           - did:web:atalaprism.io/users/testUser
           - did.prism:123
           - did:prism:...
-        connectionId: connectionId
-        status: status
+        connectionId: bc528dc8-69f1-4c5a-a508-5f8019047900
+        status: RequestPending
       properties:
         presentationId:
+          description: The unique identifier of the presentation record.
+          example: 3c6d9fa5-d277-431e-a6cb-d3956e47e610
           type: string
         status:
+          description: The current state of the proof presentation record.
+          enum:
+          - RequestPending
+          - RequestSent
+          - RequestReceived
+          - RequestRejected
+          - PresentationPending
+          - PresentationGenerated
+          - PresentationSent
+          - PresentationReceived
+          - PresentationVerified
+          - PresentationAccepted
+          - PresentationRejected
+          - ProblemReportPending
+          - ProblemReportSent
+          - ProblemReportReceived
           type: string
         proofs:
+          description: "The type of proofs requested in the context of this proof\
+            \ presentation request (e.g., VC schema, trusted issuers, etc.)"
           items:
             $ref: '#/components/schemas/ProofRequestAux'
           type: array
         data:
+          description: The list of proofs presented by the prover to the verifier.
           items:
             type: string
           type: array
         connectionId:
+          description: The unique identifier of an established connection between
+            the verifier and the prover.
+          example: bc528dc8-69f1-4c5a-a508-5f8019047900
           type: string
       required:
       - data
@@ -2137,11 +2231,12 @@ components:
         - did:prism:...
       properties:
         schemaId:
-          description: Ex ID card or driving licence
+          description: The unique identifier of a schema the VC should comply with.
           example: https://schema.org/Person
           type: string
         trustIssuers:
-          description: Issuer that the verifier trust trust
+          description: One or more issuers that are trusted by the verifier emitting
+            the proof presentation request.
           example:
           - did:web:atalaprism.io/users/testUser
           - did.prism:123
@@ -2153,7 +2248,8 @@ components:
       - schemaId
       - trustIssuers
     RequestPresentationInput:
-      description: Request Presentation Input
+      description: A request to create a new "proof presentation" record and send
+        it to the prover.
       example:
         proofs:
         - schemaId: https://schema.org/Person
@@ -2166,19 +2262,46 @@ components:
           - did:web:atalaprism.io/users/testUser
           - did.prism:123
           - did:prism:...
-        connectionId: connectionId
+        options:
+          domain: https://example-verifier.com
+          challenge: 11c91493-01b3-4c4d-ac36-b336bab5bddf
+        connectionId: bc528dc8-69f1-4c5a-a508-5f8019047900
       properties:
         connectionId:
+          description: The unique identifier of an established connection between
+            the verifier and the prover.
+          example: bc528dc8-69f1-4c5a-a508-5f8019047900
           type: string
+        options:
+          $ref: '#/components/schemas/Options'
         proofs:
+          description: "The type of proofs requested in the context of this proof\
+            \ presentation request (e.g., VC schema, trusted issuers, etc.)"
           items:
             $ref: '#/components/schemas/ProofRequestAux'
           type: array
       required:
       - connectionId
       - proofs
+    Options:
+      example:
+        domain: https://example-verifier.com
+        challenge: 11c91493-01b3-4c4d-ac36-b336bab5bddf
+      properties:
+        challenge:
+          description: The challenge should be a randomly generated string.
+          example: 11c91493-01b3-4c4d-ac36-b336bab5bddf
+          type: string
+        domain:
+          description: The domain value can be any string or URI
+          example: https://example-verifier.com
+          type: string
+      required:
+      - challenge
+      - domain
     RequestPresentationOutput:
-      description: Request Presentation Output
+      description: The proof presentation record details. Only the unique identifier
+        for now.
       example:
         presentationId: presentationId
       properties:
@@ -2188,12 +2311,12 @@ components:
       required:
       - presentationId
     RequestPresentationAction:
-      description: Actions on presetations (to update)
+      description: The action to perform on the proof presentation record.
       example:
         action: request-accept
         proofId:
-        - proofId
-        - proofId
+        - 0d3a0f8d-852e-42d5-a6f8-2281c4be945c
+        - 0d3a0f8d-852e-42d5-a6f8-2281c4be945c
       properties:
         action:
           enum:
@@ -2203,13 +2326,17 @@ components:
           - presentation-reject
           type: string
         proofId:
-          description: This is to choose what VCs to use
+          description: The unique identifier of the issue credential record - and
+            hence VC - to use as the prover accepts the presentation request. Only
+            applicable on the prover side when the action is `request-accept`.
           items:
+            example: 0d3a0f8d-852e-42d5-a6f8-2281c4be945c
             type: string
           type: array
       required:
       - action
     ConnectionCollection:
+      description: A collection of connection records.
       example:
         contents:
         - null
@@ -2218,12 +2345,15 @@ components:
         self: https://atala-prism-products.io/connections
       properties:
         self:
+          description: The reference to the connection collection itself.
           example: https://atala-prism-products.io/connections
           type: string
         kind:
+          description: The type of object returned. In this case a `Collection`.
           example: Collection
           type: string
         contents:
+          description: The array containing the list of connection records.
           items:
             $ref: '#/components/schemas/Connection'
           type: array
@@ -2236,35 +2366,40 @@ components:
       allOf:
       - $ref: '#/components/schemas/CreateConnectionRequest'
       - $ref: '#/components/schemas/Connection_allOf'
+      description: A connection record.
       type: object
     CreateConnectionRequest:
       example:
         label: Peter
       properties:
         label:
+          description: A human readable alias for the connection.
           example: Peter
           type: string
       type: object
     ConnectionInvitation:
+      description: A connection invitation.
       properties:
         id:
-          description: The invitation identifier used as parent thread ID (pthid)
-            for the response message that follows.
+          description: The unique identifier of the invitation. It should be used
+            as parent thread ID (pthid) for the Connection Request message that follows.
           example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
           format: uuid
           type: string
         type:
           description: The DIDComm Message Type URI (MTURI) the invitation message
-            coplies with.
+            complies with.
           example: https://didcomm.org/out-of-band/2.0/invitation
           type: string
         from:
           description: The DID representing the sender to be used by recipients for
             future interactions.
-          example: did:prism:1234457
+          example: did:peer:1234457
           type: string
         invitationUrl:
-          description: The invitation message encoded as a URL.
+          description: "The invitation message encoded as a URL. This URL follows\
+            \ the Out of [Band 2.0 protocol](https://identity.foundation/didcomm-messaging/spec/v2.0/#out-of-band-messages)\
+            \ and can be used to generate a QR code for example."
           example: https://domain.com/path?_oob=eyJAaWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvbXktZmFtaWx5LzEuMC9teS1tZXNzYWdlLXR5cGUiLCJkaWQiOiJXZ1d4cXp0ck5vb0c5MlJYdnhTVFd2IiwiaW1hZ2VVcmwiOiJodHRwOi8vMTkyLjE2OC41Ni4xMDEvaW1nL2xvZ28uanBnIiwibGFiZWwiOiJCb2IiLCJyZWNpcGllbnRLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInJvdXRpbmdLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInNlcnZpY2VFbmRwb2ludCI6Imh0dHA6Ly8xOTIuMTY4LjU2LjEwMTo4MDIwIn0=
           type: string
       required:
@@ -2274,83 +2409,40 @@ components:
       - type
       type: object
     AcceptConnectionInvitationRequest:
+      description: "The request used by an invitee to accept a connection invitation\
+        \ received from an inviter, using out-of-band mechanism."
       example:
         invitation: eyJAaWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvbXktZmFtaWx5LzEuMC9teS1tZXNzYWdlLXR5cGUiLCJkaWQiOiJXZ1d4cXp0ck5vb0c5MlJYdnhTVFd2IiwiaW1hZ2VVcmwiOiJodHRwOi8vMTkyLjE2OC41Ni4xMDEvaW1nL2xvZ28uanBnIiwibGFiZWwiOiJCb2IiLCJyZWNpcGllbnRLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInJvdXRpbmdLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInNlcnZpY2VFbmRwb2ludCI6Imh0dHA6Ly8xOTIuMTY4LjU2LjEwMTo4MDIwIn0=
       properties:
         invitation:
+          description: The base64-encoded raw invitation.
           example: eyJAaWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvbXktZmFtaWx5LzEuMC9teS1tZXNzYWdlLXR5cGUiLCJkaWQiOiJXZ1d4cXp0ck5vb0c5MlJYdnhTVFd2IiwiaW1hZ2VVcmwiOiJodHRwOi8vMTkyLjE2OC41Ni4xMDEvaW1nL2xvZ28uanBnIiwibGFiZWwiOiJCb2IiLCJyZWNpcGllbnRLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInJvdXRpbmdLZXlzIjpbIkgzQzJBVnZMTXY2Z21NTmFtM3VWQWpacGZrY0pDd0R3blpuNnozd1htcVBWIl0sInNlcnZpY2VFbmRwb2ludCI6Imh0dHA6Ly8xOTIuMTY4LjU2LjEwMTo4MDIwIn0=
           type: string
       required:
       - invitation
       type: object
-    ListManagedDIDResponse_inner:
-      example:
-        longFormDid: did:prism:abc:123
-        did: did:prism:abc
-        status: CREATED
-      properties:
-        did:
-          example: did:prism:abc
-          type: string
-        longFormDid:
-          description: A long-form DID. Mandatory when status is not PUBLISHED and
-            optional when status is PUBLISHED
-          example: did:prism:abc:123
-          type: string
-        status:
-          enum:
-          - CREATED
-          - PUBLICATION_PENDING
-          - PUBLISHED
-          type: string
-      required:
-      - did
-      - status
-      type: object
-    CreateManagedDidRequest_documentTemplate_publicKeys_inner:
-      example:
-        purpose: authentication
-        id: key1
-      properties:
-        id:
-          description: Identifier of a verification material in the DID Document
-          example: key1
-          type: string
-        purpose:
-          enum:
-          - authentication
-          - assertionMethod
-          - keyAgreement
-          - capabilityInvocation
-          - capabilityDelegation
-          example: authentication
-          type: string
-      required:
-      - id
-      - purpose
-      type: object
     CreateManagedDidRequest_documentTemplate:
       example:
         publicKeys:
         - purpose: authentication
-          id: key1
+          id: key-1
         - purpose: authentication
-          id: key1
+          id: key-1
         services:
-        - id: service1
+        - id: service-1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
-        - id: service1
+          type: LinkedDomains
+        - id: service-1
           serviceEndpoint:
           - https://bar.example.com
           - https://bar.example.com
-          type: MediatorService
+          type: LinkedDomains
       properties:
         publicKeys:
           items:
-            $ref: '#/components/schemas/CreateManagedDidRequest_documentTemplate_publicKeys_inner'
+            $ref: '#/components/schemas/ManagedDIDKeyTemplate'
           type: array
         services:
           items:
@@ -2361,23 +2453,141 @@ components:
       - services
       - storage
       type: object
+    UpdateManagedDIDRequest_actions_inner_removeKey:
+      example:
+        id: key-1
+      properties:
+        id:
+          description: ID of key to remove from DID document
+          example: key-1
+          type: string
+      required:
+      - id
+      type: object
+    UpdateManagedDIDRequest_actions_inner_removeService:
+      example:
+        id: service-1
+      properties:
+        id:
+          description: ID of service to remove from DID document
+          example: service-1
+          type: string
+      required:
+      - id
+      type: object
+    UpdateManagedDIDRequest_actions_inner_updateService:
+      description: A patch to existing Service. 'type' and 'serviceEndpoint' must
+        not be both empty.
+      example:
+        id: service-1
+        serviceEndpoint:
+        - https://bar.example.com
+        - https://bar.example.com
+        type: LinkedDomains
+      properties:
+        id:
+          description: ID of existing service to update in the DID document
+          example: service-1
+          type: string
+        type:
+          enum:
+          - LinkedDomains
+          example: LinkedDomains
+          type: string
+        serviceEndpoint:
+          items:
+            example: https://bar.example.com
+            type: string
+          type: array
+      required:
+      - id
+      type: object
+    UpdateManagedDIDRequest_actions_inner:
+      description: Detail of DID update action. Only property matching actionType
+        can be present.
+      example:
+        actionType: ADD_KEY
+        removeKey:
+          id: key-1
+        removeService:
+          id: service-1
+        addService:
+          id: service-1
+          serviceEndpoint:
+          - https://bar.example.com
+          - https://bar.example.com
+          type: LinkedDomains
+        updateService:
+          id: service-1
+          serviceEndpoint:
+          - https://bar.example.com
+          - https://bar.example.com
+          type: LinkedDomains
+        addKey:
+          purpose: authentication
+          id: key-1
+      properties:
+        actionType:
+          enum:
+          - ADD_KEY
+          - REMOVE_KEY
+          - ADD_SERVICE
+          - REMOVE_SERVICE
+          - UPDATE_SERVICE
+          example: ADD_KEY
+          type: string
+        addKey:
+          $ref: '#/components/schemas/ManagedDIDKeyTemplate'
+        removeKey:
+          $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner_removeKey'
+        addService:
+          $ref: '#/components/schemas/Service'
+        removeService:
+          $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner_removeService'
+        updateService:
+          $ref: '#/components/schemas/UpdateManagedDIDRequest_actions_inner_updateService'
+      required:
+      - actionType
+      type: object
+    CreateIssueCredentialRecordRequest_allOf:
+      properties:
+        issuingDID:
+          description: The issuer DID of the verifiable credential object.
+          example: did:prism:issuerofverifiablecredentials
+          type: string
+        connectionId:
+          description: "The unique identifier of a DIDComm connection that already\
+            \ exists between the issuer and the holder, and that will be used to execute\
+            \ the issue credential protocol."
+          type: string
+      required:
+      - connectionId
+      - issuingDID
+      type: object
+      example: null
     IssueCredentialRecord_allOf:
       properties:
         recordId:
-          format: uuid
+          description: The unique identifier of the issue credential record.
           type: string
         createdAt:
+          description: The date and time when the issue credential record was created.
           format: date-time
           type: string
         updatedAt:
+          description: The date and time when the issue credential record was last
+            updated.
           format: date-time
           type: string
         role:
+          description: The role played by the Prism agent in the credential issuance
+            flow.
           enum:
           - Issuer
           - Holder
           type: string
         protocolState:
+          description: The current state of the issue credential protocol execution.
           enum:
           - OfferPending
           - OfferSent
@@ -2392,13 +2602,13 @@ components:
           - CredentialSent
           - CredentialReceived
           type: string
-        publicationState:
-          enum:
-          - PublicationPending
-          - PublicationQueued
-          - Published
-          type: string
         jwtCredential:
+          description: The base64-encoded JWT verifiable credential that has been
+            sent by the issuer.
+          type: string
+        issuingDID:
+          description: Issuer DID of the verifiable credential object.
+          example: did:prism:issuerofverifiablecredentials
           type: string
       required:
       - createdAt
@@ -2410,32 +2620,58 @@ components:
     Connection_allOf:
       properties:
         self:
+          description: The reference to the connection resource.
           example: https://atala-prism-products.io/connections/ABCD-1234
           type: string
         kind:
-          example: ConnectionState
+          description: The type of object returned. In this case a `Connection`.
+          example: Connection
           type: string
         connectionId:
+          description: The unique identifier of the connection.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
           format: uuid
           type: string
         myDid:
-          example: did:prism:12345
-          type: string
-        theirDid:
+          description: The DID representing me as the inviter or invitee in this specific
+            connection.
           example: did:peer:12345
           type: string
+        theirDid:
+          description: The DID representing the other peer as the an inviter or invitee
+            in this specific connection.
+          example: did:peer:67890
+          type: string
         state:
+          description: The current state of the connection protocol execution.
           enum:
-          - pending
-          - success
-          - failed
+          - InvitationGenerated
+          - InvitationReceived
+          - ConnectionRequestPending
+          - ConnectionRequestSent
+          - ConnectionRequestReceived
+          - ConnectionResponsePending
+          - ConnectionResponseSent
+          - ConnectionResponseReceived
+          - ProblemReportPending
+          - ProblemReportSent
+          - ProblemReportReceived
           type: string
         createdAt:
+          description: The date and time the connection record was created.
           example: 2021-10-31T09:22:23Z
           format: date-time
           type: string
         updatedAt:
+          description: The date and time the connection record was last updated.
+          example: 2021-12-31T13:59:59Z
           format: date-time
+          type: string
+        role:
+          description: The role played by the Prism agent in the connection flow.
+          enum:
+          - Inviter
+          - Invitee
           type: string
         invitation:
           $ref: '#/components/schemas/ConnectionInvitation'
@@ -2444,6 +2680,7 @@ components:
       - createdAt
       - invitation
       - kind
+      - role
       - self
       - state
       type: object

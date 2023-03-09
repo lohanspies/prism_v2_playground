@@ -1,5 +1,5 @@
 # prism-agent-open-api-specification-client
-A client library for accessing PrismAgent OpenAPI specification
+A client library for accessing Prism Agent OpenAPI specification
 
 ## Usage
 First, create a client:
@@ -60,6 +60,8 @@ client = AuthenticatedClient(
     verify_ssl=False
 )
 ```
+
+There are more settings on the generated `Client` class which let you control more runtime behavior, check out the docstring on that class for more info.
 
 Things to know:
 1. Every path/method combo becomes a Python module with four functions:
