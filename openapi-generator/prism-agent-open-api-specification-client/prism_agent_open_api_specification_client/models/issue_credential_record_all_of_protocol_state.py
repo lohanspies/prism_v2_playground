@@ -14,6 +14,7 @@ class IssueCredentialRecordAllOfProtocolState(str, Enum):
     CREDENTIALPENDING = "CredentialPending"
     CREDENTIALSENT = "CredentialSent"
     CREDENTIALRECEIVED = "CredentialReceived"
+    CREDENTIALGENERATED = "CredentialGenerated"
 
     def __str__(self) -> str:
         return str(self.value)
