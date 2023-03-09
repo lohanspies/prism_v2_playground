@@ -13,61 +13,61 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { VerifiableCredentialSchema } from './VerifiableCredentialSchema';
+import type { ManagedDID } from './ManagedDID';
 import {
-    VerifiableCredentialSchemaFromJSON,
-    VerifiableCredentialSchemaFromJSONTyped,
-    VerifiableCredentialSchemaToJSON,
-} from './VerifiableCredentialSchema';
+    ManagedDIDFromJSON,
+    ManagedDIDFromJSONTyped,
+    ManagedDIDToJSON,
+} from './ManagedDID';
 
 /**
  * 
  * @export
- * @interface VerifiableCredentialSchemaPage
+ * @interface ManagedDIDPage
  */
-export interface VerifiableCredentialSchemaPage {
+export interface ManagedDIDPage {
     /**
      * 
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof ManagedDIDPage
      */
     self: string;
     /**
      * 
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof ManagedDIDPage
      */
     kind: string;
     /**
      * 
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof ManagedDIDPage
      */
     pageOf: string;
     /**
      * 
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof ManagedDIDPage
      */
     next?: string;
     /**
      * 
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof ManagedDIDPage
      */
     previous?: string;
     /**
      * 
-     * @type {Array<VerifiableCredentialSchema>}
-     * @memberof VerifiableCredentialSchemaPage
+     * @type {Array<ManagedDID>}
+     * @memberof ManagedDIDPage
      */
-    contents?: Array<VerifiableCredentialSchema>;
+    contents?: Array<ManagedDID>;
 }
 
 /**
- * Check if a given object implements the VerifiableCredentialSchemaPage interface.
+ * Check if a given object implements the ManagedDIDPage interface.
  */
-export function instanceOfVerifiableCredentialSchemaPage(value: object): boolean {
+export function instanceOfManagedDIDPage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
@@ -76,11 +76,11 @@ export function instanceOfVerifiableCredentialSchemaPage(value: object): boolean
     return isInstance;
 }
 
-export function VerifiableCredentialSchemaPageFromJSON(json: any): VerifiableCredentialSchemaPage {
-    return VerifiableCredentialSchemaPageFromJSONTyped(json, false);
+export function ManagedDIDPageFromJSON(json: any): ManagedDIDPage {
+    return ManagedDIDPageFromJSONTyped(json, false);
 }
 
-export function VerifiableCredentialSchemaPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerifiableCredentialSchemaPage {
+export function ManagedDIDPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): ManagedDIDPage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -91,11 +91,11 @@ export function VerifiableCredentialSchemaPageFromJSONTyped(json: any, ignoreDis
         'pageOf': json['pageOf'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'contents': !exists(json, 'contents') ? undefined : ((json['contents'] as Array<any>).map(VerifiableCredentialSchemaFromJSON)),
+        'contents': !exists(json, 'contents') ? undefined : ((json['contents'] as Array<any>).map(ManagedDIDFromJSON)),
     };
 }
 
-export function VerifiableCredentialSchemaPageToJSON(value?: VerifiableCredentialSchemaPage | null): any {
+export function ManagedDIDPageToJSON(value?: ManagedDIDPage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -109,7 +109,7 @@ export function VerifiableCredentialSchemaPageToJSON(value?: VerifiableCredentia
         'pageOf': value.pageOf,
         'next': value.next,
         'previous': value.previous,
-        'contents': value.contents === undefined ? undefined : ((value.contents as Array<any>).map(VerifiableCredentialSchemaToJSON)),
+        'contents': value.contents === undefined ? undefined : ((value.contents as Array<any>).map(ManagedDIDToJSON)),
     };
 }
 
