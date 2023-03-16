@@ -5,8 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.bad_request import BadRequest
-from ...models.internal_server_error import InternalServerError
+from ...models.error_response import ErrorResponse
 from ...models.verification_policy_page import VerificationPolicyPage
 from ...types import UNSET, Response, Unset
 
@@ -14,9 +13,9 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     client: Client,
-    name: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies".format(client.base_url)
@@ -25,11 +24,11 @@ def _get_kwargs(
     cookies: Dict[str, Any] = client.get_cookies()
 
     params: Dict[str, Any] = {}
-    params["name"] = name
-
     params["offset"] = offset
 
     params["limit"] = limit
+
+    params["name"] = name
 
     params["order"] = order
 
@@ -47,17 +46,17 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
+) -> Optional[Union[ErrorResponse, VerificationPolicyPage]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = VerificationPolicyPage.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequest.from_dict(response.json())
+        response_400 = ErrorResponse.from_dict(response.json())
 
         return response_400
     if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
-        response_500 = InternalServerError.from_dict(response.json())
+        response_500 = ErrorResponse.from_dict(response.json())
 
         return response_500
     if client.raise_on_unexpected_status:
@@ -68,7 +67,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
+) -> Response[Union[ErrorResponse, VerificationPolicyPage]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -80,20 +79,19 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-    name: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
+) -> Response[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
-    parameters
+     Lookup verification policies by `name`
 
     Args:
-        name (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
+        name (Union[Unset, None, str]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -101,14 +99,14 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]
+        Response[Union[ErrorResponse, VerificationPolicyPage]]
     """
 
     kwargs = _get_kwargs(
         client=client,
-        name=name,
         offset=offset,
         limit=limit,
+        name=name,
         order=order,
     )
 
@@ -123,20 +121,19 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    name: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Optional[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
+) -> Optional[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
-    parameters
+     Lookup verification policies by `name`
 
     Args:
-        name (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
+        name (Union[Unset, None, str]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -144,14 +141,14 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]
+        Response[Union[ErrorResponse, VerificationPolicyPage]]
     """
 
     return sync_detailed(
         client=client,
-        name=name,
         offset=offset,
         limit=limit,
+        name=name,
         order=order,
     ).parsed
 
@@ -159,20 +156,19 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    name: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
+) -> Response[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
-    parameters
+     Lookup verification policies by `name`
 
     Args:
-        name (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
+        name (Union[Unset, None, str]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -180,14 +176,14 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]
+        Response[Union[ErrorResponse, VerificationPolicyPage]]
     """
 
     kwargs = _get_kwargs(
         client=client,
-        name=name,
         offset=offset,
         limit=limit,
+        name=name,
         order=order,
     )
 
@@ -200,20 +196,19 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    name: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Optional[Union[BadRequest, InternalServerError, VerificationPolicyPage]]:
+) -> Optional[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
-     Lookup verification policies by `name`, and control the pagination by `offset` and `limit`
-    parameters
+     Lookup verification policies by `name`
 
     Args:
-        name (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
+        name (Union[Unset, None, str]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -221,15 +216,15 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequest, InternalServerError, VerificationPolicyPage]]
+        Response[Union[ErrorResponse, VerificationPolicyPage]]
     """
 
     return (
         await asyncio_detailed(
             client=client,
-            name=name,
             offset=offset,
             limit=limit,
+            name=name,
             order=order,
         )
     ).parsed

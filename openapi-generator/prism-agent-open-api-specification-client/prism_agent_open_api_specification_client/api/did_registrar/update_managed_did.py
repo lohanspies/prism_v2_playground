@@ -80,14 +80,14 @@ def sync_detailed(
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
@@ -130,14 +130,14 @@ def sync(
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
@@ -173,14 +173,14 @@ async def asyncio_detailed(
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:
@@ -221,14 +221,14 @@ async def asyncio(
         did_ref (str):
         json_body (UpdateManagedDIDRequest):  Example: {'actions': [{'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}, {'actionType': 'ADD_KEY',
             'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService': {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
             'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'},
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'},
             'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}.
 
     Raises:

@@ -12,10 +12,10 @@ T = TypeVar("T", bound="UpdateManagedDIDRequestActionsInnerUpdateService")
 
 @attr.s(auto_attribs=True)
 class UpdateManagedDIDRequestActionsInnerUpdateService:
-    """A patch to existing Service. 'type' and 'serviceEndpoint' must not be both empty.
+    """A patch to existing Service. 'type' and 'serviceEndpoint' can't both be empty.
 
     Example:
-        {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+        {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
             'LinkedDomains'}
 
     Attributes:

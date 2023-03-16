@@ -1,13 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.bad_request import BadRequest
-from ...models.internal_server_error import InternalServerError
-from ...models.not_found import NotFound
+from ...models.delete_verification_policy_by_id_response_200 import DeleteVerificationPolicyByIdResponse200
+from ...models.error_response import ErrorResponse
 from ...types import UNSET, Response
 
 
@@ -39,20 +38,21 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[Union[Any, BadRequest, InternalServerError, NotFound]]:
+) -> Optional[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = cast(Any, None)
+        response_200 = DeleteVerificationPolicyByIdResponse200.from_dict(response.json())
+
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequest.from_dict(response.json())
+        response_400 = ErrorResponse.from_dict(response.json())
 
         return response_400
     if response.status_code == HTTPStatus.NOT_FOUND:
-        response_404 = NotFound.from_dict(response.json())
+        response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
     if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
-        response_500 = InternalServerError.from_dict(response.json())
+        response_500 = ErrorResponse.from_dict(response.json())
 
         return response_500
     if client.raise_on_unexpected_status:
@@ -63,7 +63,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[Union[Any, BadRequest, InternalServerError, NotFound]]:
+) -> Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -77,7 +77,7 @@ def sync_detailed(
     *,
     client: Client,
     nonce: int,
-) -> Response[Union[Any, BadRequest, InternalServerError, NotFound]]:
+) -> Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
      Delete the verification policy by id
@@ -91,7 +91,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequest, InternalServerError, NotFound]]
+        Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -113,7 +113,7 @@ def sync(
     *,
     client: Client,
     nonce: int,
-) -> Optional[Union[Any, BadRequest, InternalServerError, NotFound]]:
+) -> Optional[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
      Delete the verification policy by id
@@ -127,7 +127,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequest, InternalServerError, NotFound]]
+        Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]
     """
 
     return sync_detailed(
@@ -142,7 +142,7 @@ async def asyncio_detailed(
     *,
     client: Client,
     nonce: int,
-) -> Response[Union[Any, BadRequest, InternalServerError, NotFound]]:
+) -> Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
      Delete the verification policy by id
@@ -156,7 +156,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequest, InternalServerError, NotFound]]
+        Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -176,7 +176,7 @@ async def asyncio(
     *,
     client: Client,
     nonce: int,
-) -> Optional[Union[Any, BadRequest, InternalServerError, NotFound]]:
+) -> Optional[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
      Delete the verification policy by id
@@ -190,7 +190,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequest, InternalServerError, NotFound]]
+        Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]
     """
 
     return (

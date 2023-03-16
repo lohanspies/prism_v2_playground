@@ -1,41 +1,51 @@
 """ Contains all the data models used in inputs/outputs """
 
 from .accept_connection_invitation_request import AcceptConnectionInvitationRequest
-from .bad_request import BadRequest
+from .accept_credential_offer_request import AcceptCredentialOfferRequest
 from .connection import Connection
 from .connection_all_of import ConnectionAllOf
 from .connection_all_of_role import ConnectionAllOfRole
 from .connection_all_of_state import ConnectionAllOfState
-from .connection_collection import ConnectionCollection
 from .connection_invitation import ConnectionInvitation
+from .connections_page import ConnectionsPage
+from .connections_page_all_of import ConnectionsPageAllOf
 from .create_connection_request import CreateConnectionRequest
 from .create_issue_credential_record_request import CreateIssueCredentialRecordRequest
 from .create_issue_credential_record_request_all_of import CreateIssueCredentialRecordRequestAllOf
 from .create_managed_did_request import CreateManagedDidRequest
 from .create_managed_did_request_document_template import CreateManagedDidRequestDocumentTemplate
 from .create_managed_did_response import CreateManagedDIDResponse
+from .credential_schema_input import CredentialSchemaInput
+from .credential_schema_input_schema import CredentialSchemaInputSchema
+from .credential_schema_response import CredentialSchemaResponse
+from .credential_schema_response_page import CredentialSchemaResponsePage
+from .credential_schema_response_schema import CredentialSchemaResponseSchema
+from .delete_verification_policy_by_id_response_200 import DeleteVerificationPolicyByIdResponse200
 from .did import DID
 from .did_document_metadata import DIDDocumentMetadata
 from .did_operation_response import DIDOperationResponse
 from .did_operation_submission import DidOperationSubmission
 from .did_response import DIDResponse
 from .error_response import ErrorResponse
-from .internal_server_error import InternalServerError
 from .issue_credential_record import IssueCredentialRecord
 from .issue_credential_record_all_of import IssueCredentialRecordAllOf
 from .issue_credential_record_all_of_protocol_state import IssueCredentialRecordAllOfProtocolState
 from .issue_credential_record_all_of_role import IssueCredentialRecordAllOfRole
 from .issue_credential_record_base import IssueCredentialRecordBase
 from .issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
-from .issue_credential_record_collection import IssueCredentialRecordCollection
+from .issue_credential_record_page import IssueCredentialRecordPage
+from .issue_credential_record_page_all_of import IssueCredentialRecordPageAllOf
 from .managed_did import ManagedDID
 from .managed_did_key_template import ManagedDIDKeyTemplate
 from .managed_did_key_template_purpose import ManagedDIDKeyTemplatePurpose
 from .managed_did_page import ManagedDIDPage
+from .managed_did_page_all_of import ManagedDIDPageAllOf
 from .managed_did_status import ManagedDIDStatus
-from .not_found import NotFound
 from .options import Options
+from .pagination import Pagination
 from .presentation_status import PresentationStatus
+from .presentation_status_page import PresentationStatusPage
+from .presentation_status_page_all_of import PresentationStatusPageAllOf
 from .presentation_status_status import PresentationStatusStatus
 from .proof import Proof
 from .proof_request_aux import ProofRequestAux
@@ -55,9 +65,6 @@ from .update_managed_did_request_actions_inner_update_service import UpdateManag
 from .update_managed_did_request_actions_inner_update_service_type import (
     UpdateManagedDIDRequestActionsInnerUpdateServiceType,
 )
-from .verifiable_credential_schema import VerifiableCredentialSchema
-from .verifiable_credential_schema_page import VerifiableCredentialSchemaPage
-from .verification_credential_schema_input import VerificationCredentialSchemaInput
 from .verification_method import VerificationMethod
 from .verification_method_or_ref import VerificationMethodOrRef
 from .verification_method_or_ref_type import VerificationMethodOrRefType
@@ -65,44 +72,55 @@ from .verification_policy import VerificationPolicy
 from .verification_policy_constraint import VerificationPolicyConstraint
 from .verification_policy_input import VerificationPolicyInput
 from .verification_policy_page import VerificationPolicyPage
+from .verification_policy_page_all_of import VerificationPolicyPageAllOf
 
 __all__ = (
     "AcceptConnectionInvitationRequest",
-    "BadRequest",
+    "AcceptCredentialOfferRequest",
     "Connection",
     "ConnectionAllOf",
     "ConnectionAllOfRole",
     "ConnectionAllOfState",
-    "ConnectionCollection",
     "ConnectionInvitation",
+    "ConnectionsPage",
+    "ConnectionsPageAllOf",
     "CreateConnectionRequest",
     "CreateIssueCredentialRecordRequest",
     "CreateIssueCredentialRecordRequestAllOf",
     "CreateManagedDidRequest",
     "CreateManagedDidRequestDocumentTemplate",
     "CreateManagedDIDResponse",
+    "CredentialSchemaInput",
+    "CredentialSchemaInputSchema",
+    "CredentialSchemaResponse",
+    "CredentialSchemaResponsePage",
+    "CredentialSchemaResponseSchema",
+    "DeleteVerificationPolicyByIdResponse200",
     "DID",
     "DIDDocumentMetadata",
     "DIDOperationResponse",
     "DidOperationSubmission",
     "DIDResponse",
     "ErrorResponse",
-    "InternalServerError",
     "IssueCredentialRecord",
     "IssueCredentialRecordAllOf",
     "IssueCredentialRecordAllOfProtocolState",
     "IssueCredentialRecordAllOfRole",
     "IssueCredentialRecordBase",
     "IssueCredentialRecordBaseClaims",
-    "IssueCredentialRecordCollection",
+    "IssueCredentialRecordPage",
+    "IssueCredentialRecordPageAllOf",
     "ManagedDID",
     "ManagedDIDKeyTemplate",
     "ManagedDIDKeyTemplatePurpose",
     "ManagedDIDPage",
+    "ManagedDIDPageAllOf",
     "ManagedDIDStatus",
-    "NotFound",
     "Options",
+    "Pagination",
     "PresentationStatus",
+    "PresentationStatusPage",
+    "PresentationStatusPageAllOf",
     "PresentationStatusStatus",
     "Proof",
     "ProofRequestAux",
@@ -120,9 +138,6 @@ __all__ = (
     "UpdateManagedDIDRequestActionsInnerRemoveService",
     "UpdateManagedDIDRequestActionsInnerUpdateService",
     "UpdateManagedDIDRequestActionsInnerUpdateServiceType",
-    "VerifiableCredentialSchema",
-    "VerifiableCredentialSchemaPage",
-    "VerificationCredentialSchemaInput",
     "VerificationMethod",
     "VerificationMethodOrRef",
     "VerificationMethodOrRefType",
@@ -130,4 +145,5 @@ __all__ = (
     "VerificationPolicyConstraint",
     "VerificationPolicyInput",
     "VerificationPolicyPage",
+    "VerificationPolicyPageAllOf",
 )

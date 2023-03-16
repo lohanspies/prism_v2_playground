@@ -50,7 +50,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no DID existing for the 'didRef'.
+          description: Resource could not be found
       summary: Resolve Prism DID
       tags:
       - DID
@@ -86,7 +86,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Internal Error.
+          description: Internal server error
       summary: List all DIDs stored in Prism Agent's wallet
       tags:
       - DID Registrar
@@ -102,7 +102,7 @@ paths:
               $ref: '#/components/schemas/CreateManagedDidRequest'
         required: true
       responses:
-        "200":
+        "201":
           content:
             application/json:
               schema:
@@ -141,7 +141,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no DID existing for the 'didRef'.
+          description: Resource could not be found
       summary: Get DID stored in Prism Agent's wallet
       tags:
       - DID Registrar
@@ -232,7 +232,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DIDOperationResponse'
-          description: Publishing DID to Blockchain.
+          description: DID deactivation to VDR successfully queued.
         "422":
           content:
             application/json:
@@ -246,41 +246,56 @@ paths:
   /schema-registry/schemas:
     get:
       description: "Lookup schemas by `author`, `name`, `tags` parameters and control\
-        \ the pagination by `offset` and `limit` parameters "
+        \ the pagination by `offset` and `limit` parameters"
       operationId: lookupSchemasByQuery
       parameters:
-      - in: query
-        name: offset
-        required: false
-        schema:
-          format: int32
-          type: integer
-      - in: query
-        name: limit
-        required: false
-        schema:
-          format: int32
-          type: integer
-      - explode: true
+      - example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+        explode: true
         in: query
         name: author
         required: false
         schema:
           type: string
         style: form
-      - explode: true
+      - example: DrivingLicense
+        explode: true
         in: query
         name: name
         required: false
         schema:
           type: string
         style: form
-      - explode: true
+      - example: 1.0.0
+        explode: true
+        in: query
+        name: version
+        required: false
+        schema:
+          type: string
+        style: form
+      - example: driving
+        explode: true
         in: query
         name: tags
         required: false
         schema:
           type: string
+        style: form
+      - explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
         style: form
       - explode: true
         in: query
@@ -294,70 +309,66 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifiableCredentialSchemaPage'
-          description: ""
+                $ref: '#/components/schemas/CredentialSchemaResponsePage'
+          description: Collection of CredentialSchema records.
         "400":
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-          description: "Invalid value for: query parameter author, Invalid value for:\
-            \ query parameter name, Invalid value for: query parameter tags, Invalid\
-            \ value for: query parameter offset, Invalid value for: query parameter\
-            \ limit, Invalid value for: query parameter order"
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Lookup schemas by indexed fields
       tags:
       - Schema Registry
     post:
-      description: Publish the new schema with attributes to the schema registry on
-        behalf of Cloud Agent. Schema will be signed by the keys of Cloud Agent and
-        issued by the DID that corresponds to it
+      description: Create the new credential schema record with metadata and internal
+        JSON Schema on behalf of Cloud Agent. The credential schema will be signed
+        by the keys of Cloud Agent and issued by the DID that corresponds to it
       operationId: createSchema
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerificationCredentialSchemaInput'
-        description: Create schema input object with the metadata and attributes
+              $ref: '#/components/schemas/CredentialSchemaInput'
+        description: JSON object required for the credential schema creation
         required: true
       responses:
         "201":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifiableCredentialSchema'
-          description: ""
+                $ref: '#/components/schemas/CredentialSchemaResponse'
+          description: The new credential schema record is successfully created
         "400":
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-          description: "Invalid value for: body"
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Publish new schema to the schema registry
       tags:
       - Schema Registry
-  /schema-registry/schemas/{id}:
+  /schema-registry/schemas/{guid}:
     get:
-      description: Fetch the schema by the unique identifier. Verifiable Credential
-        Schema in json format is returned.
+      description: Fetch the credential schema by the unique identifier
       operationId: getSchemaById
       parameters:
-      - description: Get the schema by id
+      - description: Globally unique identifier of the credential schema record
         explode: false
         in: path
-        name: id
+        name: guid
         required: true
         schema:
           format: uuid
@@ -368,51 +379,52 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifiableCredentialSchema'
-          description: ""
-        "400":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: "Invalid value for: path parameter id"
+                $ref: '#/components/schemas/CredentialSchemaResponse'
+          description: CredentialSchema found by `guid`
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFound'
-          description: ""
-      summary: Fetch the schema from the registry by id
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource could not be found
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
+      summary: Fetch the schema from the registry by `guid`
       tags:
       - Schema Registry
   /verification/policies:
     get:
-      description: "Lookup verification policies by `name`, and control the pagination\
-        \ by `offset` and `limit` parameters"
+      description: Lookup verification policies by `name`
       operationId: lookupVerificationPoliciesByQuery
       parameters:
+      - in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
       - explode: true
         in: query
         name: name
         required: false
         schema:
           type: string
-        style: form
-      - explode: true
-        in: query
-        name: offset
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: limit
-        required: false
-        schema:
-          format: int32
-          type: integer
         style: form
       - explode: true
         in: query
@@ -427,19 +439,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VerificationPolicyPage'
-          description: ""
+          description: List of Verification policies
         "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Lookup verification policies by query
       tags:
       - Verification
@@ -459,19 +471,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VerificationPolicy'
-          description: ""
+          description: Verification policy created successfully
         "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Create the new verification policy
       tags:
       - Verification
@@ -500,25 +512,29 @@ paths:
         style: form
       responses:
         "200":
-          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Verification policy deleted successfully
         "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFound'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource could not be found
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Delete the verification policy by id
       tags:
       - Verification
@@ -541,25 +557,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VerificationPolicy'
-          description: ""
+          description: Verification policy
         "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFound'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource could not be found
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Fetch the verification policy by id
       tags:
       - Verification
@@ -597,30 +613,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VerificationPolicy'
-          description: ""
+          description: Verification policy updated successfully
         "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
         "404":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFound'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource could not be found
         "500":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError'
-          description: ""
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Update the verification policy object by id
       tags:
       - Verification
   /issue-credentials/credential-offers:
     post:
+      description: Creates a new credential offer in the database
       operationId: createCredentialOffer
       requestBody:
         content:
@@ -650,26 +667,48 @@ paths:
       - Issue Credentials Protocol
   /issue-credentials/records:
     get:
+      description: Get the list of issue credential records paginated
       operationId: getCredentialRecords
+      parameters:
+      - in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - description: The thid of a DIDComm communication.
+        explode: true
+        in: query
+        name: thid
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IssueCredentialRecordCollection'
+                $ref: '#/components/schemas/IssueCredentialRecordPage'
           description: The list of issue credential records.
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Retrieving the issue credential records failed for an unexpected
-            reason. More information on the error can be found in the response body.
+          description: Internal server error
       summary: Gets the list of issue credential records.
       tags:
       - Issue Credentials Protocol
   /issue-credentials/records/{recordId}:
     get:
+      description: Gets issue credential records by record id
       operationId: getCredentialRecord
       parameters:
       - description: The unique identifier of the issue credential record.
@@ -691,7 +730,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record matching the given identifier.
+          description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Gets an existing issue credential record by its unique identifier.
       tags:
       - Issue Credentials Protocol
@@ -708,6 +753,13 @@ paths:
         schema:
           format: uuid
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptCredentialOfferRequest'
+        description: The accept credential offer request object.
+        required: true
       responses:
         "200":
           content:
@@ -720,12 +772,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record matching the given identifier.
+          description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: "As a holder, accepts a credential offer received from an issuer."
       tags:
       - Issue Credentials Protocol
   /issue-credentials/records/{recordId}/issue-credential:
     post:
+      description: |
+        Sends credential to a holder (holder DID is specified in credential as subjectDid).
+        Credential is constructed from the credential records found by credential id.
       operationId: issueCredential
       parameters:
       - description: The unique identifier of the issue credential record.
@@ -748,34 +809,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no issue credential record matching the given identifier.
+          description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: "As an issuer, issues the verifiable credential related to the specified\
         \ record."
       tags:
       - Issue Credentials Protocol
   /present-proof/presentations:
     get:
+      description: list of presentation statuses
       operationId: getAllPresentation
+      parameters:
+      - in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - description: The thid of a DIDComm communication.
+        explode: true
+        in: query
+        name: thid
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/PresentationStatus'
-                type: array
+                $ref: '#/components/schemas/PresentationStatusPage'
           description: The list of proof presentation records.
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Retrieving the proof presentation records failed for an unexpected
-            reason. More information on the error can be found in the response body.
+          description: Internal server error
       summary: Gets the list of proof presentation records.
       tags:
       - Present Proof
     post:
+      description: Holder presents proof derived from the verifiable credential to
+        verifier.
       operationId: requestPresentation
       requestBody:
         content:
@@ -799,12 +887,19 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Creating the proof presentation request failed for an unexpected
             reason. More information on the error can be found in the response body.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: "As a Verifier, create a new proof presentation request and send it\
         \ to the Prover."
       tags:
       - Present Proof
   /present-proof/presentations/{recordId}:
     get:
+      description: Returns an existing presentation record by id.
       operationId: getPresentation
       parameters:
       - description: The unique identifier of the proof presentation record.
@@ -826,13 +921,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no presentation record matching the given identifier.
-            More information on the error can be found in the response body.
+          description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Gets an existing proof presentation record by its unique identifier.
         More information on the error can be found in the response body.
       tags:
       - Present Proof
     patch:
+      description: Accept or reject presentation of proof request
       operationId: updatePresentation
       parameters:
       - description: The unique identifier of the proof presentation record.
@@ -851,34 +952,55 @@ paths:
         required: true
       responses:
         "200":
+          content:
+            application/json: {}
           description: The proof presentation record was successfully updated.
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no presentation record matching the given identifier.
+          description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: "Updates the proof presentation record matching the unique identifier,\
         \ with the specific action to perform."
       tags:
       - Present Proof
   /connections:
     get:
+      description: Get the list of connection records paginated
       operationId: getConnections
+      parameters:
+      - in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConnectionCollection'
+                $ref: '#/components/schemas/ConnectionsPage'
           description: The list of connection records.
         "500":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Retrieving the connection records failed for an unexpected
-            reason. More information on the error can be found in the response body.
+          description: Internal server error
       summary: Gets the list of connection records.
       tags:
       - Connections Management
@@ -914,6 +1036,7 @@ paths:
       - Connections Management
   /connections/{connectionId}:
     get:
+      description: Gets an existing connection record by its unique identifier
       operationId: getConnection
       parameters:
       - description: The unique identifier of the connection record.
@@ -934,7 +1057,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: There is no connection record matching the given identifier.
+          description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Gets an existing connection record by its unique identifier.
       tags:
       - Connections Management
@@ -963,8 +1092,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Storing the connection invitation failed for an unexpected
-            reason. More information on the error can be found in the response body.
+          description: Internal server error
       summary: Accepts an Out of Band invitation.
       tags:
       - Connections Management
@@ -1015,6 +1143,25 @@ components:
       required: true
       schema:
         type: string
+  responses:
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: Resource could not be found
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: Internal server error
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: Invalid request parameters
   schemas:
     DIDResponse:
       example:
@@ -1049,13 +1196,13 @@ components:
           service:
           - id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           - id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           keyAgreement:
           - type: EMBEDDED
@@ -1207,13 +1354,13 @@ components:
         service:
         - id: service-1
           serviceEndpoint:
-          - https://bar.example.com
-          - https://bar.example.com
+          - https://bar.example.com/
+          - https://bar.example.com/
           type: LinkedDomains
         - id: service-1
           serviceEndpoint:
-          - https://bar.example.com
-          - https://bar.example.com
+          - https://bar.example.com/
+          - https://bar.example.com/
           type: LinkedDomains
         keyAgreement:
         - type: EMBEDDED
@@ -1450,8 +1597,8 @@ components:
       example:
         id: service-1
         serviceEndpoint:
-        - https://bar.example.com
-        - https://bar.example.com
+        - https://bar.example.com/
+        - https://bar.example.com/
         type: LinkedDomains
       properties:
         id:
@@ -1464,7 +1611,7 @@ components:
           type: string
         serviceEndpoint:
           items:
-            example: https://bar.example.com
+            example: https://bar.example.com/
             type: string
           type: array
       required:
@@ -1495,7 +1642,7 @@ components:
       properties:
         type:
           description: A URI reference that identifies the problem type.
-          example: https://example.org/doc/#model-MalformedEmail
+          example: https://example.org/doc/#model-MalformedEmail/
           type: string
         title:
           description: |-
@@ -1527,39 +1674,9 @@ components:
       - type
       type: object
     ManagedDIDPage:
-      example:
-        pageOf: pageOf
-        next: next
-        previous: previous
-        contents:
-        - longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
-          did: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
-          status: CREATED
-        - longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
-          did: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
-          status: CREATED
-        kind: kind
-        self: self
-      properties:
-        self:
-          type: string
-        kind:
-          type: string
-        pageOf:
-          type: string
-        next:
-          type: string
-        previous:
-          type: string
-        contents:
-          items:
-            $ref: '#/components/schemas/ManagedDID'
-          type: array
-      required:
-      - kind
-      - pageOf
-      - self
-      type: object
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/ManagedDIDPage_allOf'
     ManagedDID:
       example:
         longFormDid: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff:Cr4BCrsBElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIg0opTuxu-zt6aRbT1tPniG4eu4CYsQPM3rrLzvzNiNgwaIIFTnyT2N4U7qCQ78qtWC3-p0el6Hvv8qxG5uuEw-WgMElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIKhBU0eCOO6Vinz_8vhtFSAhYYqrkEXC8PHGxkuIUev8GiAydFHLXb7c22A1Uj_PR21NZp6BCDQqNq2xd244txRgsQ
@@ -1598,13 +1715,13 @@ components:
           services:
           - id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           - id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
       properties:
         documentTemplate:
@@ -1683,14 +1800,14 @@ components:
           addService:
             id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           updateService:
             id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           addKey:
             purpose: authentication
@@ -1703,14 +1820,14 @@ components:
           addService:
             id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           updateService:
             id: service-1
             serviceEndpoint:
-            - https://bar.example.com
-            - https://bar.example.com
+            - https://bar.example.com/
+            - https://bar.example.com/
             type: LinkedDomains
           addKey:
             purpose: authentication
@@ -1727,268 +1844,518 @@ components:
       required:
       - actions
       type: object
-    VerifiableCredentialSchemaPage:
+    CredentialSchemaResponsePage:
       example:
-        pageOf: pageOf
-        next: next
-        previous: previous
+        pageOf: /prism-agent/schema-registry/schemas
+        next: /prism-agent/schema-registry/schemas?skip=20&limit=10
+        previous: /prism-agent/schema-registry/schemas?skip=0&limit=10
         contents:
-        - authored: 2000-01-23T04:56:07.000+00:00
-          author: author
-          name: name
-          description: description
-          attributes:
-          - attributes
-          - attributes
-          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          proof:
-            proofValue: proofValue
-            created: 2000-01-23T04:56:07.000+00:00
-            domain: domain
-            proofPurpose: proofPurpose
-            type: type
-            verificationMethod: verificationMethod
-          version: version
+        - schema:
+            example:
+              $id: driving-license-1.0
+              $schema: https://json-schema.org/draft/2020-12/schema
+              description: Driving License
+              type: object
+              properties:
+                credentialSubject:
+                  type: object
+                  properties:
+                    emailAddress:
+                      type: string
+                      format: email
+                    givenName:
+                      type: string
+                    familyName:
+                      type: string
+                    dateOfIssuance:
+                      type: datetime
+                    drivingLicenseID:
+                      type: string
+                    drivingClass:
+                      type: integer
+                    required:
+                    - emailAddress
+                    - familyName
+                    - dateOfIssuance
+                    - drivingLicenseID
+                    - drivingClass
+                    additionalProperties: true
+          authored: 2022-03-10T12:00:00Z
+          author: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+          kind: CredentialSchema
+          description: Simple credential schema for the driving licence verifiable
+            credential. This field is not a part of W3C specification
+          longId: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff/0527aea1-d131-3948-a34d-03af39aba8b4?version=1.0.0
+          type: https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json
+          version: 1.0.0
           tags:
-          - tags
-          - tags
-        - authored: 2000-01-23T04:56:07.000+00:00
-          author: author
-          name: name
-          description: description
-          attributes:
-          - attributes
-          - attributes
-          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - driving
+          - licence
+          - id
+          name: DrivingLicense
+          guid: 0527aea1-d131-3948-a34d-03af39aba8b4
+          self: /prism-agent/schema-registry/schemas/0527aea1-d131-3948-a34d-03af39aba8b4
+          id: 0527aea1-d131-3948-a34d-03af39aba8b5
           proof:
-            proofValue: proofValue
-            created: 2000-01-23T04:56:07.000+00:00
-            domain: domain
-            proofPurpose: proofPurpose
-            type: type
-            verificationMethod: verificationMethod
-          version: version
+            type: Ed25519Signature2018
+            created: 2022-03-10T12:00:00Z
+            verificationMethod: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            proofPurpose: assertionMethod
+            proofValue: FiPfjknHikKmZ...
+            jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik...
+            domain: prims.atala.com
+        - schema:
+            example:
+              $id: driving-license-1.0
+              $schema: https://json-schema.org/draft/2020-12/schema
+              description: Driving License
+              type: object
+              properties:
+                credentialSubject:
+                  type: object
+                  properties:
+                    emailAddress:
+                      type: string
+                      format: email
+                    givenName:
+                      type: string
+                    familyName:
+                      type: string
+                    dateOfIssuance:
+                      type: datetime
+                    drivingLicenseID:
+                      type: string
+                    drivingClass:
+                      type: integer
+                    required:
+                    - emailAddress
+                    - familyName
+                    - dateOfIssuance
+                    - drivingLicenseID
+                    - drivingClass
+                    additionalProperties: true
+          authored: 2022-03-10T12:00:00Z
+          author: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+          kind: CredentialSchema
+          description: Simple credential schema for the driving licence verifiable
+            credential. This field is not a part of W3C specification
+          longId: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff/0527aea1-d131-3948-a34d-03af39aba8b4?version=1.0.0
+          type: https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json
+          version: 1.0.0
           tags:
-          - tags
-          - tags
-        kind: kind
-        self: self
+          - driving
+          - licence
+          - id
+          name: DrivingLicense
+          guid: 0527aea1-d131-3948-a34d-03af39aba8b4
+          self: /prism-agent/schema-registry/schemas/0527aea1-d131-3948-a34d-03af39aba8b4
+          id: 0527aea1-d131-3948-a34d-03af39aba8b5
+          proof:
+            type: Ed25519Signature2018
+            created: 2022-03-10T12:00:00Z
+            verificationMethod: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+            proofPurpose: assertionMethod
+            proofValue: FiPfjknHikKmZ...
+            jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik...
+            domain: prims.atala.com
+        kind: CredentialSchemaPage
+        self: /prism-agent/schema-registry/schemas?skip=10&limit=10
       properties:
-        self:
-          type: string
+        contents:
+          description: A sequence of CredentialSchemaResponse objects representing
+            the list of credential schemas that the API response contains
+          items:
+            $ref: '#/components/schemas/CredentialSchemaResponse'
+          type: array
         kind:
+          description: "A string field indicating the type of the API response. In\
+            \ this case, it will always be set to `CredentialSchemaPage`"
+          example: CredentialSchemaPage
+          type: string
+        self:
+          description: A string field containing the URL of the current API endpoint
+          example: /prism-agent/schema-registry/schemas?skip=10&limit=10
           type: string
         pageOf:
+          description: A string field indicating the type of resource that the contents
+            field contains
+          example: /prism-agent/schema-registry/schemas
           type: string
         next:
+          description: "An optional string field containing the URL of the next page\
+            \ of results. If the API response does not contain any more pages, this\
+            \ field should be set to None."
+          example: /prism-agent/schema-registry/schemas?skip=20&limit=10
           type: string
         previous:
+          description: "An optional string field containing the URL of the previous\
+            \ page of results. If the API response is the first page of results, this\
+            \ field should be set to None."
+          example: /prism-agent/schema-registry/schemas?skip=0&limit=10
           type: string
-        contents:
-          items:
-            $ref: '#/components/schemas/VerifiableCredentialSchema'
-          type: array
       required:
       - kind
       - pageOf
       - self
       type: object
-    VerifiableCredentialSchema:
+    CredentialSchemaResponse:
       example:
-        authored: 2000-01-23T04:56:07.000+00:00
-        author: author
-        name: name
-        description: description
-        attributes:
-        - attributes
-        - attributes
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        proof:
-          proofValue: proofValue
-          created: 2000-01-23T04:56:07.000+00:00
-          domain: domain
-          proofPurpose: proofPurpose
-          type: type
-          verificationMethod: verificationMethod
-        version: version
+        schema:
+          example:
+            $id: driving-license-1.0
+            $schema: https://json-schema.org/draft/2020-12/schema
+            description: Driving License
+            type: object
+            properties:
+              credentialSubject:
+                type: object
+                properties:
+                  emailAddress:
+                    type: string
+                    format: email
+                  givenName:
+                    type: string
+                  familyName:
+                    type: string
+                  dateOfIssuance:
+                    type: datetime
+                  drivingLicenseID:
+                    type: string
+                  drivingClass:
+                    type: integer
+                  required:
+                  - emailAddress
+                  - familyName
+                  - dateOfIssuance
+                  - drivingLicenseID
+                  - drivingClass
+                  additionalProperties: true
+        authored: 2022-03-10T12:00:00Z
+        author: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
+        kind: CredentialSchema
+        description: Simple credential schema for the driving licence verifiable credential.
+          This field is not a part of W3C specification
+        longId: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff/0527aea1-d131-3948-a34d-03af39aba8b4?version=1.0.0
+        type: https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json
+        version: 1.0.0
         tags:
-        - tags
-        - tags
+        - driving
+        - licence
+        - id
+        name: DrivingLicense
+        guid: 0527aea1-d131-3948-a34d-03af39aba8b4
+        self: /prism-agent/schema-registry/schemas/0527aea1-d131-3948-a34d-03af39aba8b4
+        id: 0527aea1-d131-3948-a34d-03af39aba8b5
+        proof:
+          type: Ed25519Signature2018
+          created: 2022-03-10T12:00:00Z
+          verificationMethod: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+          proofPurpose: assertionMethod
+          proofValue: FiPfjknHikKmZ...
+          jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik...
+          domain: prims.atala.com
       properties:
-        id:
+        guid:
+          description: |
+            Globally unique id of the credential schema. It's composed
+            from the bytes of the string that contain the `authored`, `name`, and
+            `version` values. The string format looks like the resource identifier: `author`/`id`?version=`version`
+          example: 0527aea1-d131-3948-a34d-03af39aba8b4
           format: uuid
           type: string
+        id:
+          description: |
+            A locally unique identifier to address the schema. UUID is
+            generated by the backend
+          example: 0527aea1-d131-3948-a34d-03af39aba8b5
+          type: string
+        longId:
+          description: "Resource id of the credential schema. Contains the `author`'s\
+            \ DID, `id` and `version` fields."
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff/0527aea1-d131-3948-a34d-03af39aba8b4?version=1.0.0
+          type: string
         name:
+          description: A human-readable name for the credential schema. A piece of
+            Metadata.
+          example: DrivingLicense
           type: string
         version:
+          description: Denotes the revision of a given Credential Schema. It should
+            follow semantic version convention to describe the impact of the schema
+            evolution
+          example: 1.0.0
           type: string
         tags:
+          description: Tokens that allow to lookup and filter the credential schema
+            records. This field is not a part of W3C specification
+          example:
+          - driving
+          - licence
+          - id
           items:
             type: string
           type: array
         description:
+          description: A human-readable description of the credential schema
+          example: Simple credential schema for the driving licence verifiable credential.
+            This field is not a part of W3C specification
           type: string
-        attributes:
-          items:
-            type: string
-          type: array
+        type:
+          description: This field resolves to a JSON schema with details about the
+            schema metadata that applies to the schema. A piece of Metadata.
+          example: https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json
+          type: string
+        schema:
+          description: |-
+            Valid JSON Schema where the Credential Schema data fields are defined
+            A piece of Metadata
+          example:
+            example:
+              $id: driving-license-1.0
+              $schema: https://json-schema.org/draft/2020-12/schema
+              description: Driving License
+              type: object
+              properties:
+                credentialSubject:
+                  type: object
+                  properties:
+                    emailAddress:
+                      type: string
+                      format: email
+                    givenName:
+                      type: string
+                    familyName:
+                      type: string
+                    dateOfIssuance:
+                      type: datetime
+                    drivingLicenseID:
+                      type: string
+                    drivingClass:
+                      type: integer
+                    required:
+                    - emailAddress
+                    - familyName
+                    - dateOfIssuance
+                    - drivingLicenseID
+                    - drivingClass
+                    additionalProperties: true
+          type: object
         author:
+          description: DID of the identity which authored the credential schema. A
+            piece of Metadata.
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
         authored:
+          description: "[RFC3339](https://www.rfc-editor.org/rfc/rfc3339) date on\
+            \ which the credential schema was created. A piece of Metadata."
+          example: 2022-03-10T12:00:00Z
           format: date-time
           type: string
         proof:
           $ref: '#/components/schemas/Proof'
+        kind:
+          description: A string that identifies the type of resource being returned
+            in the response
+          example: CredentialSchema
+          type: string
+        self:
+          description: The URL that uniquely identifies the resource being returned
+            in the response
+          example: /prism-agent/schema-registry/schemas/0527aea1-d131-3948-a34d-03af39aba8b4
+          type: string
       required:
       - author
       - authored
+      - description
+      - guid
       - id
+      - kind
       - name
+      - schema
+      - self
+      - type
       - version
       type: object
     Proof:
+      description: A digital signature over the Credential Schema for the sake of
+        asserting authorship. A piece of Metadata.
       example:
-        proofValue: proofValue
-        created: 2000-01-23T04:56:07.000+00:00
-        domain: domain
-        proofPurpose: proofPurpose
-        type: type
-        verificationMethod: verificationMethod
+        type: Ed25519Signature2018
+        created: 2022-03-10T12:00:00Z
+        verificationMethod: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
+        proofPurpose: assertionMethod
+        proofValue: FiPfjknHikKmZ...
+        jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik...
+        domain: prims.atala.com
       properties:
         type:
+          description: The type of cryptographic signature algorithm used to generate
+            the proof
+          example: Ed25519Signature2018
           type: string
         created:
+          description: "The date and time at which the proof was created, in UTC format.\
+            \ This field is used to ensure that the proof was generated before or\
+            \ at the same time as the credential schema itself"
+          example: 2022-03-10T12:00:00Z
           format: date-time
           type: string
         verificationMethod:
+          description: The verification method used to generate the proof. This is
+            usually a DID and key ID combination that can be used to look up the public
+            key needed to verify the proof.
+          example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1
           type: string
         proofPurpose:
+          description: "The purpose of the proof (for example: `assertionMethod`).\
+            \ This indicates that the proof is being used to assert that the issuer\
+            \ really issued this credential schema instance"
+          example: assertionMethod
           type: string
         proofValue:
+          description: "The cryptographic signature value that was generated using\
+            \ the private key associated with the verification method, and which can\
+            \ be used to verify the proof"
+          example: FiPfjknHikKmZ...
+          type: string
+        jws:
+          description: The JSON Web Signature (JWS) that contains the proof information
+          example: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik...
           type: string
         domain:
+          description: It specifies the domain context within which the credential
+            schema and proof are being used
+          example: prims.atala.com
           type: string
       required:
       - created
+      - jws
       - proofPurpose
       - proofValue
       - type
       - verificationMethod
       type: object
-    InternalServerError:
-      properties:
-        msg:
-          type: string
-      required:
-      - msg
-      type: object
-    VerificationCredentialSchemaInput:
+    CredentialSchemaInput:
       example:
-        authored: 2000-01-23T04:56:07.000+00:00
-        name: name
-        description: description
-        attributes:
-        - attributes
-        - attributes
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        version: version
+        schema:
+          example:
+            $id: driving-license-1.0
+            $schema: https://json-schema.org/draft/2020-12/schema
+            description: Driving License
+            type: object
+            properties:
+              credentialSubject:
+                type: object
+                properties:
+                  emailAddress:
+                    type: string
+                    format: email
+                  givenName:
+                    type: string
+                  familyName:
+                    type: string
+                  dateOfIssuance:
+                    type: datetime
+                  drivingLicenseID:
+                    type: string
+                  drivingClass:
+                    type: integer
+                  required:
+                  - emailAddress
+                  - familyName
+                  - dateOfIssuance
+                  - drivingLicenseID
+                  - drivingClass
+                  additionalProperties: true
+        name: DrivingLicense
+        description: Simple credential schema for the driving licence verifiable credential.
+          This field is not a part of W3C specification
+        type: https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json
+        version: 1.0.0
         tags:
-        - tags
-        - tags
+        - driving
+        - licence
+        - id
       properties:
-        id:
-          format: uuid
-          type: string
         name:
+          description: A human-readable name for the credential schema. A piece of
+            Metadata.
+          example: DrivingLicense
           type: string
         version:
+          description: Denotes the revision of a given Credential Schema. It should
+            follow semantic version convention to describe the impact of the schema
+            evolution
+          example: 1.0.0
+          pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\\
+            d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\
+            +([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
           type: string
         description:
+          description: A human-readable description of the credential schema
+          example: Simple credential schema for the driving licence verifiable credential.
+            This field is not a part of W3C specification
           type: string
-        attributes:
-          items:
-            type: string
-          type: array
-        authored:
-          format: date-time
+        type:
+          description: This field resolves to a JSON schema with details about the
+            schema metadata that applies to the schema. A piece of Metadata.
+          example: https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json
           type: string
+        schema:
+          description: |-
+            Valid JSON Schema where the Credential Schema data fields are defined
+            A piece of Metadata
+          example:
+            example:
+              $id: driving-license-1.0
+              $schema: https://json-schema.org/draft/2020-12/schema
+              description: Driving License
+              type: object
+              properties:
+                credentialSubject:
+                  type: object
+                  properties:
+                    emailAddress:
+                      type: string
+                      format: email
+                    givenName:
+                      type: string
+                    familyName:
+                      type: string
+                    dateOfIssuance:
+                      type: datetime
+                    drivingLicenseID:
+                      type: string
+                    drivingClass:
+                      type: integer
+                    required:
+                    - emailAddress
+                    - familyName
+                    - dateOfIssuance
+                    - drivingLicenseID
+                    - drivingClass
+                    additionalProperties: true
+          type: object
         tags:
+          description: Tokens that allow to lookup and filter the credential schema
+            records. This field is not a part of W3C specification
+          example:
+          - driving
+          - licence
+          - id
           items:
             type: string
           type: array
       required:
       - name
+      - schema
+      - type
       - version
       type: object
-    NotFound:
-      properties:
-        msg:
-          type: string
-      required:
-      - msg
-      type: object
     VerificationPolicyPage:
-      example:
-        pageOf: pageOf
-        next: next
-        previous: previous
-        contents:
-        - createdAt: 2000-01-23T04:56:07.000+00:00
-          kind: kind
-          name: name
-          self: self
-          description: description
-          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          nonce: 0
-          constraints:
-          - trustedIssuers:
-            - trustedIssuers
-            - trustedIssuers
-            schemaId: schemaId
-          - trustedIssuers:
-            - trustedIssuers
-            - trustedIssuers
-            schemaId: schemaId
-          updatedAt: 2000-01-23T04:56:07.000+00:00
-        - createdAt: 2000-01-23T04:56:07.000+00:00
-          kind: kind
-          name: name
-          self: self
-          description: description
-          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          nonce: 0
-          constraints:
-          - trustedIssuers:
-            - trustedIssuers
-            - trustedIssuers
-            schemaId: schemaId
-          - trustedIssuers:
-            - trustedIssuers
-            - trustedIssuers
-            schemaId: schemaId
-          updatedAt: 2000-01-23T04:56:07.000+00:00
-        kind: kind
-        self: self
-      properties:
-        self:
-          type: string
-        kind:
-          type: string
-        pageOf:
-          type: string
-        next:
-          type: string
-        previous:
-          type: string
-        contents:
-          items:
-            $ref: '#/components/schemas/VerificationPolicy'
-          type: array
-      required:
-      - kind
-      - pageOf
-      - self
-      type: object
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/VerificationPolicyPage_allOf'
     VerificationPolicy:
       example:
         createdAt: 2000-01-23T04:56:07.000+00:00
@@ -2059,17 +2426,6 @@ components:
       required:
       - schemaId
       type: object
-    BadRequest:
-      properties:
-        msg:
-          type: string
-        errors:
-          items:
-            type: string
-          type: array
-      required:
-      - msg
-      type: object
     VerificationPolicyInput:
       example:
         name: name
@@ -2136,7 +2492,6 @@ components:
           type: boolean
       required:
       - claims
-      - subjectId
     IssueCredentialRecord:
       allOf:
       - $ref: '#/components/schemas/IssueCredentialRecordBase'
@@ -2144,20 +2499,27 @@ components:
       description: An issue credential record that stores the state of the protocol
         execution.
       type: object
-    IssueCredentialRecordCollection:
-      description: A collection of issue credential records.
+    IssueCredentialRecordPage:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/IssueCredentialRecordPage_allOf'
+    AcceptCredentialOfferRequest:
+      description: A request to accept a credential offer received from an issuer.
       example:
-        contents:
-        - null
-        - null
+        subjectId: did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f
       properties:
-        contents:
-          description: The array containing the list of issue credential records.
-          items:
-            $ref: '#/components/schemas/IssueCredentialRecord'
-          type: array
+        subjectId:
+          description: The short-form subject Prism DID to which the verifiable credential
+            should be issued.
+          example: did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f
+          type: string
       required:
-      - contents
+      - subjectId
+      type: object
+    PresentationStatusPage:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/PresentationStatusPage_allOf'
     PresentationStatus:
       description: The proof presentation record.
       example:
@@ -2222,6 +2584,7 @@ components:
       - presentationId
       - proofs
       - status
+      type: object
     ProofRequestAux:
       example:
         schemaId: https://schema.org/Person
@@ -2335,33 +2698,10 @@ components:
           type: array
       required:
       - action
-    ConnectionCollection:
-      description: A collection of connection records.
-      example:
-        contents:
-        - null
-        - null
-        kind: Collection
-        self: https://atala-prism-products.io/connections
-      properties:
-        self:
-          description: The reference to the connection collection itself.
-          example: https://atala-prism-products.io/connections
-          type: string
-        kind:
-          description: The type of object returned. In this case a `Collection`.
-          example: Collection
-          type: string
-        contents:
-          description: The array containing the list of connection records.
-          items:
-            $ref: '#/components/schemas/Connection'
-          type: array
-      required:
-      - contents
-      - kind
-      - self
-      type: object
+    ConnectionsPage:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/ConnectionsPage_allOf'
     Connection:
       allOf:
       - $ref: '#/components/schemas/CreateConnectionRequest'
@@ -2421,6 +2761,40 @@ components:
       required:
       - invitation
       type: object
+    Pagination:
+      properties:
+        self:
+          description: The reference to the connection collection itself.
+          example: https://atala-prism-products.io/dids
+          type: string
+        kind:
+          description: The type of object returned. In this case a `Collection`.
+          example: Collection
+          type: string
+        pageOf:
+          description: Page number within the context of paginated response.
+          type: string
+        next:
+          description: URL of the next page (if available)
+          type: string
+        previous:
+          description: URL of the previous page (if available)
+          type: string
+      required:
+      - kind
+      - pageOf
+      - self
+      type: object
+    ManagedDIDPage_allOf:
+      properties:
+        contents:
+          items:
+            $ref: '#/components/schemas/ManagedDID'
+          type: array
+      required:
+      - contents
+      type: object
+      example: null
     CreateManagedDidRequest_documentTemplate:
       example:
         publicKeys:
@@ -2431,13 +2805,13 @@ components:
         services:
         - id: service-1
           serviceEndpoint:
-          - https://bar.example.com
-          - https://bar.example.com
+          - https://bar.example.com/
+          - https://bar.example.com/
           type: LinkedDomains
         - id: service-1
           serviceEndpoint:
-          - https://bar.example.com
-          - https://bar.example.com
+          - https://bar.example.com/
+          - https://bar.example.com/
           type: LinkedDomains
       properties:
         publicKeys:
@@ -2476,13 +2850,13 @@ components:
       - id
       type: object
     UpdateManagedDIDRequest_actions_inner_updateService:
-      description: A patch to existing Service. 'type' and 'serviceEndpoint' must
-        not be both empty.
+      description: A patch to existing Service. 'type' and 'serviceEndpoint' can't
+        both be empty.
       example:
         id: service-1
         serviceEndpoint:
-        - https://bar.example.com
-        - https://bar.example.com
+        - https://bar.example.com/
+        - https://bar.example.com/
         type: LinkedDomains
       properties:
         id:
@@ -2496,7 +2870,7 @@ components:
           type: string
         serviceEndpoint:
           items:
-            example: https://bar.example.com
+            example: https://bar.example.com/
             type: string
           type: array
       required:
@@ -2514,14 +2888,14 @@ components:
         addService:
           id: service-1
           serviceEndpoint:
-          - https://bar.example.com
-          - https://bar.example.com
+          - https://bar.example.com/
+          - https://bar.example.com/
           type: LinkedDomains
         updateService:
           id: service-1
           serviceEndpoint:
-          - https://bar.example.com
-          - https://bar.example.com
+          - https://bar.example.com/
+          - https://bar.example.com/
           type: LinkedDomains
         addKey:
           purpose: authentication
@@ -2549,6 +2923,16 @@ components:
       required:
       - actionType
       type: object
+    VerificationPolicyPage_allOf:
+      properties:
+        contents:
+          items:
+            $ref: '#/components/schemas/VerificationPolicy'
+          type: array
+      required:
+      - contents
+      type: object
+      example: null
     CreateIssueCredentialRecordRequest_allOf:
       properties:
         issuingDID:
@@ -2593,6 +2977,7 @@ components:
           - OfferSent
           - OfferReceived
           - RequestPending
+          - RequestGenerated
           - RequestSent
           - RequestReceived
           - ProblemReportPending
@@ -2615,6 +3000,37 @@ components:
       - protocolState
       - recordId
       - role
+      type: object
+      example: null
+    IssueCredentialRecordPage_allOf:
+      properties:
+        contents:
+          items:
+            $ref: '#/components/schemas/IssueCredentialRecord'
+          type: array
+      required:
+      - contents
+      type: object
+      example: null
+    PresentationStatusPage_allOf:
+      properties:
+        contents:
+          items:
+            $ref: '#/components/schemas/PresentationStatus'
+          type: array
+      required:
+      - contents
+      type: object
+      example: null
+    ConnectionsPage_allOf:
+      properties:
+        contents:
+          description: The array containing the list of connection records.
+          items:
+            $ref: '#/components/schemas/Connection'
+          type: array
+      required:
+      - contents
       type: object
       example: null
     Connection_allOf:

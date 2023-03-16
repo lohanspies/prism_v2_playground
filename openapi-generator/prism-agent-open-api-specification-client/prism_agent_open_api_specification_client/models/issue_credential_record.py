@@ -20,8 +20,6 @@ class IssueCredentialRecord:
     """An issue credential record that stores the state of the protocol execution.
 
     Attributes:
-        subject_id (str): The identifier (e.g DID) of the subject to which the verifiable credential will be issued.
-            Example: did:prism:subjectofverifiablecredentials.
         claims (IssueCredentialRecordBaseClaims): The claims that will be associated with the issued verifiable
             credential.
         record_id (str): The unique identifier of the issue credential record.
@@ -30,6 +28,8 @@ class IssueCredentialRecord:
         protocol_state (IssueCredentialRecordAllOfProtocolState): The current state of the issue credential protocol
             execution.
         schema_id (Union[Unset, str]): The unique identifier of the schema used for this credential offer.
+        subject_id (Union[Unset, str]): The identifier (e.g DID) of the subject to which the verifiable credential will
+            be issued. Example: did:prism:subjectofverifiablecredentials.
         validity_period (Union[Unset, float]): The validity period in seconds of the verifiable credential that will be
             issued. Example: 3600.
         automatic_issuance (Union[Unset, bool]): Specifies whether or not the credential should be automatically
@@ -44,13 +44,13 @@ class IssueCredentialRecord:
             did:prism:issuerofverifiablecredentials.
     """
 
-    subject_id: str
     claims: "IssueCredentialRecordBaseClaims"
     record_id: str
     created_at: datetime.datetime
     role: IssueCredentialRecordAllOfRole
     protocol_state: IssueCredentialRecordAllOfProtocolState
     schema_id: Union[Unset, str] = UNSET
+    subject_id: Union[Unset, str] = UNSET
     validity_period: Union[Unset, float] = UNSET
     automatic_issuance: Union[Unset, bool] = True
     updated_at: Union[Unset, datetime.datetime] = UNSET
@@ -59,7 +59,6 @@ class IssueCredentialRecord:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        subject_id = self.subject_id
         claims = self.claims.to_dict()
 
         record_id = self.record_id
@@ -70,6 +69,7 @@ class IssueCredentialRecord:
         protocol_state = self.protocol_state.value
 
         schema_id = self.schema_id
+        subject_id = self.subject_id
         validity_period = self.validity_period
         automatic_issuance = self.automatic_issuance
         updated_at: Union[Unset, str] = UNSET
@@ -83,7 +83,6 @@ class IssueCredentialRecord:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "subjectId": subject_id,
                 "claims": claims,
                 "recordId": record_id,
                 "createdAt": created_at,
@@ -93,6 +92,8 @@ class IssueCredentialRecord:
         )
         if schema_id is not UNSET:
             field_dict["schemaId"] = schema_id
+        if subject_id is not UNSET:
+            field_dict["subjectId"] = subject_id
         if validity_period is not UNSET:
             field_dict["validityPeriod"] = validity_period
         if automatic_issuance is not UNSET:
@@ -111,8 +112,6 @@ class IssueCredentialRecord:
         from ..models.issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
 
         d = src_dict.copy()
-        subject_id = d.pop("subjectId")
-
         claims = IssueCredentialRecordBaseClaims.from_dict(d.pop("claims"))
 
         record_id = d.pop("recordId")
@@ -124,6 +123,8 @@ class IssueCredentialRecord:
         protocol_state = IssueCredentialRecordAllOfProtocolState(d.pop("protocolState"))
 
         schema_id = d.pop("schemaId", UNSET)
+
+        subject_id = d.pop("subjectId", UNSET)
 
         validity_period = d.pop("validityPeriod", UNSET)
 
@@ -141,13 +142,13 @@ class IssueCredentialRecord:
         issuing_did = d.pop("issuingDID", UNSET)
 
         issue_credential_record = cls(
-            subject_id=subject_id,
             claims=claims,
             record_id=record_id,
             created_at=created_at,
             role=role,
             protocol_state=protocol_state,
             schema_id=schema_id,
+            subject_id=subject_id,
             validity_period=validity_period,
             automatic_issuance=automatic_issuance,
             updated_at=updated_at,

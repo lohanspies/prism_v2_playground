@@ -33,8 +33,8 @@ class DID:
             'EcdsaSecp256k1VerificationKey2019'}, 'uri':
             'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}], 'controller':
             'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'service': [{'id': 'service-1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id':
-            'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+            'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
             'LinkedDomains'}], 'keyAgreement': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
             'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
             'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':

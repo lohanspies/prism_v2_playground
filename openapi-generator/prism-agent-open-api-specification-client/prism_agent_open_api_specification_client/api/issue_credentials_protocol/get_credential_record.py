@@ -40,6 +40,10 @@ def _parse_response(
         response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -63,6 +67,8 @@ def sync_detailed(
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """Gets an existing issue credential record by its unique identifier.
+
+     Gets issue credential records by record id
 
     Args:
         record_id (str):
@@ -95,6 +101,8 @@ def sync(
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """Gets an existing issue credential record by its unique identifier.
 
+     Gets issue credential records by record id
+
     Args:
         record_id (str):
 
@@ -118,6 +126,8 @@ async def asyncio_detailed(
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """Gets an existing issue credential record by its unique identifier.
+
+     Gets issue credential records by record id
 
     Args:
         record_id (str):
@@ -147,6 +157,8 @@ async def asyncio(
     client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """Gets an existing issue credential record by its unique identifier.
+
+     Gets issue credential records by record id
 
     Args:
         record_id (str):

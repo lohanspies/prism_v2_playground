@@ -41,6 +41,10 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -64,6 +68,8 @@ def sync_detailed(
 ) -> Response[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
+
+     Accept or reject presentation of proof request
 
     Args:
         record_id (str):
@@ -102,6 +108,8 @@ def sync(
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
 
+     Accept or reject presentation of proof request
+
     Args:
         record_id (str):
         json_body (RequestPresentationAction): The action to perform on the proof presentation
@@ -131,6 +139,8 @@ async def asyncio_detailed(
 ) -> Response[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
+
+     Accept or reject presentation of proof request
 
     Args:
         record_id (str):
@@ -166,6 +176,8 @@ async def asyncio(
 ) -> Optional[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
+
+     Accept or reject presentation of proof request
 
     Args:
         record_id (str):

@@ -2,43 +2,30 @@ from typing import Any, Dict, List, Type, TypeVar
 
 import attr
 
-T = TypeVar("T", bound="InternalServerError")
+T = TypeVar("T", bound="DeleteVerificationPolicyByIdResponse200")
 
 
 @attr.s(auto_attribs=True)
-class InternalServerError:
-    """
-    Attributes:
-        msg (str):
-    """
+class DeleteVerificationPolicyByIdResponse200:
+    """ """
 
-    msg: str
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        msg = self.msg
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "msg": msg,
-            }
-        )
+        field_dict.update({})
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        msg = d.pop("msg")
+        delete_verification_policy_by_id_response_200 = cls()
 
-        internal_server_error = cls(
-            msg=msg,
-        )
-
-        internal_server_error.additional_properties = d
-        return internal_server_error
+        delete_verification_policy_by_id_response_200.additional_properties = d
+        return delete_verification_policy_by_id_response_200
 
     @property
     def additional_keys(self) -> List[str]:

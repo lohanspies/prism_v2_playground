@@ -13,7 +13,7 @@ class ErrorResponse:
 
     Attributes:
         type (str): A URI reference that identifies the problem type. Example: https://example.org/doc/#model-
-            MalformedEmail.
+            MalformedEmail/.
         title (str): A short, human-readable summary of the problem type. It does not
             change from occurrence to occurrence of the problem. Example: Malformed email.
         status (int): The HTTP status code for this occurrence of the problem. Example: 400.

@@ -11,7 +11,7 @@ T = TypeVar("T", bound="Service")
 class Service:
     """
     Example:
-        {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
+        {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
             'LinkedDomains'}
 
     Attributes:

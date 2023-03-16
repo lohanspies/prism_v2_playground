@@ -5,19 +5,20 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.internal_server_error import InternalServerError
-from ...models.verifiable_credential_schema_page import VerifiableCredentialSchemaPage
+from ...models.credential_schema_response_page import CredentialSchemaResponsePage
+from ...models.error_response import ErrorResponse
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     client: Client,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas".format(client.base_url)
@@ -26,15 +27,17 @@ def _get_kwargs(
     cookies: Dict[str, Any] = client.get_cookies()
 
     params: Dict[str, Any] = {}
-    params["offset"] = offset
-
-    params["limit"] = limit
-
     params["author"] = author
 
     params["name"] = name
 
+    params["version"] = version
+
     params["tags"] = tags
+
+    params["offset"] = offset
+
+    params["limit"] = limit
 
     params["order"] = order
 
@@ -52,13 +55,17 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
+) -> Optional[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = VerifiableCredentialSchemaPage.from_dict(response.json())
+        response_200 = CredentialSchemaResponsePage.from_dict(response.json())
 
         return response_200
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
     if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
-        response_500 = InternalServerError.from_dict(response.json())
+        response_500 = ErrorResponse.from_dict(response.json())
 
         return response_500
     if client.raise_on_unexpected_status:
@@ -69,7 +76,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
+) -> Response[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -81,24 +88,26 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
+) -> Response[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
      Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and
     `limit` parameters
 
     Args:
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
+        version (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -106,16 +115,17 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
+        Response[Union[CredentialSchemaResponsePage, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
         client=client,
-        offset=offset,
-        limit=limit,
         author=author,
         name=name,
+        version=version,
         tags=tags,
+        offset=offset,
+        limit=limit,
         order=order,
     )
 
@@ -130,24 +140,26 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
+) -> Optional[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
      Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and
     `limit` parameters
 
     Args:
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
+        version (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -155,16 +167,17 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
+        Response[Union[CredentialSchemaResponsePage, ErrorResponse]]
     """
 
     return sync_detailed(
         client=client,
-        offset=offset,
-        limit=limit,
         author=author,
         name=name,
+        version=version,
         tags=tags,
+        offset=offset,
+        limit=limit,
         order=order,
     ).parsed
 
@@ -172,24 +185,26 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
+) -> Response[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
      Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and
     `limit` parameters
 
     Args:
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
+        version (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -197,16 +212,17 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
+        Response[Union[CredentialSchemaResponsePage, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
         client=client,
-        offset=offset,
-        limit=limit,
         author=author,
         name=name,
+        version=version,
         tags=tags,
+        offset=offset,
+        limit=limit,
         order=order,
     )
 
@@ -219,24 +235,26 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    offset: Union[Unset, None, int] = UNSET,
-    limit: Union[Unset, None, int] = UNSET,
     author: Union[Unset, None, str] = UNSET,
     name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
     tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
     order: Union[Unset, None, str] = UNSET,
-) -> Optional[Union[InternalServerError, VerifiableCredentialSchemaPage]]:
+) -> Optional[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
      Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and
     `limit` parameters
 
     Args:
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):
         author (Union[Unset, None, str]):
         name (Union[Unset, None, str]):
+        version (Union[Unset, None, str]):
         tags (Union[Unset, None, str]):
+        offset (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
         order (Union[Unset, None, str]):
 
     Raises:
@@ -244,17 +262,18 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchemaPage]]
+        Response[Union[CredentialSchemaResponsePage, ErrorResponse]]
     """
 
     return (
         await asyncio_detailed(
             client=client,
-            offset=offset,
-            limit=limit,
             author=author,
             name=name,
+            version=version,
             tags=tags,
+            offset=offset,
+            limit=limit,
             order=order,
         )
     ).parsed

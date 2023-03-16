@@ -11,18 +11,31 @@ T = TypeVar("T", bound="Proof")
 
 @attr.s(auto_attribs=True)
 class Proof:
-    """
+    """A digital signature over the Credential Schema for the sake of asserting authorship. A piece of Metadata.
+
     Example:
-        {'proofValue': 'proofValue', 'created': datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc),
-            'domain': 'domain', 'proofPurpose': 'proofPurpose', 'type': 'type', 'verificationMethod': 'verificationMethod'}
+        {'type': 'Ed25519Signature2018', 'created': datetime.datetime(2022, 3, 10, 12, 0, tzinfo=datetime.timezone.utc),
+            'verificationMethod': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1',
+            'proofPurpose': 'assertionMethod', 'proofValue': 'FiPfjknHikKmZ...', 'jws':
+            'eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik...', 'domain': 'prims.atala.com'}
 
     Attributes:
-        type (str):
-        created (datetime.datetime):
-        verification_method (str):
-        proof_purpose (str):
-        proof_value (str):
-        domain (Union[Unset, str]):
+        type (str): The type of cryptographic signature algorithm used to generate the proof Example:
+            Ed25519Signature2018.
+        created (datetime.datetime): The date and time at which the proof was created, in UTC format. This field is used
+            to ensure that the proof was generated before or at the same time as the credential schema itself Example:
+            2022-03-10 12:00:00+00:00.
+        verification_method (str): The verification method used to generate the proof. This is usually a DID and key ID
+            combination that can be used to look up the public key needed to verify the proof. Example:
+            did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1.
+        proof_purpose (str): The purpose of the proof (for example: `assertionMethod`). This indicates that the proof is
+            being used to assert that the issuer really issued this credential schema instance Example: assertionMethod.
+        proof_value (str): The cryptographic signature value that was generated using the private key associated with
+            the verification method, and which can be used to verify the proof Example: FiPfjknHikKmZ....
+        jws (str): The JSON Web Signature (JWS) that contains the proof information Example:
+            eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImt0eSI6Ik....
+        domain (Union[Unset, str]): It specifies the domain context within which the credential schema and proof are
+            being used Example: prims.atala.com.
     """
 
     type: str
@@ -30,6 +43,7 @@ class Proof:
     verification_method: str
     proof_purpose: str
     proof_value: str
+    jws: str
     domain: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -40,6 +54,7 @@ class Proof:
         verification_method = self.verification_method
         proof_purpose = self.proof_purpose
         proof_value = self.proof_value
+        jws = self.jws
         domain = self.domain
 
         field_dict: Dict[str, Any] = {}
@@ -51,6 +66,7 @@ class Proof:
                 "verificationMethod": verification_method,
                 "proofPurpose": proof_purpose,
                 "proofValue": proof_value,
+                "jws": jws,
             }
         )
         if domain is not UNSET:
@@ -71,6 +87,8 @@ class Proof:
 
         proof_value = d.pop("proofValue")
 
+        jws = d.pop("jws")
+
         domain = d.pop("domain", UNSET)
 
         proof = cls(
@@ -79,6 +97,7 @@ class Proof:
             verification_method=verification_method,
             proof_purpose=proof_purpose,
             proof_value=proof_value,
+            jws=jws,
             domain=domain,
         )
 

@@ -38,6 +38,10 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -59,6 +63,8 @@ def sync_detailed(
     client: Client,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
+
+     Gets an existing connection record by its unique identifier
 
     Args:
         connection_id (str):
@@ -91,6 +97,8 @@ def sync(
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
 
+     Gets an existing connection record by its unique identifier
+
     Args:
         connection_id (str):
 
@@ -114,6 +122,8 @@ async def asyncio_detailed(
     client: Client,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
+
+     Gets an existing connection record by its unique identifier
 
     Args:
         connection_id (str):
@@ -143,6 +153,8 @@ async def asyncio(
     client: Client,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
+
+     Gets an existing connection record by its unique identifier
 
     Args:
         connection_id (str):

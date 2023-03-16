@@ -5,20 +5,20 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.managed_did import ManagedDID
+    from ..models.issue_credential_record import IssueCredentialRecord
 
 
-T = TypeVar("T", bound="ManagedDIDPage")
+T = TypeVar("T", bound="IssueCredentialRecordPage")
 
 
 @attr.s(auto_attribs=True)
-class ManagedDIDPage:
+class IssueCredentialRecordPage:
     """
     Attributes:
         self_ (str): The reference to the connection collection itself. Example: https://atala-prism-products.io/dids.
         kind (str): The type of object returned. In this case a `Collection`. Example: Collection.
         page_of (str): Page number within the context of paginated response.
-        contents (List['ManagedDID']):
+        contents (List['IssueCredentialRecord']):
         next_ (Union[Unset, str]): URL of the next page (if available)
         previous (Union[Unset, str]): URL of the previous page (if available)
     """
@@ -26,7 +26,7 @@ class ManagedDIDPage:
     self_: str
     kind: str
     page_of: str
-    contents: List["ManagedDID"]
+    contents: List["IssueCredentialRecord"]
     next_: Union[Unset, str] = UNSET
     previous: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
@@ -63,7 +63,7 @@ class ManagedDIDPage:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.managed_did import ManagedDID
+        from ..models.issue_credential_record import IssueCredentialRecord
 
         d = src_dict.copy()
         self_ = d.pop("self")
@@ -75,7 +75,7 @@ class ManagedDIDPage:
         contents = []
         _contents = d.pop("contents")
         for contents_item_data in _contents:
-            contents_item = ManagedDID.from_dict(contents_item_data)
+            contents_item = IssueCredentialRecord.from_dict(contents_item_data)
 
             contents.append(contents_item)
 
@@ -83,7 +83,7 @@ class ManagedDIDPage:
 
         previous = d.pop("previous", UNSET)
 
-        managed_did_page = cls(
+        issue_credential_record_page = cls(
             self_=self_,
             kind=kind,
             page_of=page_of,
@@ -92,8 +92,8 @@ class ManagedDIDPage:
             previous=previous,
         )
 
-        managed_did_page.additional_properties = d
-        return managed_did_page
+        issue_credential_record_page.additional_properties = d
+        return issue_credential_record_page
 
     @property
     def additional_keys(self) -> List[str]:

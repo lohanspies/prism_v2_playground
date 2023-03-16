@@ -40,6 +40,10 @@ def _parse_response(
         response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -63,6 +67,9 @@ def sync_detailed(
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
+
+     Sends credential to a holder (holder DID is specified in credential as subjectDid).
+    Credential is constructed from the credential records found by credential id.
 
     Args:
         record_id (str):
@@ -95,6 +102,9 @@ def sync(
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
 
+     Sends credential to a holder (holder DID is specified in credential as subjectDid).
+    Credential is constructed from the credential records found by credential id.
+
     Args:
         record_id (str):
 
@@ -118,6 +128,9 @@ async def asyncio_detailed(
     client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
+
+     Sends credential to a holder (holder DID is specified in credential as subjectDid).
+    Credential is constructed from the credential records found by credential id.
 
     Args:
         record_id (str):
@@ -147,6 +160,9 @@ async def asyncio(
     client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
+
+     Sends credential to a holder (holder DID is specified in credential as subjectDid).
+    Credential is constructed from the credential records found by credential id.
 
     Args:
         record_id (str):

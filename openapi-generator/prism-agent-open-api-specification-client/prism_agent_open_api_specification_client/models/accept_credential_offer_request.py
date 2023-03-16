@@ -2,27 +2,32 @@ from typing import Any, Dict, List, Type, TypeVar
 
 import attr
 
-T = TypeVar("T", bound="NotFound")
+T = TypeVar("T", bound="AcceptCredentialOfferRequest")
 
 
 @attr.s(auto_attribs=True)
-class NotFound:
-    """
+class AcceptCredentialOfferRequest:
+    """A request to accept a credential offer received from an issuer.
+
+    Example:
+        {'subjectId': 'did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f'}
+
     Attributes:
-        msg (str):
+        subject_id (str): The short-form subject Prism DID to which the verifiable credential should be issued. Example:
+            did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f.
     """
 
-    msg: str
+    subject_id: str
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        msg = self.msg
+        subject_id = self.subject_id
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "msg": msg,
+                "subjectId": subject_id,
             }
         )
 
@@ -31,14 +36,14 @@ class NotFound:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        msg = d.pop("msg")
+        subject_id = d.pop("subjectId")
 
-        not_found = cls(
-            msg=msg,
+        accept_credential_offer_request = cls(
+            subject_id=subject_id,
         )
 
-        not_found.additional_properties = d
-        return not_found
+        accept_credential_offer_request.additional_properties = d
+        return accept_credential_offer_request
 
     @property
     def additional_keys(self) -> List[str]:

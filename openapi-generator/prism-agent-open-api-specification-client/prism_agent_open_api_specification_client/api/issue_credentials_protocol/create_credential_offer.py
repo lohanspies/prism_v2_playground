@@ -68,6 +68,8 @@ def sync_detailed(
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
 
+     Creates a new credential offer in the database
+
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
             credential record".
@@ -100,6 +102,8 @@ def sync(
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
 
+     Creates a new credential offer in the database
+
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
             credential record".
@@ -124,6 +128,8 @@ async def asyncio_detailed(
     json_body: CreateIssueCredentialRecordRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
+
+     Creates a new credential offer in the database
 
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue
@@ -154,6 +160,8 @@ async def asyncio(
     json_body: CreateIssueCredentialRecordRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
+
+     Creates a new credential offer in the database
 
     Args:
         json_body (CreateIssueCredentialRecordRequest): A request to create a new "issue

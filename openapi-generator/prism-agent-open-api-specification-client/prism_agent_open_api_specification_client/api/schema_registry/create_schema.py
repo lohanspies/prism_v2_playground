@@ -5,16 +5,16 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.internal_server_error import InternalServerError
-from ...models.verifiable_credential_schema import VerifiableCredentialSchema
-from ...models.verification_credential_schema_input import VerificationCredentialSchemaInput
+from ...models.credential_schema_input import CredentialSchemaInput
+from ...models.credential_schema_response import CredentialSchemaResponse
+from ...models.error_response import ErrorResponse
 from ...types import Response
 
 
 def _get_kwargs(
     *,
     client: Client,
-    json_body: VerificationCredentialSchemaInput,
+    json_body: CredentialSchemaInput,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas".format(client.base_url)
 
@@ -35,13 +35,17 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[Union[InternalServerError, VerifiableCredentialSchema]]:
+) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     if response.status_code == HTTPStatus.CREATED:
-        response_201 = VerifiableCredentialSchema.from_dict(response.json())
+        response_201 = CredentialSchemaResponse.from_dict(response.json())
 
         return response_201
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
     if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
-        response_500 = InternalServerError.from_dict(response.json())
+        response_500 = ErrorResponse.from_dict(response.json())
 
         return response_500
     if client.raise_on_unexpected_status:
@@ -52,7 +56,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[Union[InternalServerError, VerifiableCredentialSchema]]:
+) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -64,25 +68,34 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-    json_body: VerificationCredentialSchemaInput,
-) -> Response[Union[InternalServerError, VerifiableCredentialSchema]]:
+    json_body: CredentialSchemaInput,
+) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
-     Publish the new schema with attributes to the schema registry on behalf of Cloud Agent. Schema will
-    be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
+     Create the new credential schema record with metadata and internal JSON Schema on behalf of Cloud
+    Agent. The credential schema will be signed by the keys of Cloud Agent and issued by the DID that
+    corresponds to it
 
     Args:
-        json_body (VerificationCredentialSchemaInput):  Example: {'authored':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'name': 'name',
-            'description': 'description', 'attributes': ['attributes', 'attributes'], 'id':
-            '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'version': 'version', 'tags': ['tags', 'tags']}.
+        json_body (CredentialSchemaInput):  Example: {'schema': {'example': {'$id': 'driving-
+            license-1.0', '$schema': 'https://json-schema.org/draft/2020-12/schema', 'description':
+            'Driving License', 'type': 'object', 'properties': {'credentialSubject': {'type':
+            'object', 'properties': {'emailAddress': {'type': 'string', 'format': 'email'},
+            'givenName': {'type': 'string'}, 'familyName': {'type': 'string'}, 'dateOfIssuance':
+            {'type': 'datetime'}, 'drivingLicenseID': {'type': 'string'}, 'drivingClass': {'type':
+            'integer'}, 'required': ['emailAddress', 'familyName', 'dateOfIssuance',
+            'drivingLicenseID', 'drivingClass'], 'additionalProperties': True}}}}}, 'name':
+            'DrivingLicense', 'description': 'Simple credential schema for the driving licence
+            verifiable credential. This field is not a part of W3C specification', 'type':
+            'https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json', 'version': '1.0.0',
+            'tags': ['driving', 'licence', 'id']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -101,25 +114,34 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    json_body: VerificationCredentialSchemaInput,
-) -> Optional[Union[InternalServerError, VerifiableCredentialSchema]]:
+    json_body: CredentialSchemaInput,
+) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
-     Publish the new schema with attributes to the schema registry on behalf of Cloud Agent. Schema will
-    be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
+     Create the new credential schema record with metadata and internal JSON Schema on behalf of Cloud
+    Agent. The credential schema will be signed by the keys of Cloud Agent and issued by the DID that
+    corresponds to it
 
     Args:
-        json_body (VerificationCredentialSchemaInput):  Example: {'authored':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'name': 'name',
-            'description': 'description', 'attributes': ['attributes', 'attributes'], 'id':
-            '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'version': 'version', 'tags': ['tags', 'tags']}.
+        json_body (CredentialSchemaInput):  Example: {'schema': {'example': {'$id': 'driving-
+            license-1.0', '$schema': 'https://json-schema.org/draft/2020-12/schema', 'description':
+            'Driving License', 'type': 'object', 'properties': {'credentialSubject': {'type':
+            'object', 'properties': {'emailAddress': {'type': 'string', 'format': 'email'},
+            'givenName': {'type': 'string'}, 'familyName': {'type': 'string'}, 'dateOfIssuance':
+            {'type': 'datetime'}, 'drivingLicenseID': {'type': 'string'}, 'drivingClass': {'type':
+            'integer'}, 'required': ['emailAddress', 'familyName', 'dateOfIssuance',
+            'drivingLicenseID', 'drivingClass'], 'additionalProperties': True}}}}}, 'name':
+            'DrivingLicense', 'description': 'Simple credential schema for the driving licence
+            verifiable credential. This field is not a part of W3C specification', 'type':
+            'https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json', 'version': '1.0.0',
+            'tags': ['driving', 'licence', 'id']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     return sync_detailed(
@@ -131,25 +153,34 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    json_body: VerificationCredentialSchemaInput,
-) -> Response[Union[InternalServerError, VerifiableCredentialSchema]]:
+    json_body: CredentialSchemaInput,
+) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
-     Publish the new schema with attributes to the schema registry on behalf of Cloud Agent. Schema will
-    be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
+     Create the new credential schema record with metadata and internal JSON Schema on behalf of Cloud
+    Agent. The credential schema will be signed by the keys of Cloud Agent and issued by the DID that
+    corresponds to it
 
     Args:
-        json_body (VerificationCredentialSchemaInput):  Example: {'authored':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'name': 'name',
-            'description': 'description', 'attributes': ['attributes', 'attributes'], 'id':
-            '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'version': 'version', 'tags': ['tags', 'tags']}.
+        json_body (CredentialSchemaInput):  Example: {'schema': {'example': {'$id': 'driving-
+            license-1.0', '$schema': 'https://json-schema.org/draft/2020-12/schema', 'description':
+            'Driving License', 'type': 'object', 'properties': {'credentialSubject': {'type':
+            'object', 'properties': {'emailAddress': {'type': 'string', 'format': 'email'},
+            'givenName': {'type': 'string'}, 'familyName': {'type': 'string'}, 'dateOfIssuance':
+            {'type': 'datetime'}, 'drivingLicenseID': {'type': 'string'}, 'drivingClass': {'type':
+            'integer'}, 'required': ['emailAddress', 'familyName', 'dateOfIssuance',
+            'drivingLicenseID', 'drivingClass'], 'additionalProperties': True}}}}}, 'name':
+            'DrivingLicense', 'description': 'Simple credential schema for the driving licence
+            verifiable credential. This field is not a part of W3C specification', 'type':
+            'https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json', 'version': '1.0.0',
+            'tags': ['driving', 'licence', 'id']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -166,25 +197,34 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    json_body: VerificationCredentialSchemaInput,
-) -> Optional[Union[InternalServerError, VerifiableCredentialSchema]]:
+    json_body: CredentialSchemaInput,
+) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
-     Publish the new schema with attributes to the schema registry on behalf of Cloud Agent. Schema will
-    be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
+     Create the new credential schema record with metadata and internal JSON Schema on behalf of Cloud
+    Agent. The credential schema will be signed by the keys of Cloud Agent and issued by the DID that
+    corresponds to it
 
     Args:
-        json_body (VerificationCredentialSchemaInput):  Example: {'authored':
-            datetime.datetime(2000, 1, 23, 4, 56, 7, tzinfo=datetime.timezone.utc), 'name': 'name',
-            'description': 'description', 'attributes': ['attributes', 'attributes'], 'id':
-            '046b6c7f-0b8a-43b9-b35d-6489e6daee91', 'version': 'version', 'tags': ['tags', 'tags']}.
+        json_body (CredentialSchemaInput):  Example: {'schema': {'example': {'$id': 'driving-
+            license-1.0', '$schema': 'https://json-schema.org/draft/2020-12/schema', 'description':
+            'Driving License', 'type': 'object', 'properties': {'credentialSubject': {'type':
+            'object', 'properties': {'emailAddress': {'type': 'string', 'format': 'email'},
+            'givenName': {'type': 'string'}, 'familyName': {'type': 'string'}, 'dateOfIssuance':
+            {'type': 'datetime'}, 'drivingLicenseID': {'type': 'string'}, 'drivingClass': {'type':
+            'integer'}, 'required': ['emailAddress', 'familyName', 'dateOfIssuance',
+            'drivingLicenseID', 'drivingClass'], 'additionalProperties': True}}}}}, 'name':
+            'DrivingLicense', 'description': 'Simple credential schema for the driving licence
+            verifiable credential. This field is not a part of W3C specification', 'type':
+            'https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json', 'version': '1.0.0',
+            'tags': ['driving', 'licence', 'id']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[InternalServerError, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     return (

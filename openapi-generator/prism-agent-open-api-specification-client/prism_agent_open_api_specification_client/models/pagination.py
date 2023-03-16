@@ -1,24 +1,19 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-if TYPE_CHECKING:
-    from ..models.managed_did import ManagedDID
-
-
-T = TypeVar("T", bound="ManagedDIDPage")
+T = TypeVar("T", bound="Pagination")
 
 
 @attr.s(auto_attribs=True)
-class ManagedDIDPage:
+class Pagination:
     """
     Attributes:
         self_ (str): The reference to the connection collection itself. Example: https://atala-prism-products.io/dids.
         kind (str): The type of object returned. In this case a `Collection`. Example: Collection.
         page_of (str): Page number within the context of paginated response.
-        contents (List['ManagedDID']):
         next_ (Union[Unset, str]): URL of the next page (if available)
         previous (Union[Unset, str]): URL of the previous page (if available)
     """
@@ -26,7 +21,6 @@ class ManagedDIDPage:
     self_: str
     kind: str
     page_of: str
-    contents: List["ManagedDID"]
     next_: Union[Unset, str] = UNSET
     previous: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
@@ -35,12 +29,6 @@ class ManagedDIDPage:
         self_ = self.self_
         kind = self.kind
         page_of = self.page_of
-        contents = []
-        for contents_item_data in self.contents:
-            contents_item = contents_item_data.to_dict()
-
-            contents.append(contents_item)
-
         next_ = self.next_
         previous = self.previous
 
@@ -51,7 +39,6 @@ class ManagedDIDPage:
                 "self": self_,
                 "kind": kind,
                 "pageOf": page_of,
-                "contents": contents,
             }
         )
         if next_ is not UNSET:
@@ -63,8 +50,6 @@ class ManagedDIDPage:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.managed_did import ManagedDID
-
         d = src_dict.copy()
         self_ = d.pop("self")
 
@@ -72,28 +57,20 @@ class ManagedDIDPage:
 
         page_of = d.pop("pageOf")
 
-        contents = []
-        _contents = d.pop("contents")
-        for contents_item_data in _contents:
-            contents_item = ManagedDID.from_dict(contents_item_data)
-
-            contents.append(contents_item)
-
         next_ = d.pop("next", UNSET)
 
         previous = d.pop("previous", UNSET)
 
-        managed_did_page = cls(
+        pagination = cls(
             self_=self_,
             kind=kind,
             page_of=page_of,
-            contents=contents,
             next_=next_,
             previous=previous,
         )
 
-        managed_did_page.additional_properties = d
-        return managed_did_page
+        pagination.additional_properties = d
+        return pagination
 
     @property
     def additional_keys(self) -> List[str]:

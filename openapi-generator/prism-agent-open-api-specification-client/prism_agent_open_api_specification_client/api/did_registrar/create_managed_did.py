@@ -36,10 +36,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: Client, response: httpx.Response
 ) -> Optional[Union[CreateManagedDIDResponse, ErrorResponse]]:
-    if response.status_code == HTTPStatus.OK:
-        response_200 = CreateManagedDIDResponse.from_dict(response.json())
+    if response.status_code == HTTPStatus.CREATED:
+        response_201 = CreateManagedDIDResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
     if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = ErrorResponse.from_dict(response.json())
 
@@ -74,10 +74,10 @@ def sync_detailed(
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
-            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}]}}.
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint':
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
+            'type': 'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -113,10 +113,10 @@ def sync(
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
-            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}]}}.
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint':
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
+            'type': 'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -145,10 +145,10 @@ async def asyncio_detailed(
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
-            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}]}}.
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint':
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
+            'type': 'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -182,10 +182,10 @@ async def asyncio(
     Args:
         json_body (CreateManagedDidRequest):  Example: {'documentTemplate': {'publicKeys':
             [{'purpose': 'authentication', 'id': 'key-1'}, {'purpose': 'authentication', 'id':
-            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, {'id': 'service-1',
-            'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}]}}.
+            'key-1'}], 'services': [{'id': 'service-1', 'serviceEndpoint':
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}, {'id':
+            'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
+            'type': 'LinkedDomains'}]}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

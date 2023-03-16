@@ -28,9 +28,9 @@ class UpdateManagedDIDRequestActionsInner:
 
     Example:
         {'actionType': 'ADD_KEY', 'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService':
-            {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}}
+            {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
+            'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/',
+            'https://bar.example.com/'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}}
 
     Attributes:
         action_type (UpdateManagedDIDRequestActionsInnerActionType):  Example: ADD_KEY.
@@ -38,11 +38,11 @@ class UpdateManagedDIDRequestActionsInner:
             'authentication', 'id': 'key-1'}.
         remove_key (Union[Unset, UpdateManagedDIDRequestActionsInnerRemoveKey]):  Example: {'id': 'key-1'}.
         add_service (Union[Unset, Service]):  Example: {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}.
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}.
         remove_service (Union[Unset, UpdateManagedDIDRequestActionsInnerRemoveService]):  Example: {'id': 'service-1'}.
         update_service (Union[Unset, UpdateManagedDIDRequestActionsInnerUpdateService]): A patch to existing Service.
-            'type' and 'serviceEndpoint' must not be both empty. Example: {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com', 'https://bar.example.com'], 'type': 'LinkedDomains'}.
+            'type' and 'serviceEndpoint' can't both be empty. Example: {'id': 'service-1', 'serviceEndpoint':
+            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}.
     """
 
     action_type: UpdateManagedDIDRequestActionsInnerActionType

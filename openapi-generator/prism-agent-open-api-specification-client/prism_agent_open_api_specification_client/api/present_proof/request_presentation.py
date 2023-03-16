@@ -44,6 +44,10 @@ def _parse_response(
         response_422 = ErrorResponse.from_dict(response.json())
 
         return response_422
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -67,6 +71,8 @@ def sync_detailed(
     json_body: RequestPresentationInput,
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
+
+     Holder presents proof derived from the verifiable credential to verifier.
 
     Args:
         json_body (RequestPresentationInput): A request to create a new "proof presentation"
@@ -106,6 +112,8 @@ def sync(
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
 
+     Holder presents proof derived from the verifiable credential to verifier.
+
     Args:
         json_body (RequestPresentationInput): A request to create a new "proof presentation"
             record and send it to the prover. Example: {'proofs': [{'schemaId':
@@ -136,6 +144,8 @@ async def asyncio_detailed(
     json_body: RequestPresentationInput,
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
+
+     Holder presents proof derived from the verifiable credential to verifier.
 
     Args:
         json_body (RequestPresentationInput): A request to create a new "proof presentation"
@@ -172,6 +182,8 @@ async def asyncio(
     json_body: RequestPresentationInput,
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
+
+     Holder presents proof derived from the verifiable credential to verifier.
 
     Args:
         json_body (RequestPresentationInput): A request to create a new "proof presentation"

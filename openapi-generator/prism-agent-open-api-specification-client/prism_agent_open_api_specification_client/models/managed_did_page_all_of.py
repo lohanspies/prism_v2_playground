@@ -1,56 +1,59 @@
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
 import attr
 
-from ..types import UNSET, Unset
+if TYPE_CHECKING:
+    from ..models.managed_did import ManagedDID
 
-T = TypeVar("T", bound="BadRequest")
+
+T = TypeVar("T", bound="ManagedDIDPageAllOf")
 
 
 @attr.s(auto_attribs=True)
-class BadRequest:
+class ManagedDIDPageAllOf:
     """
     Attributes:
-        msg (str):
-        errors (Union[Unset, List[str]]):
+        contents (List['ManagedDID']):
     """
 
-    msg: str
-    errors: Union[Unset, List[str]] = UNSET
+    contents: List["ManagedDID"]
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        msg = self.msg
-        errors: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.errors, Unset):
-            errors = self.errors
+        contents = []
+        for contents_item_data in self.contents:
+            contents_item = contents_item_data.to_dict()
+
+            contents.append(contents_item)
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "msg": msg,
+                "contents": contents,
             }
         )
-        if errors is not UNSET:
-            field_dict["errors"] = errors
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.managed_did import ManagedDID
+
         d = src_dict.copy()
-        msg = d.pop("msg")
+        contents = []
+        _contents = d.pop("contents")
+        for contents_item_data in _contents:
+            contents_item = ManagedDID.from_dict(contents_item_data)
 
-        errors = cast(List[str], d.pop("errors", UNSET))
+            contents.append(contents_item)
 
-        bad_request = cls(
-            msg=msg,
-            errors=errors,
+        managed_did_page_all_of = cls(
+            contents=contents,
         )
 
-        bad_request.additional_properties = d
-        return bad_request
+        managed_did_page_all_of.additional_properties = d
+        return managed_did_page_all_of
 
     @property
     def additional_keys(self) -> List[str]:

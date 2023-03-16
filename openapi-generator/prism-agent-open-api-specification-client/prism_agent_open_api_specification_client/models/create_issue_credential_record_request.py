@@ -16,8 +16,6 @@ class CreateIssueCredentialRecordRequest:
     """A request to create a new "issue credential record".
 
     Attributes:
-        subject_id (str): The identifier (e.g DID) of the subject to which the verifiable credential will be issued.
-            Example: did:prism:subjectofverifiablecredentials.
         claims (IssueCredentialRecordBaseClaims): The claims that will be associated with the issued verifiable
             credential.
         issuing_did (str): The issuer DID of the verifiable credential object. Example:
@@ -25,6 +23,8 @@ class CreateIssueCredentialRecordRequest:
         connection_id (str): The unique identifier of a DIDComm connection that already exists between the issuer and
             the holder, and that will be used to execute the issue credential protocol.
         schema_id (Union[Unset, str]): The unique identifier of the schema used for this credential offer.
+        subject_id (Union[Unset, str]): The identifier (e.g DID) of the subject to which the verifiable credential will
+            be issued. Example: did:prism:subjectofverifiablecredentials.
         validity_period (Union[Unset, float]): The validity period in seconds of the verifiable credential that will be
             issued. Example: 3600.
         automatic_issuance (Union[Unset, bool]): Specifies whether or not the credential should be automatically
@@ -33,22 +33,22 @@ class CreateIssueCredentialRecordRequest:
              Default: True.
     """
 
-    subject_id: str
     claims: "IssueCredentialRecordBaseClaims"
     issuing_did: str
     connection_id: str
     schema_id: Union[Unset, str] = UNSET
+    subject_id: Union[Unset, str] = UNSET
     validity_period: Union[Unset, float] = UNSET
     automatic_issuance: Union[Unset, bool] = True
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        subject_id = self.subject_id
         claims = self.claims.to_dict()
 
         issuing_did = self.issuing_did
         connection_id = self.connection_id
         schema_id = self.schema_id
+        subject_id = self.subject_id
         validity_period = self.validity_period
         automatic_issuance = self.automatic_issuance
 
@@ -56,7 +56,6 @@ class CreateIssueCredentialRecordRequest:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "subjectId": subject_id,
                 "claims": claims,
                 "issuingDID": issuing_did,
                 "connectionId": connection_id,
@@ -64,6 +63,8 @@ class CreateIssueCredentialRecordRequest:
         )
         if schema_id is not UNSET:
             field_dict["schemaId"] = schema_id
+        if subject_id is not UNSET:
+            field_dict["subjectId"] = subject_id
         if validity_period is not UNSET:
             field_dict["validityPeriod"] = validity_period
         if automatic_issuance is not UNSET:
@@ -76,8 +77,6 @@ class CreateIssueCredentialRecordRequest:
         from ..models.issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
 
         d = src_dict.copy()
-        subject_id = d.pop("subjectId")
-
         claims = IssueCredentialRecordBaseClaims.from_dict(d.pop("claims"))
 
         issuing_did = d.pop("issuingDID")
@@ -86,16 +85,18 @@ class CreateIssueCredentialRecordRequest:
 
         schema_id = d.pop("schemaId", UNSET)
 
+        subject_id = d.pop("subjectId", UNSET)
+
         validity_period = d.pop("validityPeriod", UNSET)
 
         automatic_issuance = d.pop("automaticIssuance", UNSET)
 
         create_issue_credential_record_request = cls(
-            subject_id=subject_id,
             claims=claims,
             issuing_did=issuing_did,
             connection_id=connection_id,
             schema_id=schema_id,
+            subject_id=subject_id,
             validity_period=validity_period,
             automatic_issuance=automatic_issuance,
         )

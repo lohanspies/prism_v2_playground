@@ -5,6 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
+from ...models.accept_credential_offer_request import AcceptCredentialOfferRequest
 from ...models.error_response import ErrorResponse
 from ...models.issue_credential_record import IssueCredentialRecord
 from ...types import Response
@@ -14,11 +15,14 @@ def _get_kwargs(
     record_id: str,
     *,
     client: Client,
+    json_body: AcceptCredentialOfferRequest,
 ) -> Dict[str, Any]:
     url = "{}/issue-credentials/records/{recordId}/accept-offer".format(client.base_url, recordId=record_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
+
+    json_json_body = json_body.to_dict()
 
     return {
         "method": "post",
@@ -26,6 +30,7 @@ def _get_kwargs(
         "headers": headers,
         "cookies": cookies,
         "timeout": client.get_timeout(),
+        "json": json_json_body,
     }
 
 
@@ -40,6 +45,10 @@ def _parse_response(
         response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -61,6 +70,7 @@ def sync_detailed(
     record_id: str,
     *,
     client: Client,
+    json_body: AcceptCredentialOfferRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a holder, accepts a credential offer received from an issuer.
 
@@ -68,6 +78,9 @@ def sync_detailed(
 
     Args:
         record_id (str):
+        json_body (AcceptCredentialOfferRequest): A request to accept a credential offer received
+            from an issuer. Example: {'subjectId':
+            'did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -80,6 +93,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         record_id=record_id,
         client=client,
+        json_body=json_body,
     )
 
     response = httpx.request(
@@ -94,6 +108,7 @@ def sync(
     record_id: str,
     *,
     client: Client,
+    json_body: AcceptCredentialOfferRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a holder, accepts a credential offer received from an issuer.
 
@@ -101,6 +116,9 @@ def sync(
 
     Args:
         record_id (str):
+        json_body (AcceptCredentialOfferRequest): A request to accept a credential offer received
+            from an issuer. Example: {'subjectId':
+            'did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -113,6 +131,7 @@ def sync(
     return sync_detailed(
         record_id=record_id,
         client=client,
+        json_body=json_body,
     ).parsed
 
 
@@ -120,6 +139,7 @@ async def asyncio_detailed(
     record_id: str,
     *,
     client: Client,
+    json_body: AcceptCredentialOfferRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a holder, accepts a credential offer received from an issuer.
 
@@ -127,6 +147,9 @@ async def asyncio_detailed(
 
     Args:
         record_id (str):
+        json_body (AcceptCredentialOfferRequest): A request to accept a credential offer received
+            from an issuer. Example: {'subjectId':
+            'did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -139,6 +162,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         record_id=record_id,
         client=client,
+        json_body=json_body,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -151,6 +175,7 @@ async def asyncio(
     record_id: str,
     *,
     client: Client,
+    json_body: AcceptCredentialOfferRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a holder, accepts a credential offer received from an issuer.
 
@@ -158,6 +183,9 @@ async def asyncio(
 
     Args:
         record_id (str):
+        json_body (AcceptCredentialOfferRequest): A request to accept a credential offer received
+            from an issuer. Example: {'subjectId':
+            'did:prism:3bb0505d13fcb04d28a48234edb27b0d4e6d7e18a81e2c1abab58f3bbc21ce6f'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -171,5 +199,6 @@ async def asyncio(
         await asyncio_detailed(
             record_id=record_id,
             client=client,
+            json_body=json_body,
         )
     ).parsed

@@ -6,6 +6,7 @@ class IssueCredentialRecordAllOfProtocolState(str, Enum):
     OFFERSENT = "OfferSent"
     OFFERRECEIVED = "OfferReceived"
     REQUESTPENDING = "RequestPending"
+    REQUESTGENERATED = "RequestGenerated"
     REQUESTSENT = "RequestSent"
     REQUESTRECEIVED = "RequestReceived"
     PROBLEMREPORTPENDING = "ProblemReportPending"

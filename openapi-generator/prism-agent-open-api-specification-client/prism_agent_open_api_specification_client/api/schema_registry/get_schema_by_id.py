@@ -5,17 +5,17 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.not_found import NotFound
-from ...models.verifiable_credential_schema import VerifiableCredentialSchema
+from ...models.credential_schema_response import CredentialSchemaResponse
+from ...models.error_response import ErrorResponse
 from ...types import Response
 
 
 def _get_kwargs(
-    id: str,
+    guid: str,
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/schema-registry/schemas/{id}".format(client.base_url, id=id)
+    url = "{}/schema-registry/schemas/{guid}".format(client.base_url, guid=guid)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -31,15 +31,23 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[Union[NotFound, VerifiableCredentialSchema]]:
+) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = VerifiableCredentialSchema.from_dict(response.json())
+        response_200 = CredentialSchemaResponse.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.NOT_FOUND:
-        response_404 = NotFound.from_dict(response.json())
+        response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -48,7 +56,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[Union[NotFound, VerifiableCredentialSchema]]:
+) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -58,27 +66,27 @@ def _build_response(
 
 
 def sync_detailed(
-    id: str,
+    guid: str,
     *,
     client: Client,
-) -> Response[Union[NotFound, VerifiableCredentialSchema]]:
-    """Fetch the schema from the registry by id
+) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
+    """Fetch the schema from the registry by `guid`
 
-     Fetch the schema by the unique identifier. Verifiable Credential Schema in json format is returned.
+     Fetch the credential schema by the unique identifier
 
     Args:
-        id (str):
+        guid (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[NotFound, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        guid=guid,
         client=client,
     )
 
@@ -91,53 +99,53 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
+    guid: str,
     *,
     client: Client,
-) -> Optional[Union[NotFound, VerifiableCredentialSchema]]:
-    """Fetch the schema from the registry by id
+) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
+    """Fetch the schema from the registry by `guid`
 
-     Fetch the schema by the unique identifier. Verifiable Credential Schema in json format is returned.
+     Fetch the credential schema by the unique identifier
 
     Args:
-        id (str):
+        guid (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[NotFound, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     return sync_detailed(
-        id=id,
+        guid=guid,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: str,
+    guid: str,
     *,
     client: Client,
-) -> Response[Union[NotFound, VerifiableCredentialSchema]]:
-    """Fetch the schema from the registry by id
+) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
+    """Fetch the schema from the registry by `guid`
 
-     Fetch the schema by the unique identifier. Verifiable Credential Schema in json format is returned.
+     Fetch the credential schema by the unique identifier
 
     Args:
-        id (str):
+        guid (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[NotFound, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        guid=guid,
         client=client,
     )
 
@@ -148,28 +156,28 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
+    guid: str,
     *,
     client: Client,
-) -> Optional[Union[NotFound, VerifiableCredentialSchema]]:
-    """Fetch the schema from the registry by id
+) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
+    """Fetch the schema from the registry by `guid`
 
-     Fetch the schema by the unique identifier. Verifiable Credential Schema in json format is returned.
+     Fetch the credential schema by the unique identifier
 
     Args:
-        id (str):
+        guid (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[NotFound, VerifiableCredentialSchema]]
+        Response[Union[CredentialSchemaResponse, ErrorResponse]]
     """
 
     return (
         await asyncio_detailed(
-            id=id,
+            guid=guid,
             client=client,
         )
     ).parsed

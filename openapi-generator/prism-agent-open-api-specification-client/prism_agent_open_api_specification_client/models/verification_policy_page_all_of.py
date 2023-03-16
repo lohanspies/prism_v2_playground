@@ -3,24 +3,20 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 import attr
 
 if TYPE_CHECKING:
-    from ..models.issue_credential_record import IssueCredentialRecord
+    from ..models.verification_policy import VerificationPolicy
 
 
-T = TypeVar("T", bound="IssueCredentialRecordCollection")
+T = TypeVar("T", bound="VerificationPolicyPageAllOf")
 
 
 @attr.s(auto_attribs=True)
-class IssueCredentialRecordCollection:
-    """A collection of issue credential records.
-
-    Example:
-        {'contents': [None, None]}
-
+class VerificationPolicyPageAllOf:
+    """
     Attributes:
-        contents (List['IssueCredentialRecord']): The array containing the list of issue credential records.
+        contents (List['VerificationPolicy']):
     """
 
-    contents: List["IssueCredentialRecord"]
+    contents: List["VerificationPolicy"]
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -42,22 +38,22 @@ class IssueCredentialRecordCollection:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.issue_credential_record import IssueCredentialRecord
+        from ..models.verification_policy import VerificationPolicy
 
         d = src_dict.copy()
         contents = []
         _contents = d.pop("contents")
         for contents_item_data in _contents:
-            contents_item = IssueCredentialRecord.from_dict(contents_item_data)
+            contents_item = VerificationPolicy.from_dict(contents_item_data)
 
             contents.append(contents_item)
 
-        issue_credential_record_collection = cls(
+        verification_policy_page_all_of = cls(
             contents=contents,
         )
 
-        issue_credential_record_collection.additional_properties = d
-        return issue_credential_record_collection
+        verification_policy_page_all_of.additional_properties = d
+        return verification_policy_page_all_of
 
     @property
     def additional_keys(self) -> List[str]:

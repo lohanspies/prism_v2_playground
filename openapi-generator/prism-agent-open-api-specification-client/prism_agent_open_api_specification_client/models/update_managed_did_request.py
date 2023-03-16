@@ -14,13 +14,13 @@ class UpdateManagedDIDRequest:
     """
     Example:
         {'actions': [{'actionType': 'ADD_KEY', 'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'},
-            'addService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'],
-            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}},
+            'addService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
+            'type': 'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/',
+            'https://bar.example.com/'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}},
             {'actionType': 'ADD_KEY', 'removeKey': {'id': 'key-1'}, 'removeService': {'id': 'service-1'}, 'addService':
-            {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com', 'https://bar.example.com'], 'type':
-            'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com',
-            'https://bar.example.com'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}
+            {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
+            'LinkedDomains'}, 'updateService': {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/',
+            'https://bar.example.com/'], 'type': 'LinkedDomains'}, 'addKey': {'purpose': 'authentication', 'id': 'key-1'}}]}
 
     Attributes:
         actions (List['UpdateManagedDIDRequestActionsInner']): A list of actions to perform on DID document.
