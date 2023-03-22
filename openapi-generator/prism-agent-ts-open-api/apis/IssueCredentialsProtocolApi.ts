@@ -15,24 +15,28 @@
 
 import * as runtime from '../runtime';
 import type {
+  AcceptCredentialOfferRequest,
   CreateIssueCredentialRecordRequest,
   ErrorResponse,
   IssueCredentialRecord,
-  IssueCredentialRecordCollection,
+  IssueCredentialRecordPage,
 } from '../models';
 import {
+    AcceptCredentialOfferRequestFromJSON,
+    AcceptCredentialOfferRequestToJSON,
     CreateIssueCredentialRecordRequestFromJSON,
     CreateIssueCredentialRecordRequestToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
     IssueCredentialRecordFromJSON,
     IssueCredentialRecordToJSON,
-    IssueCredentialRecordCollectionFromJSON,
-    IssueCredentialRecordCollectionToJSON,
+    IssueCredentialRecordPageFromJSON,
+    IssueCredentialRecordPageToJSON,
 } from '../models';
 
-export interface AcceptCredentialOfferRequest {
+export interface AcceptCredentialOfferOperationRequest {
     recordId: string;
+    acceptCredentialOfferRequest: AcceptCredentialOfferRequest;
 }
 
 export interface CreateCredentialOfferRequest {
@@ -41,6 +45,12 @@ export interface CreateCredentialOfferRequest {
 
 export interface GetCredentialRecordRequest {
     recordId: string;
+}
+
+export interface GetCredentialRecordsRequest {
+    offset?: number;
+    limit?: number;
+    thid?: string;
 }
 
 export interface IssueCredentialRequest {
@@ -56,14 +66,20 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
      * Accepts a credential offer received from a VC issuer and sends back a credential request.
      * As a holder, accepts a credential offer received from an issuer.
      */
-    async acceptCredentialOfferRaw(requestParameters: AcceptCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
+    async acceptCredentialOfferRaw(requestParameters: AcceptCredentialOfferOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
         if (requestParameters.recordId === null || requestParameters.recordId === undefined) {
             throw new runtime.RequiredError('recordId','Required parameter requestParameters.recordId was null or undefined when calling acceptCredentialOffer.');
+        }
+
+        if (requestParameters.acceptCredentialOfferRequest === null || requestParameters.acceptCredentialOfferRequest === undefined) {
+            throw new runtime.RequiredError('acceptCredentialOfferRequest','Required parameter requestParameters.acceptCredentialOfferRequest was null or undefined when calling acceptCredentialOffer.');
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["apikey"] = this.configuration.apiKey("apikey"); // ApiKeyAuth authentication
@@ -74,6 +90,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: AcceptCredentialOfferRequestToJSON(requestParameters.acceptCredentialOfferRequest),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IssueCredentialRecordFromJSON(jsonValue));
@@ -83,12 +100,13 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
      * Accepts a credential offer received from a VC issuer and sends back a credential request.
      * As a holder, accepts a credential offer received from an issuer.
      */
-    async acceptCredentialOffer(requestParameters: AcceptCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
+    async acceptCredentialOffer(requestParameters: AcceptCredentialOfferOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
         const response = await this.acceptCredentialOfferRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
+     * Creates a new credential offer in the database
      * As a credential issuer, create a new credential offer to be sent to a holder.
      */
     async createCredentialOfferRaw(requestParameters: CreateCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
@@ -118,6 +136,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates a new credential offer in the database
      * As a credential issuer, create a new credential offer to be sent to a holder.
      */
     async createCredentialOffer(requestParameters: CreateCredentialOfferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
@@ -126,6 +145,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
+     * Gets issue credential records by record id
      * Gets an existing issue credential record by its unique identifier.
      */
     async getCredentialRecordRaw(requestParameters: GetCredentialRecordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
@@ -152,6 +172,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
+     * Gets issue credential records by record id
      * Gets an existing issue credential record by its unique identifier.
      */
     async getCredentialRecord(requestParameters: GetCredentialRecordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {
@@ -160,10 +181,23 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get the list of issue credential records paginated
      * Gets the list of issue credential records.
      */
-    async getCredentialRecordsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecordCollection>> {
+    async getCredentialRecordsRaw(requestParameters: GetCredentialRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecordPage>> {
         const queryParameters: any = {};
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.thid !== undefined) {
+            queryParameters['thid'] = requestParameters.thid;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -178,18 +212,20 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IssueCredentialRecordCollectionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IssueCredentialRecordPageFromJSON(jsonValue));
     }
 
     /**
+     * Get the list of issue credential records paginated
      * Gets the list of issue credential records.
      */
-    async getCredentialRecords(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecordCollection> {
-        const response = await this.getCredentialRecordsRaw(initOverrides);
+    async getCredentialRecords(requestParameters: GetCredentialRecordsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecordPage> {
+        const response = await this.getCredentialRecordsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
+     * Sends credential to a holder (holder DID is specified in credential as subjectDid). Credential is constructed from the credential records found by credential id. 
      * As an issuer, issues the verifiable credential related to the specified record.
      */
     async issueCredentialRaw(requestParameters: IssueCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IssueCredentialRecord>> {
@@ -216,6 +252,7 @@ export class IssueCredentialsProtocolApi extends runtime.BaseAPI {
     }
 
     /**
+     * Sends credential to a holder (holder DID is specified in credential as subjectDid). Credential is constructed from the credential records found by credential id. 
      * As an issuer, issues the verifiable credential related to the specified record.
      */
     async issueCredential(requestParameters: IssueCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueCredentialRecord> {

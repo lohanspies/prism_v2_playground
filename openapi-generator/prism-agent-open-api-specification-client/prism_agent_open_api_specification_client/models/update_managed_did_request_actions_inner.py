@@ -37,8 +37,10 @@ class UpdateManagedDIDRequestActionsInner:
         add_key (Union[Unset, ManagedDIDKeyTemplate]): key-pair template to add to DID document. Example: {'purpose':
             'authentication', 'id': 'key-1'}.
         remove_key (Union[Unset, UpdateManagedDIDRequestActionsInnerRemoveKey]):  Example: {'id': 'key-1'}.
-        add_service (Union[Unset, Service]):  Example: {'id': 'service-1', 'serviceEndpoint':
-            ['https://bar.example.com/', 'https://bar.example.com/'], 'type': 'LinkedDomains'}.
+        add_service (Union[Unset, Service]): A service expressed in the DID document.
+            https://www.w3.org/TR/did-core/#services
+             Example: {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'],
+            'type': 'LinkedDomains'}.
         remove_service (Union[Unset, UpdateManagedDIDRequestActionsInnerRemoveService]):  Example: {'id': 'service-1'}.
         update_service (Union[Unset, UpdateManagedDIDRequestActionsInnerUpdateService]): A patch to existing Service.
             'type' and 'serviceEndpoint' can't both be empty. Example: {'id': 'service-1', 'serviceEndpoint':

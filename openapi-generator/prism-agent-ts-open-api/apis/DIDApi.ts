@@ -35,7 +35,7 @@ export interface GetDidRequest {
 export class DIDApi extends runtime.BaseAPI {
 
     /**
-     * Resolve Prism DID to a DID document.
+     * Resolve Prism DID to a DID document data model. The returned DID document is not the W3C DID document representation, but a DID document data model. However, this data model is capable of being transformed into the W3C compliant representation. 
      * Resolve Prism DID
      */
     async getDidRaw(requestParameters: GetDidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DIDResponse>> {
@@ -62,7 +62,7 @@ export class DIDApi extends runtime.BaseAPI {
     }
 
     /**
-     * Resolve Prism DID to a DID document.
+     * Resolve Prism DID to a DID document data model. The returned DID document is not the W3C DID document representation, but a DID document data model. However, this data model is capable of being transformed into the W3C compliant representation. 
      * Resolve Prism DID
      */
     async getDid(requestParameters: GetDidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DIDResponse> {

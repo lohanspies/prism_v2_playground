@@ -28,10 +28,14 @@ tags:
 paths:
   /dids/{didRef}:
     get:
-      description: Resolve Prism DID to a DID document.
+      description: |
+        Resolve Prism DID to a DID document data model.
+        The returned DID document is not the W3C DID document representation, but a DID document data model.
+        However, this data model is capable of being transformed into the W3C compliant representation.
       operationId: getDid
       parameters:
-      - description: DID reference.
+      - description: |
+          Prism DID according to [the Prism DID method syntax](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#prism-did-method-syntax)
         example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
@@ -44,13 +48,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DIDResponse'
-          description: The DID resource
+          description: The DID document data model
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Resource could not be found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Resolve Prism DID
       tags:
       - DID
@@ -62,13 +78,18 @@ paths:
         If the `limit` parameter is not set, it defaults to 100 items per page.
       operationId: listManagedDid
       parameters:
-      - in: query
+      - description: |
+          Pagination offset starting from 0.
+          If the parameter is not specifed, it defaults to 0.
+        in: query
         name: offset
         required: false
         schema:
           format: int32
           type: integer
-      - in: query
+      - description: "Pagination limit. The maximum number of items in the paginated\
+          \ response. If the parameter is not specified, it defualt to 100."
+        in: query
         name: limit
         required: false
         schema:
@@ -113,7 +134,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The DID creation failed.
+          description: Invalid request parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Create unpublished DID and store it in Prism Agent's wallet
       tags:
       - DID Registrar
@@ -122,7 +149,8 @@ paths:
       description: Get DID stored in Prism Agent's wallet
       operationId: getManagedDid
       parameters:
-      - description: DID reference.
+      - description: |
+          Prism DID according to [the Prism DID method syntax](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#prism-did-method-syntax)
         example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
@@ -142,6 +170,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Resource could not be found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Get DID stored in Prism Agent's wallet
       tags:
       - DID Registrar
@@ -151,7 +185,8 @@ paths:
         Publish the DID stored in Prism Agent's wallet to the VDR.
       operationId: publishManagedDid
       parameters:
-      - description: DID reference.
+      - description: |
+          Prism DID according to [the Prism DID method syntax](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#prism-did-method-syntax)
         example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
@@ -170,7 +205,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The DID publication failed.
+          description: Invalid request parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Publish the DID stored in Prism Agent's wallet to the VDR
       tags:
       - DID Registrar
@@ -183,7 +224,8 @@ paths:
         some operations being rejected as only one operation is allowed to be appended to the last confirmed operation.
       operationId: updateManagedDid
       parameters:
-      - description: DID reference.
+      - description: |
+          Prism DID according to [the Prism DID method syntax](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#prism-did-method-syntax)
         example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
@@ -208,7 +250,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The DID update failed.
+          description: Invalid request parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Update DID in Prism Agent's wallet and post update operation to the
         VDR
       tags:
@@ -219,7 +267,8 @@ paths:
         Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR.
       operationId: deactivateManagedDid
       parameters:
-      - description: DID reference.
+      - description: |
+          Prism DID according to [the Prism DID method syntax](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#prism-did-method-syntax)
         example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         in: path
         name: didRef
@@ -238,7 +287,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: The DID deactivation failed.
+          description: Invalid request parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error
       summary: Deactivate DID in Prism Agent's wallet and post deactivate operation
         to the VDR
       tags:
@@ -407,13 +462,18 @@ paths:
       description: Lookup verification policies by `name`
       operationId: lookupVerificationPoliciesByQuery
       parameters:
-      - in: query
+      - description: |
+          Pagination offset starting from 0.
+          If the parameter is not specifed, it defaults to 0.
+        in: query
         name: offset
         required: false
         schema:
           format: int32
           type: integer
-      - in: query
+      - description: "Pagination limit. The maximum number of items in the paginated\
+          \ response. If the parameter is not specified, it defualt to 100."
+        in: query
         name: limit
         required: false
         schema:
@@ -670,13 +730,18 @@ paths:
       description: Get the list of issue credential records paginated
       operationId: getCredentialRecords
       parameters:
-      - in: query
+      - description: |
+          Pagination offset starting from 0.
+          If the parameter is not specifed, it defaults to 0.
+        in: query
         name: offset
         required: false
         schema:
           format: int32
           type: integer
-      - in: query
+      - description: "Pagination limit. The maximum number of items in the paginated\
+          \ response. If the parameter is not specified, it defualt to 100."
+        in: query
         name: limit
         required: false
         schema:
@@ -825,13 +890,18 @@ paths:
       description: list of presentation statuses
       operationId: getAllPresentation
       parameters:
-      - in: query
+      - description: |
+          Pagination offset starting from 0.
+          If the parameter is not specifed, it defaults to 0.
+        in: query
         name: offset
         required: false
         schema:
           format: int32
           type: integer
-      - in: query
+      - description: "Pagination limit. The maximum number of items in the paginated\
+          \ response. If the parameter is not specified, it defualt to 100."
+        in: query
         name: limit
         required: false
         schema:
@@ -976,13 +1046,18 @@ paths:
       description: Get the list of connection records paginated
       operationId: getConnections
       parameters:
-      - in: query
+      - description: |
+          Pagination offset starting from 0.
+          If the parameter is not specifed, it defaults to 0.
+        in: query
         name: offset
         required: false
         schema:
           format: int32
           type: integer
-      - in: query
+      - description: "Pagination limit. The maximum number of items in the paginated\
+          \ response. If the parameter is not specified, it defualt to 100."
+        in: query
         name: limit
         required: false
         schema:
@@ -1099,7 +1174,8 @@ paths:
 components:
   parameters:
     didRefInPath:
-      description: DID reference.
+      description: |
+        Prism DID according to [the Prism DID method syntax](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#prism-did-method-syntax)
       example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
       in: path
       name: didRef
@@ -1107,6 +1183,9 @@ components:
       schema:
         type: string
     offset:
+      description: |
+        Pagination offset starting from 0.
+        If the parameter is not specifed, it defaults to 0.
       in: query
       name: offset
       required: false
@@ -1114,6 +1193,8 @@ components:
         format: int32
         type: integer
     limit:
+      description: "Pagination limit. The maximum number of items in the paginated\
+        \ response. If the parameter is not specified, it defualt to 100."
       in: query
       name: limit
       required: false
@@ -1150,6 +1231,12 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
       description: Resource could not be found
+    UnprocessableEntity:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: Invalid request parameters
     InternalServerError:
       content:
         application/json:
@@ -1325,7 +1412,7 @@ components:
       type: object
     DID:
       description: |
-        A core DID data model capable of being transformed into W3C compliant representation.
+        A Prism DID document data model capable of being transformed into W3C compliant representation.
       example:
         assertionMethod:
         - type: EMBEDDED
@@ -1474,9 +1561,14 @@ components:
           uri: did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1
       properties:
         id:
+          description: |
+            [DID subject](https://www.w3.org/TR/did-core/#did-subject).
+            The value must match the DID that was given to the resolver.
           example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
         controller:
+          description: |
+            [DID controller](https://www.w3.org/TR/did-core/#did-controller)
           example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
           type: string
         verificationMethod:
@@ -1511,6 +1603,9 @@ components:
       - id
       type: object
     VerificationMethod:
+      description: |
+        A cryptographic public key expressed in the DID document.
+        https://www.w3.org/TR/did-core/#verification-methods
       example:
         controller: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff
         publicKeyJwk:
@@ -1594,6 +1689,9 @@ components:
       - type
       type: object
     Service:
+      description: |
+        A service expressed in the DID document.
+        https://www.w3.org/TR/did-core/#services
       example:
         id: service-1
         serviceEndpoint:
@@ -1605,11 +1703,21 @@ components:
           example: service-1
           type: string
         type:
+          description: |
+            Service type.
+            Can contain multiple possible values as described in the [Create DID operation](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#create-did) under the construction section.
+
+            *Known issue: This is currently misaligned with Prism DID method. This will be fixed in the future version of Prism Agent*
           enum:
           - LinkedDomains
           example: LinkedDomains
           type: string
         serviceEndpoint:
+          description: |
+            Application service endpoints.
+            Can contain multiple possible values as described in the [Create DID operation](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#create-did) under the construction section.
+
+            *Known issue: This is currently misaligned with Prism DID method. This will be fixed in the future version of Prism Agent*
           items:
             example: https://bar.example.com/
             type: string
@@ -1620,6 +1728,8 @@ components:
       - type
       type: object
     DIDDocumentMetadata:
+      description: |
+        [DID document metadata](https://www.w3.org/TR/did-core/#did-document-metadata)
       example:
         canonicalId: canonicalId
         deactivated: true
@@ -1631,7 +1741,12 @@ components:
             \ the boolean value false."
           type: boolean
         canonicalId:
-          description: A DID in canonical form
+          description: |
+            A DID in canonical form.
+
+            If a DID is in long form and has been published, DID document metadata MUST contain a `canonicalId`` property with the short form DID as its value.
+
+            If a DID in short form or has not been published, DID document metadata MUST NOT contain a `canonicalId` property.
           type: string
       required:
       - deactivated

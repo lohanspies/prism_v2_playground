@@ -13,61 +13,61 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { VerificationPolicy } from './VerificationPolicy';
+import type { Connection } from './Connection';
 import {
-    VerificationPolicyFromJSON,
-    VerificationPolicyFromJSONTyped,
-    VerificationPolicyToJSON,
-} from './VerificationPolicy';
+    ConnectionFromJSON,
+    ConnectionFromJSONTyped,
+    ConnectionToJSON,
+} from './Connection';
 
 /**
  * 
  * @export
- * @interface VerificationPolicyPage
+ * @interface ConnectionsPage
  */
-export interface VerificationPolicyPage {
+export interface ConnectionsPage {
     /**
      * The reference to the connection collection itself.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof ConnectionsPage
      */
     self: string;
     /**
      * The type of object returned. In this case a `Collection`.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof ConnectionsPage
      */
     kind: string;
     /**
      * Page number within the context of paginated response.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof ConnectionsPage
      */
     pageOf: string;
     /**
      * URL of the next page (if available)
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof ConnectionsPage
      */
     next?: string;
     /**
      * URL of the previous page (if available)
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof ConnectionsPage
      */
     previous?: string;
     /**
-     * 
-     * @type {Array<VerificationPolicy>}
-     * @memberof VerificationPolicyPage
+     * The array containing the list of connection records.
+     * @type {Array<Connection>}
+     * @memberof ConnectionsPage
      */
-    contents: Array<VerificationPolicy>;
+    contents: Array<Connection>;
 }
 
 /**
- * Check if a given object implements the VerificationPolicyPage interface.
+ * Check if a given object implements the ConnectionsPage interface.
  */
-export function instanceOfVerificationPolicyPage(value: object): boolean {
+export function instanceOfConnectionsPage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
@@ -77,11 +77,11 @@ export function instanceOfVerificationPolicyPage(value: object): boolean {
     return isInstance;
 }
 
-export function VerificationPolicyPageFromJSON(json: any): VerificationPolicyPage {
-    return VerificationPolicyPageFromJSONTyped(json, false);
+export function ConnectionsPageFromJSON(json: any): ConnectionsPage {
+    return ConnectionsPageFromJSONTyped(json, false);
 }
 
-export function VerificationPolicyPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerificationPolicyPage {
+export function ConnectionsPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConnectionsPage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -92,11 +92,11 @@ export function VerificationPolicyPageFromJSONTyped(json: any, ignoreDiscriminat
         'pageOf': json['pageOf'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'contents': ((json['contents'] as Array<any>).map(VerificationPolicyFromJSON)),
+        'contents': ((json['contents'] as Array<any>).map(ConnectionFromJSON)),
     };
 }
 
-export function VerificationPolicyPageToJSON(value?: VerificationPolicyPage | null): any {
+export function ConnectionsPageToJSON(value?: ConnectionsPage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -110,7 +110,7 @@ export function VerificationPolicyPageToJSON(value?: VerificationPolicyPage | nu
         'pageOf': value.pageOf,
         'next': value.next,
         'previous': value.previous,
-        'contents': ((value.contents as Array<any>).map(VerificationPolicyToJSON)),
+        'contents': ((value.contents as Array<any>).map(ConnectionToJSON)),
     };
 }
 

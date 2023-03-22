@@ -27,31 +27,31 @@ import {
  */
 export interface ManagedDIDPage {
     /**
-     * 
+     * The reference to the connection collection itself.
      * @type {string}
      * @memberof ManagedDIDPage
      */
     self: string;
     /**
-     * 
+     * The type of object returned. In this case a `Collection`.
      * @type {string}
      * @memberof ManagedDIDPage
      */
     kind: string;
     /**
-     * 
+     * Page number within the context of paginated response.
      * @type {string}
      * @memberof ManagedDIDPage
      */
     pageOf: string;
     /**
-     * 
+     * URL of the next page (if available)
      * @type {string}
      * @memberof ManagedDIDPage
      */
     next?: string;
     /**
-     * 
+     * URL of the previous page (if available)
      * @type {string}
      * @memberof ManagedDIDPage
      */
@@ -61,7 +61,7 @@ export interface ManagedDIDPage {
      * @type {Array<ManagedDID>}
      * @memberof ManagedDIDPage
      */
-    contents?: Array<ManagedDID>;
+    contents: Array<ManagedDID>;
 }
 
 /**
@@ -72,6 +72,7 @@ export function instanceOfManagedDIDPage(value: object): boolean {
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
     isInstance = isInstance && "pageOf" in value;
+    isInstance = isInstance && "contents" in value;
 
     return isInstance;
 }
@@ -91,7 +92,7 @@ export function ManagedDIDPageFromJSONTyped(json: any, ignoreDiscriminator: bool
         'pageOf': json['pageOf'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'contents': !exists(json, 'contents') ? undefined : ((json['contents'] as Array<any>).map(ManagedDIDFromJSON)),
+        'contents': ((json['contents'] as Array<any>).map(ManagedDIDFromJSON)),
     };
 }
 
@@ -109,7 +110,7 @@ export function ManagedDIDPageToJSON(value?: ManagedDIDPage | null): any {
         'pageOf': value.pageOf,
         'next': value.next,
         'previous': value.previous,
-        'contents': value.contents === undefined ? undefined : ((value.contents as Array<any>).map(ManagedDIDToJSON)),
+        'contents': ((value.contents as Array<any>).map(ManagedDIDToJSON)),
     };
 }
 

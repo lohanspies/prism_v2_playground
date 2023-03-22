@@ -14,7 +14,8 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * A service expressed in the DID document.
+ * https://www.w3.org/TR/did-core/#services
  * @export
  * @interface Service
  */
@@ -26,13 +27,19 @@ export interface Service {
      */
     id: string;
     /**
+     * Service type.
+     * Can contain multiple possible values as described in the [Create DID operation](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#create-did) under the construction section.
      * 
+     * *Known issue: This is currently misaligned with Prism DID method. This will be fixed in the future version of Prism Agent*
      * @type {string}
      * @memberof Service
      */
     type: ServiceTypeEnum;
     /**
+     * Application service endpoints.
+     * Can contain multiple possible values as described in the [Create DID operation](https://github.com/input-output-hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#create-did) under the construction section.
      * 
+     * *Known issue: This is currently misaligned with Prism DID method. This will be fixed in the future version of Prism Agent*
      * @type {Array<string>}
      * @memberof Service
      */

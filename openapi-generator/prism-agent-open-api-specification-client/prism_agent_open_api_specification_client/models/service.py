@@ -9,15 +9,28 @@ T = TypeVar("T", bound="Service")
 
 @attr.s(auto_attribs=True)
 class Service:
-    """
-    Example:
-        {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
-            'LinkedDomains'}
+    """A service expressed in the DID document.
+    https://www.w3.org/TR/did-core/#services
 
-    Attributes:
-        id (str):  Example: service-1.
-        type (ServiceType):  Example: LinkedDomains.
-        service_endpoint (List[str]):
+        Example:
+            {'id': 'service-1', 'serviceEndpoint': ['https://bar.example.com/', 'https://bar.example.com/'], 'type':
+                'LinkedDomains'}
+
+        Attributes:
+            id (str):  Example: service-1.
+            type (ServiceType): Service type.
+                Can contain multiple possible values as described in the [Create DID operation](https://github.com/input-output-
+                hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#create-did) under the construction section.
+
+                *Known issue: This is currently misaligned with Prism DID method. This will be fixed in the future version of
+                Prism Agent*
+                 Example: LinkedDomains.
+            service_endpoint (List[str]): Application service endpoints.
+                Can contain multiple possible values as described in the [Create DID operation](https://github.com/input-output-
+                hk/prism-did-method-spec/blob/main/w3c-spec/PRISM-method.md#create-did) under the construction section.
+
+                *Known issue: This is currently misaligned with Prism DID method. This will be fixed in the future version of
+                Prism Agent*
     """
 
     id: str

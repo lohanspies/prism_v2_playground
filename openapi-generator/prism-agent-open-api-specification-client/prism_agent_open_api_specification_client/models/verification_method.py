@@ -11,20 +11,22 @@ T = TypeVar("T", bound="VerificationMethod")
 
 @attr.s(auto_attribs=True)
 class VerificationMethod:
-    """
-    Example:
-        {'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
-            {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
-            'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
-            'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
-            'EcdsaSecp256k1VerificationKey2019'}
+    """A cryptographic public key expressed in the DID document.
+    https://www.w3.org/TR/did-core/#verification-methods
 
-    Attributes:
-        id (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1.
-        type (str):  Example: EcdsaSecp256k1VerificationKey2019.
-        controller (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
-        public_key_jwk (PublicKeyJwk):  Example: {'kty': 'EC', 'crv': 'secp256k1', 'x':
-            '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}.
+        Example:
+            {'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk':
+                {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+                'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
+                'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
+                'EcdsaSecp256k1VerificationKey2019'}
+
+        Attributes:
+            id (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1.
+            type (str):  Example: EcdsaSecp256k1VerificationKey2019.
+            controller (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
+            public_key_jwk (PublicKeyJwk):  Example: {'kty': 'EC', 'crv': 'secp256k1', 'x':
+                '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y': 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}.
     """
 
     id: str

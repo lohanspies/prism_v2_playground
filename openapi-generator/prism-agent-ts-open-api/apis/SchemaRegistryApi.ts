@@ -15,39 +15,37 @@
 
 import * as runtime from '../runtime';
 import type {
-  InternalServerError,
-  NotFound,
-  VerifiableCredentialSchema,
-  VerifiableCredentialSchemaPage,
-  VerificationCredentialSchemaInput,
+  CredentialSchemaInput,
+  CredentialSchemaResponse,
+  CredentialSchemaResponsePage,
+  ErrorResponse,
 } from '../models';
 import {
-    InternalServerErrorFromJSON,
-    InternalServerErrorToJSON,
-    NotFoundFromJSON,
-    NotFoundToJSON,
-    VerifiableCredentialSchemaFromJSON,
-    VerifiableCredentialSchemaToJSON,
-    VerifiableCredentialSchemaPageFromJSON,
-    VerifiableCredentialSchemaPageToJSON,
-    VerificationCredentialSchemaInputFromJSON,
-    VerificationCredentialSchemaInputToJSON,
+    CredentialSchemaInputFromJSON,
+    CredentialSchemaInputToJSON,
+    CredentialSchemaResponseFromJSON,
+    CredentialSchemaResponseToJSON,
+    CredentialSchemaResponsePageFromJSON,
+    CredentialSchemaResponsePageToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
 } from '../models';
 
 export interface CreateSchemaRequest {
-    verificationCredentialSchemaInput: VerificationCredentialSchemaInput;
+    credentialSchemaInput: CredentialSchemaInput;
 }
 
 export interface GetSchemaByIdRequest {
-    id: string;
+    guid: string;
 }
 
 export interface LookupSchemasByQueryRequest {
-    offset?: number;
-    limit?: number;
     author?: string;
     name?: string;
+    version?: string;
     tags?: string;
+    offset?: number;
+    limit?: number;
     order?: string;
 }
 
@@ -57,12 +55,12 @@ export interface LookupSchemasByQueryRequest {
 export class SchemaRegistryApi extends runtime.BaseAPI {
 
     /**
-     * Publish the new schema with attributes to the schema registry on behalf of Cloud Agent. Schema will be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
+     * Create the new credential schema record with metadata and internal JSON Schema on behalf of Cloud Agent. The credential schema will be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
      * Publish new schema to the schema registry
      */
-    async createSchemaRaw(requestParameters: CreateSchemaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VerifiableCredentialSchema>> {
-        if (requestParameters.verificationCredentialSchemaInput === null || requestParameters.verificationCredentialSchemaInput === undefined) {
-            throw new runtime.RequiredError('verificationCredentialSchemaInput','Required parameter requestParameters.verificationCredentialSchemaInput was null or undefined when calling createSchema.');
+    async createSchemaRaw(requestParameters: CreateSchemaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CredentialSchemaResponse>> {
+        if (requestParameters.credentialSchemaInput === null || requestParameters.credentialSchemaInput === undefined) {
+            throw new runtime.RequiredError('credentialSchemaInput','Required parameter requestParameters.credentialSchemaInput was null or undefined when calling createSchema.');
         }
 
         const queryParameters: any = {};
@@ -80,28 +78,28 @@ export class SchemaRegistryApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: VerificationCredentialSchemaInputToJSON(requestParameters.verificationCredentialSchemaInput),
+            body: CredentialSchemaInputToJSON(requestParameters.credentialSchemaInput),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => VerifiableCredentialSchemaFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CredentialSchemaResponseFromJSON(jsonValue));
     }
 
     /**
-     * Publish the new schema with attributes to the schema registry on behalf of Cloud Agent. Schema will be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
+     * Create the new credential schema record with metadata and internal JSON Schema on behalf of Cloud Agent. The credential schema will be signed by the keys of Cloud Agent and issued by the DID that corresponds to it
      * Publish new schema to the schema registry
      */
-    async createSchema(requestParameters: CreateSchemaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerifiableCredentialSchema> {
+    async createSchema(requestParameters: CreateSchemaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CredentialSchemaResponse> {
         const response = await this.createSchemaRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Fetch the schema by the unique identifier. Verifiable Credential Schema in json format is returned.
-     * Fetch the schema from the registry by id
+     * Fetch the credential schema by the unique identifier
+     * Fetch the schema from the registry by `guid`
      */
-    async getSchemaByIdRaw(requestParameters: GetSchemaByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VerifiableCredentialSchema>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSchemaById.');
+    async getSchemaByIdRaw(requestParameters: GetSchemaByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CredentialSchemaResponse>> {
+        if (requestParameters.guid === null || requestParameters.guid === undefined) {
+            throw new runtime.RequiredError('guid','Required parameter requestParameters.guid was null or undefined when calling getSchemaById.');
         }
 
         const queryParameters: any = {};
@@ -113,38 +111,30 @@ export class SchemaRegistryApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/schema-registry/schemas/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/schema-registry/schemas/{guid}`.replace(`{${"guid"}}`, encodeURIComponent(String(requestParameters.guid))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => VerifiableCredentialSchemaFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CredentialSchemaResponseFromJSON(jsonValue));
     }
 
     /**
-     * Fetch the schema by the unique identifier. Verifiable Credential Schema in json format is returned.
-     * Fetch the schema from the registry by id
+     * Fetch the credential schema by the unique identifier
+     * Fetch the schema from the registry by `guid`
      */
-    async getSchemaById(requestParameters: GetSchemaByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerifiableCredentialSchema> {
+    async getSchemaById(requestParameters: GetSchemaByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CredentialSchemaResponse> {
         const response = await this.getSchemaByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and `limit` parameters 
+     * Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and `limit` parameters
      * Lookup schemas by indexed fields
      */
-    async lookupSchemasByQueryRaw(requestParameters: LookupSchemasByQueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VerifiableCredentialSchemaPage>> {
+    async lookupSchemasByQueryRaw(requestParameters: LookupSchemasByQueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CredentialSchemaResponsePage>> {
         const queryParameters: any = {};
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
 
         if (requestParameters.author !== undefined) {
             queryParameters['author'] = requestParameters.author;
@@ -154,8 +144,20 @@ export class SchemaRegistryApi extends runtime.BaseAPI {
             queryParameters['name'] = requestParameters.name;
         }
 
+        if (requestParameters.version !== undefined) {
+            queryParameters['version'] = requestParameters.version;
+        }
+
         if (requestParameters.tags !== undefined) {
             queryParameters['tags'] = requestParameters.tags;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         if (requestParameters.order !== undefined) {
@@ -175,14 +177,14 @@ export class SchemaRegistryApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => VerifiableCredentialSchemaPageFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CredentialSchemaResponsePageFromJSON(jsonValue));
     }
 
     /**
-     * Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and `limit` parameters 
+     * Lookup schemas by `author`, `name`, `tags` parameters and control the pagination by `offset` and `limit` parameters
      * Lookup schemas by indexed fields
      */
-    async lookupSchemasByQuery(requestParameters: LookupSchemasByQueryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerifiableCredentialSchemaPage> {
+    async lookupSchemasByQuery(requestParameters: LookupSchemasByQueryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CredentialSchemaResponsePage> {
         const response = await this.lookupSchemasByQueryRaw(requestParameters, initOverrides);
         return await response.value();
     }

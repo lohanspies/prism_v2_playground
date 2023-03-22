@@ -38,6 +38,14 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         response_404 = ErrorResponse.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+        response_422 = ErrorResponse.from_dict(response.json())
+
+        return response_422
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = ErrorResponse.from_dict(response.json())
+
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(f"Unexpected status code: {response.status_code}")
     else:
@@ -60,7 +68,9 @@ def sync_detailed(
 ) -> Response[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID to a DID document.
+     Resolve Prism DID to a DID document data model.
+    The returned DID document is not the W3C DID document representation, but a DID document data model.
+    However, this data model is capable of being transformed into the W3C compliant representation.
 
     Args:
         did_ref (str):
@@ -93,7 +103,9 @@ def sync(
 ) -> Optional[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID to a DID document.
+     Resolve Prism DID to a DID document data model.
+    The returned DID document is not the W3C DID document representation, but a DID document data model.
+    However, this data model is capable of being transformed into the W3C compliant representation.
 
     Args:
         did_ref (str):
@@ -119,7 +131,9 @@ async def asyncio_detailed(
 ) -> Response[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID to a DID document.
+     Resolve Prism DID to a DID document data model.
+    The returned DID document is not the W3C DID document representation, but a DID document data model.
+    However, this data model is capable of being transformed into the W3C compliant representation.
 
     Args:
         did_ref (str):
@@ -150,7 +164,9 @@ async def asyncio(
 ) -> Optional[Union[DIDResponse, ErrorResponse]]:
     """Resolve Prism DID
 
-     Resolve Prism DID to a DID document.
+     Resolve Prism DID to a DID document data model.
+    The returned DID document is not the W3C DID document representation, but a DID document data model.
+    However, this data model is capable of being transformed into the W3C compliant representation.
 
     Args:
         did_ref (str):

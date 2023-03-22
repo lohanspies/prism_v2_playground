@@ -33,19 +33,20 @@ import {
 } from './VerificationMethodOrRef';
 
 /**
- * A core DID data model capable of being transformed into W3C compliant representation.
+ * A Prism DID document data model capable of being transformed into W3C compliant representation.
  * @export
  * @interface DID
  */
 export interface DID {
     /**
-     * 
+     * [DID subject](https://www.w3.org/TR/did-core/#did-subject).
+     * The value must match the DID that was given to the resolver.
      * @type {string}
      * @memberof DID
      */
     id: string;
     /**
-     * 
+     * [DID controller](https://www.w3.org/TR/did-core/#did-controller)
      * @type {string}
      * @memberof DID
      */

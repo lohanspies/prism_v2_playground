@@ -30,7 +30,7 @@ export interface CreateIssueCredentialRecordRequest {
      * @type {string}
      * @memberof CreateIssueCredentialRecordRequest
      */
-    subjectId: string;
+    subjectId?: string;
     /**
      * The validity period in seconds of the verifiable credential that will be issued.
      * @type {number}
@@ -69,7 +69,6 @@ export interface CreateIssueCredentialRecordRequest {
  */
 export function instanceOfCreateIssueCredentialRecordRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "subjectId" in value;
     isInstance = isInstance && "claims" in value;
     isInstance = isInstance && "issuingDID" in value;
     isInstance = isInstance && "connectionId" in value;
@@ -88,7 +87,7 @@ export function CreateIssueCredentialRecordRequestFromJSONTyped(json: any, ignor
     return {
         
         'schemaId': !exists(json, 'schemaId') ? undefined : json['schemaId'],
-        'subjectId': json['subjectId'],
+        'subjectId': !exists(json, 'subjectId') ? undefined : json['subjectId'],
         'validityPeriod': !exists(json, 'validityPeriod') ? undefined : json['validityPeriod'],
         'claims': json['claims'],
         'automaticIssuance': !exists(json, 'automaticIssuance') ? undefined : json['automaticIssuance'],

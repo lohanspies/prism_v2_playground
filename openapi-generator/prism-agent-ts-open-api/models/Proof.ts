@@ -14,43 +14,49 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * A digital signature over the Credential Schema for the sake of asserting authorship. A piece of Metadata.
  * @export
  * @interface Proof
  */
 export interface Proof {
     /**
-     * 
+     * The type of cryptographic signature algorithm used to generate the proof
      * @type {string}
      * @memberof Proof
      */
     type: string;
     /**
-     * 
+     * The date and time at which the proof was created, in UTC format. This field is used to ensure that the proof was generated before or at the same time as the credential schema itself
      * @type {Date}
      * @memberof Proof
      */
     created: Date;
     /**
-     * 
+     * The verification method used to generate the proof. This is usually a DID and key ID combination that can be used to look up the public key needed to verify the proof.
      * @type {string}
      * @memberof Proof
      */
     verificationMethod: string;
     /**
-     * 
+     * The purpose of the proof (for example: `assertionMethod`). This indicates that the proof is being used to assert that the issuer really issued this credential schema instance
      * @type {string}
      * @memberof Proof
      */
     proofPurpose: string;
     /**
-     * 
+     * The cryptographic signature value that was generated using the private key associated with the verification method, and which can be used to verify the proof
      * @type {string}
      * @memberof Proof
      */
     proofValue: string;
     /**
-     * 
+     * The JSON Web Signature (JWS) that contains the proof information
+     * @type {string}
+     * @memberof Proof
+     */
+    jws: string;
+    /**
+     * It specifies the domain context within which the credential schema and proof are being used
      * @type {string}
      * @memberof Proof
      */
@@ -67,6 +73,7 @@ export function instanceOfProof(value: object): boolean {
     isInstance = isInstance && "verificationMethod" in value;
     isInstance = isInstance && "proofPurpose" in value;
     isInstance = isInstance && "proofValue" in value;
+    isInstance = isInstance && "jws" in value;
 
     return isInstance;
 }
@@ -86,6 +93,7 @@ export function ProofFromJSONTyped(json: any, ignoreDiscriminator: boolean): Pro
         'verificationMethod': json['verificationMethod'],
         'proofPurpose': json['proofPurpose'],
         'proofValue': json['proofValue'],
+        'jws': json['jws'],
         'domain': !exists(json, 'domain') ? undefined : json['domain'],
     };
 }
@@ -104,6 +112,7 @@ export function ProofToJSON(value?: Proof | null): any {
         'verificationMethod': value.verificationMethod,
         'proofPurpose': value.proofPurpose,
         'proofValue': value.proofValue,
+        'jws': value.jws,
         'domain': value.domain,
     };
 }

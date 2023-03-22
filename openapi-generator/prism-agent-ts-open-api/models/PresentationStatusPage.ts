@@ -13,74 +13,75 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { VerifiableCredentialSchema } from './VerifiableCredentialSchema';
+import type { PresentationStatus } from './PresentationStatus';
 import {
-    VerifiableCredentialSchemaFromJSON,
-    VerifiableCredentialSchemaFromJSONTyped,
-    VerifiableCredentialSchemaToJSON,
-} from './VerifiableCredentialSchema';
+    PresentationStatusFromJSON,
+    PresentationStatusFromJSONTyped,
+    PresentationStatusToJSON,
+} from './PresentationStatus';
 
 /**
  * 
  * @export
- * @interface VerifiableCredentialSchemaPage
+ * @interface PresentationStatusPage
  */
-export interface VerifiableCredentialSchemaPage {
+export interface PresentationStatusPage {
     /**
-     * 
+     * The reference to the connection collection itself.
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof PresentationStatusPage
      */
     self: string;
     /**
-     * 
+     * The type of object returned. In this case a `Collection`.
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof PresentationStatusPage
      */
     kind: string;
     /**
-     * 
+     * Page number within the context of paginated response.
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof PresentationStatusPage
      */
     pageOf: string;
     /**
-     * 
+     * URL of the next page (if available)
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof PresentationStatusPage
      */
     next?: string;
     /**
-     * 
+     * URL of the previous page (if available)
      * @type {string}
-     * @memberof VerifiableCredentialSchemaPage
+     * @memberof PresentationStatusPage
      */
     previous?: string;
     /**
      * 
-     * @type {Array<VerifiableCredentialSchema>}
-     * @memberof VerifiableCredentialSchemaPage
+     * @type {Array<PresentationStatus>}
+     * @memberof PresentationStatusPage
      */
-    contents?: Array<VerifiableCredentialSchema>;
+    contents: Array<PresentationStatus>;
 }
 
 /**
- * Check if a given object implements the VerifiableCredentialSchemaPage interface.
+ * Check if a given object implements the PresentationStatusPage interface.
  */
-export function instanceOfVerifiableCredentialSchemaPage(value: object): boolean {
+export function instanceOfPresentationStatusPage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
     isInstance = isInstance && "pageOf" in value;
+    isInstance = isInstance && "contents" in value;
 
     return isInstance;
 }
 
-export function VerifiableCredentialSchemaPageFromJSON(json: any): VerifiableCredentialSchemaPage {
-    return VerifiableCredentialSchemaPageFromJSONTyped(json, false);
+export function PresentationStatusPageFromJSON(json: any): PresentationStatusPage {
+    return PresentationStatusPageFromJSONTyped(json, false);
 }
 
-export function VerifiableCredentialSchemaPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerifiableCredentialSchemaPage {
+export function PresentationStatusPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): PresentationStatusPage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -91,11 +92,11 @@ export function VerifiableCredentialSchemaPageFromJSONTyped(json: any, ignoreDis
         'pageOf': json['pageOf'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'contents': !exists(json, 'contents') ? undefined : ((json['contents'] as Array<any>).map(VerifiableCredentialSchemaFromJSON)),
+        'contents': ((json['contents'] as Array<any>).map(PresentationStatusFromJSON)),
     };
 }
 
-export function VerifiableCredentialSchemaPageToJSON(value?: VerifiableCredentialSchemaPage | null): any {
+export function PresentationStatusPageToJSON(value?: PresentationStatusPage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -109,7 +110,7 @@ export function VerifiableCredentialSchemaPageToJSON(value?: VerifiableCredentia
         'pageOf': value.pageOf,
         'next': value.next,
         'previous': value.previous,
-        'contents': value.contents === undefined ? undefined : ((value.contents as Array<any>).map(VerifiableCredentialSchemaToJSON)),
+        'contents': ((value.contents as Array<any>).map(PresentationStatusToJSON)),
     };
 }
 

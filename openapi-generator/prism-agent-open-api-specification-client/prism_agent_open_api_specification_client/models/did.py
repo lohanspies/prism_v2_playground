@@ -15,7 +15,7 @@ T = TypeVar("T", bound="DID")
 
 @attr.s(auto_attribs=True)
 class DID:
-    """A core DID data model capable of being transformed into W3C compliant representation.
+    """A Prism DID document data model capable of being transformed into W3C compliant representation.
 
     Example:
         {'assertionMethod': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
@@ -103,9 +103,11 @@ class DID:
             'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}]}
 
     Attributes:
-        id (str):  Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
-        controller (Union[Unset, str]):  Example:
-            did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
+        id (str): [DID subject](https://www.w3.org/TR/did-core/#did-subject).
+            The value must match the DID that was given to the resolver.
+             Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
+        controller (Union[Unset, str]): [DID controller](https://www.w3.org/TR/did-core/#did-controller)
+             Example: did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff.
         verification_method (Union[Unset, List['VerificationMethod']]):
         authentication (Union[Unset, List['VerificationMethodOrRef']]):
         assertion_method (Union[Unset, List['VerificationMethodOrRef']]):

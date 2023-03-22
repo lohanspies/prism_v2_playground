@@ -32,9 +32,11 @@ class VerificationMethodOrRef:
             type (VerificationMethodOrRefType):  Example: EMBEDDED.
             uri (Union[Unset, str]):  Example:
                 did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1.
-            verification_method (Union[Unset, VerificationMethod]):  Example: {'controller':
-                'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
-                'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
+            verification_method (Union[Unset, VerificationMethod]): A cryptographic public key expressed in the DID
+                document.
+                https://www.w3.org/TR/did-core/#verification-methods
+                 Example: {'controller': 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff',
+                'publicKeyJwk': {'kty': 'EC', 'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
                 'nDQW6XZ7b_u2Sy9slofYLlG03sOEoug3I0aAPQ0exs4'}, 'id':
                 'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
                 'EcdsaSecp256k1VerificationKey2019'}.

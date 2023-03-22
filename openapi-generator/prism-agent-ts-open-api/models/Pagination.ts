@@ -13,75 +13,61 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { VerificationPolicy } from './VerificationPolicy';
-import {
-    VerificationPolicyFromJSON,
-    VerificationPolicyFromJSONTyped,
-    VerificationPolicyToJSON,
-} from './VerificationPolicy';
-
 /**
  * 
  * @export
- * @interface VerificationPolicyPage
+ * @interface Pagination
  */
-export interface VerificationPolicyPage {
+export interface Pagination {
     /**
      * The reference to the connection collection itself.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof Pagination
      */
     self: string;
     /**
      * The type of object returned. In this case a `Collection`.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof Pagination
      */
     kind: string;
     /**
      * Page number within the context of paginated response.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof Pagination
      */
     pageOf: string;
     /**
      * URL of the next page (if available)
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof Pagination
      */
     next?: string;
     /**
      * URL of the previous page (if available)
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof Pagination
      */
     previous?: string;
-    /**
-     * 
-     * @type {Array<VerificationPolicy>}
-     * @memberof VerificationPolicyPage
-     */
-    contents: Array<VerificationPolicy>;
 }
 
 /**
- * Check if a given object implements the VerificationPolicyPage interface.
+ * Check if a given object implements the Pagination interface.
  */
-export function instanceOfVerificationPolicyPage(value: object): boolean {
+export function instanceOfPagination(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
     isInstance = isInstance && "pageOf" in value;
-    isInstance = isInstance && "contents" in value;
 
     return isInstance;
 }
 
-export function VerificationPolicyPageFromJSON(json: any): VerificationPolicyPage {
-    return VerificationPolicyPageFromJSONTyped(json, false);
+export function PaginationFromJSON(json: any): Pagination {
+    return PaginationFromJSONTyped(json, false);
 }
 
-export function VerificationPolicyPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerificationPolicyPage {
+export function PaginationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Pagination {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -92,11 +78,10 @@ export function VerificationPolicyPageFromJSONTyped(json: any, ignoreDiscriminat
         'pageOf': json['pageOf'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'contents': ((json['contents'] as Array<any>).map(VerificationPolicyFromJSON)),
     };
 }
 
-export function VerificationPolicyPageToJSON(value?: VerificationPolicyPage | null): any {
+export function PaginationToJSON(value?: Pagination | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -110,7 +95,6 @@ export function VerificationPolicyPageToJSON(value?: VerificationPolicyPage | nu
         'pageOf': value.pageOf,
         'next': value.next,
         'previous': value.previous,
-        'contents': ((value.contents as Array<any>).map(VerificationPolicyToJSON)),
     };
 }
 

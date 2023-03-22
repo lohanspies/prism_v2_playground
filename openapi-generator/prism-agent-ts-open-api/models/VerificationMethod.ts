@@ -21,7 +21,8 @@ import {
 } from './PublicKeyJwk';
 
 /**
- * 
+ * A cryptographic public key expressed in the DID document.
+ * https://www.w3.org/TR/did-core/#verification-methods
  * @export
  * @interface VerificationMethod
  */

@@ -100,7 +100,7 @@ class DIDResponse:
             'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}]}}
 
     Attributes:
-        did (DID): A core DID data model capable of being transformed into W3C compliant representation.
+        did (DID): A Prism DID document data model capable of being transformed into W3C compliant representation.
              Example: {'assertionMethod': [{'type': 'EMBEDDED', 'verificationMethod': {'controller':
             'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff', 'publicKeyJwk': {'kty': 'EC',
             'crv': 'secp256k1', 'x': '38M1FDts7Oea7urmseiugGW7tWc3mLpJh6rKe7xINZ8', 'y':
@@ -184,7 +184,8 @@ class DIDResponse:
             'did:prism:4a5b5cf0a513e83b598bbea25cd6196746747f361a73ef77068268bc9bd732ff#key-1', 'type':
             'EcdsaSecp256k1VerificationKey2019'}, 'uri':
             'did:prism:c7bd808e8e135236d7262ecf5e639b8f9d22bd886f59a4e6c909486846ca8319#key-1'}]}.
-        metadata (DIDDocumentMetadata):  Example: {'canonicalId': 'canonicalId', 'deactivated': True}.
+        metadata (DIDDocumentMetadata): [DID document metadata](https://www.w3.org/TR/did-core/#did-document-metadata)
+             Example: {'canonicalId': 'canonicalId', 'deactivated': True}.
     """
 
     did: "DID"

@@ -15,20 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  BadRequest,
-  InternalServerError,
-  NotFound,
+  ErrorResponse,
   VerificationPolicy,
   VerificationPolicyInput,
   VerificationPolicyPage,
 } from '../models';
 import {
-    BadRequestFromJSON,
-    BadRequestToJSON,
-    InternalServerErrorFromJSON,
-    InternalServerErrorToJSON,
-    NotFoundFromJSON,
-    NotFoundToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     VerificationPolicyFromJSON,
     VerificationPolicyToJSON,
     VerificationPolicyInputFromJSON,
@@ -51,9 +45,9 @@ export interface GetVerificationPolicyByIdRequest {
 }
 
 export interface LookupVerificationPoliciesByQueryRequest {
-    name?: string;
     offset?: number;
     limit?: number;
+    name?: string;
     order?: string;
 }
 
@@ -111,7 +105,7 @@ export class VerificationApi extends runtime.BaseAPI {
      * Delete the verification policy by id
      * Delete the verification policy by id
      */
-    async deleteVerificationPolicyByIdRaw(requestParameters: DeleteVerificationPolicyByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteVerificationPolicyByIdRaw(requestParameters: DeleteVerificationPolicyByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteVerificationPolicyById.');
         }
@@ -139,15 +133,16 @@ export class VerificationApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
      * Delete the verification policy by id
      * Delete the verification policy by id
      */
-    async deleteVerificationPolicyById(requestParameters: DeleteVerificationPolicyByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteVerificationPolicyByIdRaw(requestParameters, initOverrides);
+    async deleteVerificationPolicyById(requestParameters: DeleteVerificationPolicyByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.deleteVerificationPolicyByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -187,15 +182,11 @@ export class VerificationApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lookup verification policies by `name`, and control the pagination by `offset` and `limit` parameters
+     * Lookup verification policies by `name`
      * Lookup verification policies by query
      */
     async lookupVerificationPoliciesByQueryRaw(requestParameters: LookupVerificationPoliciesByQueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VerificationPolicyPage>> {
         const queryParameters: any = {};
-
-        if (requestParameters.name !== undefined) {
-            queryParameters['name'] = requestParameters.name;
-        }
 
         if (requestParameters.offset !== undefined) {
             queryParameters['offset'] = requestParameters.offset;
@@ -203,6 +194,10 @@ export class VerificationApi extends runtime.BaseAPI {
 
         if (requestParameters.limit !== undefined) {
             queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.name !== undefined) {
+            queryParameters['name'] = requestParameters.name;
         }
 
         if (requestParameters.order !== undefined) {
@@ -226,7 +221,7 @@ export class VerificationApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lookup verification policies by `name`, and control the pagination by `offset` and `limit` parameters
+     * Lookup verification policies by `name`
      * Lookup verification policies by query
      */
     async lookupVerificationPoliciesByQuery(requestParameters: LookupVerificationPoliciesByQueryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerificationPolicyPage> {

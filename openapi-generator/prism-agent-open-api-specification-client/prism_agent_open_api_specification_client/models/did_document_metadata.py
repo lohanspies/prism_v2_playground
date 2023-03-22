@@ -9,7 +9,8 @@ T = TypeVar("T", bound="DIDDocumentMetadata")
 
 @attr.s(auto_attribs=True)
 class DIDDocumentMetadata:
-    """
+    """[DID document metadata](https://www.w3.org/TR/did-core/#did-document-metadata)
+
     Example:
         {'canonicalId': 'canonicalId', 'deactivated': True}
 
@@ -17,7 +18,13 @@ class DIDDocumentMetadata:
         deactivated (bool): If a DID has been deactivated, DID document metadata MUST include this property with the
             boolean value true. If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the
             boolean value false.
-        canonical_id (Union[Unset, str]): A DID in canonical form
+        canonical_id (Union[Unset, str]): A DID in canonical form.
+
+            If a DID is in long form and has been published, DID document metadata MUST contain a `canonicalId`` property
+            with the short form DID as its value.
+
+            If a DID in short form or has not been published, DID document metadata MUST NOT contain a `canonicalId`
+            property.
     """
 
     deactivated: bool

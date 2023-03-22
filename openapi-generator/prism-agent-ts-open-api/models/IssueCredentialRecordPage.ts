@@ -13,61 +13,61 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { VerificationPolicy } from './VerificationPolicy';
+import type { IssueCredentialRecord } from './IssueCredentialRecord';
 import {
-    VerificationPolicyFromJSON,
-    VerificationPolicyFromJSONTyped,
-    VerificationPolicyToJSON,
-} from './VerificationPolicy';
+    IssueCredentialRecordFromJSON,
+    IssueCredentialRecordFromJSONTyped,
+    IssueCredentialRecordToJSON,
+} from './IssueCredentialRecord';
 
 /**
  * 
  * @export
- * @interface VerificationPolicyPage
+ * @interface IssueCredentialRecordPage
  */
-export interface VerificationPolicyPage {
+export interface IssueCredentialRecordPage {
     /**
      * The reference to the connection collection itself.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof IssueCredentialRecordPage
      */
     self: string;
     /**
      * The type of object returned. In this case a `Collection`.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof IssueCredentialRecordPage
      */
     kind: string;
     /**
      * Page number within the context of paginated response.
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof IssueCredentialRecordPage
      */
     pageOf: string;
     /**
      * URL of the next page (if available)
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof IssueCredentialRecordPage
      */
     next?: string;
     /**
      * URL of the previous page (if available)
      * @type {string}
-     * @memberof VerificationPolicyPage
+     * @memberof IssueCredentialRecordPage
      */
     previous?: string;
     /**
      * 
-     * @type {Array<VerificationPolicy>}
-     * @memberof VerificationPolicyPage
+     * @type {Array<IssueCredentialRecord>}
+     * @memberof IssueCredentialRecordPage
      */
-    contents: Array<VerificationPolicy>;
+    contents: Array<IssueCredentialRecord>;
 }
 
 /**
- * Check if a given object implements the VerificationPolicyPage interface.
+ * Check if a given object implements the IssueCredentialRecordPage interface.
  */
-export function instanceOfVerificationPolicyPage(value: object): boolean {
+export function instanceOfIssueCredentialRecordPage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "self" in value;
     isInstance = isInstance && "kind" in value;
@@ -77,11 +77,11 @@ export function instanceOfVerificationPolicyPage(value: object): boolean {
     return isInstance;
 }
 
-export function VerificationPolicyPageFromJSON(json: any): VerificationPolicyPage {
-    return VerificationPolicyPageFromJSONTyped(json, false);
+export function IssueCredentialRecordPageFromJSON(json: any): IssueCredentialRecordPage {
+    return IssueCredentialRecordPageFromJSONTyped(json, false);
 }
 
-export function VerificationPolicyPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerificationPolicyPage {
+export function IssueCredentialRecordPageFromJSONTyped(json: any, ignoreDiscriminator: boolean): IssueCredentialRecordPage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -92,11 +92,11 @@ export function VerificationPolicyPageFromJSONTyped(json: any, ignoreDiscriminat
         'pageOf': json['pageOf'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'contents': ((json['contents'] as Array<any>).map(VerificationPolicyFromJSON)),
+        'contents': ((json['contents'] as Array<any>).map(IssueCredentialRecordFromJSON)),
     };
 }
 
-export function VerificationPolicyPageToJSON(value?: VerificationPolicyPage | null): any {
+export function IssueCredentialRecordPageToJSON(value?: IssueCredentialRecordPage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -110,7 +110,7 @@ export function VerificationPolicyPageToJSON(value?: VerificationPolicyPage | nu
         'pageOf': value.pageOf,
         'next': value.next,
         'previous': value.previous,
-        'contents': ((value.contents as Array<any>).map(VerificationPolicyToJSON)),
+        'contents': ((value.contents as Array<any>).map(IssueCredentialRecordToJSON)),
     };
 }
 

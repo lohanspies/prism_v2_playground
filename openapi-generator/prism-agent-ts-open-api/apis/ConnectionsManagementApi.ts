@@ -17,7 +17,7 @@ import * as runtime from '../runtime';
 import type {
   AcceptConnectionInvitationRequest,
   Connection,
-  ConnectionCollection,
+  ConnectionsPage,
   CreateConnectionRequest,
   ErrorResponse,
 } from '../models';
@@ -26,8 +26,8 @@ import {
     AcceptConnectionInvitationRequestToJSON,
     ConnectionFromJSON,
     ConnectionToJSON,
-    ConnectionCollectionFromJSON,
-    ConnectionCollectionToJSON,
+    ConnectionsPageFromJSON,
+    ConnectionsPageToJSON,
     CreateConnectionRequestFromJSON,
     CreateConnectionRequestToJSON,
     ErrorResponseFromJSON,
@@ -44,6 +44,11 @@ export interface CreateConnectionOperationRequest {
 
 export interface GetConnectionRequest {
     connectionId: string;
+}
+
+export interface GetConnectionsRequest {
+    offset?: number;
+    limit?: number;
 }
 
 /**
@@ -130,6 +135,7 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
+     * Gets an existing connection record by its unique identifier
      * Gets an existing connection record by its unique identifier.
      */
     async getConnectionRaw(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
@@ -156,6 +162,7 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
+     * Gets an existing connection record by its unique identifier
      * Gets an existing connection record by its unique identifier.
      */
     async getConnection(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
@@ -164,10 +171,19 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get the list of connection records paginated
      * Gets the list of connection records.
      */
-    async getConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionCollection>> {
+    async getConnectionsRaw(requestParameters: GetConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionsPage>> {
         const queryParameters: any = {};
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -182,14 +198,15 @@ export class ConnectionsManagementApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectionCollectionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectionsPageFromJSON(jsonValue));
     }
 
     /**
+     * Get the list of connection records paginated
      * Gets the list of connection records.
      */
-    async getConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionCollection> {
-        const response = await this.getConnectionsRaw(initOverrides);
+    async getConnections(requestParameters: GetConnectionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionsPage> {
+        const response = await this.getConnectionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

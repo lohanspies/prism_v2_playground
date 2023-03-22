@@ -81,6 +81,7 @@ export const IssueCredentialRecordAllOfProtocolStateEnum = {
     OfferSent: 'OfferSent',
     OfferReceived: 'OfferReceived',
     RequestPending: 'RequestPending',
+    RequestGenerated: 'RequestGenerated',
     RequestSent: 'RequestSent',
     RequestReceived: 'RequestReceived',
     ProblemReportPending: 'ProblemReportPending',

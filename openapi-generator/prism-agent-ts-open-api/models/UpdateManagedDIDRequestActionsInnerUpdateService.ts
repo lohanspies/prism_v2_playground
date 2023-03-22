@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * A patch to existing Service. 'type' and 'serviceEndpoint' must not be both empty.
+ * A patch to existing Service. 'type' and 'serviceEndpoint' can't both be empty.
  * @export
  * @interface UpdateManagedDIDRequestActionsInnerUpdateService
  */

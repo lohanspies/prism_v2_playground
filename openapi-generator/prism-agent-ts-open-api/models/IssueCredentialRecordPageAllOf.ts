@@ -21,34 +21,34 @@ import {
 } from './IssueCredentialRecord';
 
 /**
- * A collection of issue credential records.
+ * 
  * @export
- * @interface IssueCredentialRecordCollection
+ * @interface IssueCredentialRecordPageAllOf
  */
-export interface IssueCredentialRecordCollection {
+export interface IssueCredentialRecordPageAllOf {
     /**
-     * The array containing the list of issue credential records.
+     * 
      * @type {Array<IssueCredentialRecord>}
-     * @memberof IssueCredentialRecordCollection
+     * @memberof IssueCredentialRecordPageAllOf
      */
     contents: Array<IssueCredentialRecord>;
 }
 
 /**
- * Check if a given object implements the IssueCredentialRecordCollection interface.
+ * Check if a given object implements the IssueCredentialRecordPageAllOf interface.
  */
-export function instanceOfIssueCredentialRecordCollection(value: object): boolean {
+export function instanceOfIssueCredentialRecordPageAllOf(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "contents" in value;
 
     return isInstance;
 }
 
-export function IssueCredentialRecordCollectionFromJSON(json: any): IssueCredentialRecordCollection {
-    return IssueCredentialRecordCollectionFromJSONTyped(json, false);
+export function IssueCredentialRecordPageAllOfFromJSON(json: any): IssueCredentialRecordPageAllOf {
+    return IssueCredentialRecordPageAllOfFromJSONTyped(json, false);
 }
 
-export function IssueCredentialRecordCollectionFromJSONTyped(json: any, ignoreDiscriminator: boolean): IssueCredentialRecordCollection {
+export function IssueCredentialRecordPageAllOfFromJSONTyped(json: any, ignoreDiscriminator: boolean): IssueCredentialRecordPageAllOf {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -58,7 +58,7 @@ export function IssueCredentialRecordCollectionFromJSONTyped(json: any, ignoreDi
     };
 }
 
-export function IssueCredentialRecordCollectionToJSON(value?: IssueCredentialRecordCollection | null): any {
+export function IssueCredentialRecordPageAllOfToJSON(value?: IssueCredentialRecordPageAllOf | null): any {
     if (value === undefined) {
         return undefined;
     }

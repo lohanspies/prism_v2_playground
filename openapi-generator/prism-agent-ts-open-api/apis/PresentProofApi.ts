@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ErrorResponse,
   PresentationStatus,
+  PresentationStatusPage,
   RequestPresentationAction,
   RequestPresentationInput,
   RequestPresentationOutput,
@@ -26,6 +27,8 @@ import {
     ErrorResponseToJSON,
     PresentationStatusFromJSON,
     PresentationStatusToJSON,
+    PresentationStatusPageFromJSON,
+    PresentationStatusPageToJSON,
     RequestPresentationActionFromJSON,
     RequestPresentationActionToJSON,
     RequestPresentationInputFromJSON,
@@ -33,6 +36,12 @@ import {
     RequestPresentationOutputFromJSON,
     RequestPresentationOutputToJSON,
 } from '../models';
+
+export interface GetAllPresentationRequest {
+    offset?: number;
+    limit?: number;
+    thid?: string;
+}
 
 export interface GetPresentationRequest {
     recordId: string;
@@ -53,10 +62,23 @@ export interface UpdatePresentationRequest {
 export class PresentProofApi extends runtime.BaseAPI {
 
     /**
+     * list of presentation statuses
      * Gets the list of proof presentation records.
      */
-    async getAllPresentationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PresentationStatus>>> {
+    async getAllPresentationRaw(requestParameters: GetAllPresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PresentationStatusPage>> {
         const queryParameters: any = {};
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.thid !== undefined) {
+            queryParameters['thid'] = requestParameters.thid;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -71,18 +93,20 @@ export class PresentProofApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PresentationStatusFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PresentationStatusPageFromJSON(jsonValue));
     }
 
     /**
+     * list of presentation statuses
      * Gets the list of proof presentation records.
      */
-    async getAllPresentation(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PresentationStatus>> {
-        const response = await this.getAllPresentationRaw(initOverrides);
+    async getAllPresentation(requestParameters: GetAllPresentationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PresentationStatusPage> {
+        const response = await this.getAllPresentationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
+     * Returns an existing presentation record by id.
      * Gets an existing proof presentation record by its unique identifier. More information on the error can be found in the response body.
      */
     async getPresentationRaw(requestParameters: GetPresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PresentationStatus>> {
@@ -109,6 +133,7 @@ export class PresentProofApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns an existing presentation record by id.
      * Gets an existing proof presentation record by its unique identifier. More information on the error can be found in the response body.
      */
     async getPresentation(requestParameters: GetPresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PresentationStatus> {
@@ -117,6 +142,7 @@ export class PresentProofApi extends runtime.BaseAPI {
     }
 
     /**
+     * Holder presents proof derived from the verifiable credential to verifier.
      * As a Verifier, create a new proof presentation request and send it to the Prover.
      */
     async requestPresentationRaw(requestParameters: RequestPresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestPresentationOutput>> {
@@ -146,6 +172,7 @@ export class PresentProofApi extends runtime.BaseAPI {
     }
 
     /**
+     * Holder presents proof derived from the verifiable credential to verifier.
      * As a Verifier, create a new proof presentation request and send it to the Prover.
      */
     async requestPresentation(requestParameters: RequestPresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestPresentationOutput> {
@@ -154,6 +181,7 @@ export class PresentProofApi extends runtime.BaseAPI {
     }
 
     /**
+     * Accept or reject presentation of proof request
      * Updates the proof presentation record matching the unique identifier, with the specific action to perform.
      */
     async updatePresentationRaw(requestParameters: UpdatePresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -187,6 +215,7 @@ export class PresentProofApi extends runtime.BaseAPI {
     }
 
     /**
+     * Accept or reject presentation of proof request
      * Updates the proof presentation record matching the unique identifier, with the specific action to perform.
      */
     async updatePresentation(requestParameters: UpdatePresentationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {

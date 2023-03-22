@@ -21,60 +21,44 @@ import {
 } from './Connection';
 
 /**
- * A collection of connection records.
+ * 
  * @export
- * @interface ConnectionCollection
+ * @interface ConnectionsPageAllOf
  */
-export interface ConnectionCollection {
-    /**
-     * The reference to the connection collection itself.
-     * @type {string}
-     * @memberof ConnectionCollection
-     */
-    self: string;
-    /**
-     * The type of object returned. In this case a `Collection`.
-     * @type {string}
-     * @memberof ConnectionCollection
-     */
-    kind: string;
+export interface ConnectionsPageAllOf {
     /**
      * The array containing the list of connection records.
      * @type {Array<Connection>}
-     * @memberof ConnectionCollection
+     * @memberof ConnectionsPageAllOf
      */
     contents: Array<Connection>;
 }
 
 /**
- * Check if a given object implements the ConnectionCollection interface.
+ * Check if a given object implements the ConnectionsPageAllOf interface.
  */
-export function instanceOfConnectionCollection(value: object): boolean {
+export function instanceOfConnectionsPageAllOf(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "self" in value;
-    isInstance = isInstance && "kind" in value;
     isInstance = isInstance && "contents" in value;
 
     return isInstance;
 }
 
-export function ConnectionCollectionFromJSON(json: any): ConnectionCollection {
-    return ConnectionCollectionFromJSONTyped(json, false);
+export function ConnectionsPageAllOfFromJSON(json: any): ConnectionsPageAllOf {
+    return ConnectionsPageAllOfFromJSONTyped(json, false);
 }
 
-export function ConnectionCollectionFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConnectionCollection {
+export function ConnectionsPageAllOfFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConnectionsPageAllOf {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'self': json['self'],
-        'kind': json['kind'],
         'contents': ((json['contents'] as Array<any>).map(ConnectionFromJSON)),
     };
 }
 
-export function ConnectionCollectionToJSON(value?: ConnectionCollection | null): any {
+export function ConnectionsPageAllOfToJSON(value?: ConnectionsPageAllOf | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -83,8 +67,6 @@ export function ConnectionCollectionToJSON(value?: ConnectionCollection | null):
     }
     return {
         
-        'self': value.self,
-        'kind': value.kind,
         'contents': ((value.contents as Array<any>).map(ConnectionToJSON)),
     };
 }

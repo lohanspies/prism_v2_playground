@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * [DID document metadata](https://www.w3.org/TR/did-core/#did-document-metadata)
  * @export
  * @interface DIDDocumentMetadata
  */
@@ -26,7 +26,11 @@ export interface DIDDocumentMetadata {
      */
     deactivated: boolean;
     /**
-     * A DID in canonical form
+     * A DID in canonical form.
+     * 
+     * If a DID is in long form and has been published, DID document metadata MUST contain a `canonicalId`` property with the short form DID as its value.
+     * 
+     * If a DID in short form or has not been published, DID document metadata MUST NOT contain a `canonicalId` property.
      * @type {string}
      * @memberof DIDDocumentMetadata
      */

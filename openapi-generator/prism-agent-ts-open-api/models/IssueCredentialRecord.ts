@@ -30,7 +30,7 @@ export interface IssueCredentialRecord {
      * @type {string}
      * @memberof IssueCredentialRecord
      */
-    subjectId: string;
+    subjectId?: string;
     /**
      * The validity period in seconds of the verifiable credential that will be issued.
      * @type {number}
@@ -112,6 +112,7 @@ export const IssueCredentialRecordProtocolStateEnum = {
     OfferSent: 'OfferSent',
     OfferReceived: 'OfferReceived',
     RequestPending: 'RequestPending',
+    RequestGenerated: 'RequestGenerated',
     RequestSent: 'RequestSent',
     RequestReceived: 'RequestReceived',
     ProblemReportPending: 'ProblemReportPending',
@@ -129,7 +130,6 @@ export type IssueCredentialRecordProtocolStateEnum = typeof IssueCredentialRecor
  */
 export function instanceOfIssueCredentialRecord(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "subjectId" in value;
     isInstance = isInstance && "claims" in value;
     isInstance = isInstance && "recordId" in value;
     isInstance = isInstance && "createdAt" in value;
@@ -150,7 +150,7 @@ export function IssueCredentialRecordFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'schemaId': !exists(json, 'schemaId') ? undefined : json['schemaId'],
-        'subjectId': json['subjectId'],
+        'subjectId': !exists(json, 'subjectId') ? undefined : json['subjectId'],
         'validityPeriod': !exists(json, 'validityPeriod') ? undefined : json['validityPeriod'],
         'claims': json['claims'],
         'automaticIssuance': !exists(json, 'automaticIssuance') ? undefined : json['automaticIssuance'],
