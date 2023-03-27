@@ -11,10 +11,10 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/did-registrar/dids".format(client.base_url)
 
@@ -63,10 +63,10 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[ErrorResponse, ManagedDIDPage]]:
     """List all DIDs stored in Prism Agent's wallet
 
@@ -101,10 +101,10 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[ErrorResponse, ManagedDIDPage]]:
     """List all DIDs stored in Prism Agent's wallet
 
@@ -132,10 +132,10 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[ErrorResponse, ManagedDIDPage]]:
     """List all DIDs stored in Prism Agent's wallet
 
@@ -168,10 +168,10 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[ErrorResponse, ManagedDIDPage]]:
     """List all DIDs stored in Prism Agent's wallet
 

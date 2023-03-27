@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from ..models.credential_schema_response_schema import CredentialSchemaResponseSchema
     from ..models.proof import Proof
 
+
 T = TypeVar("T", bound="CredentialSchemaResponse")
 
 

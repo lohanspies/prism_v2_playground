@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        json_body: CreateManagedDidRequest,
+    *,
+    client: Client,
+    json_body: CreateManagedDidRequest,
 ) -> Dict[str, Any]:
     url = "{}/did-registrar/dids".format(client.base_url)
 
@@ -34,7 +34,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[CreateManagedDIDResponse, ErrorResponse]]:
     if response.status_code == HTTPStatus.CREATED:
         response_201 = CreateManagedDIDResponse.from_dict(response.json())
@@ -55,7 +55,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[CreateManagedDIDResponse, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -66,9 +66,9 @@ def _build_response(
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        json_body: CreateManagedDidRequest,
+    *,
+    client: Client,
+    json_body: CreateManagedDidRequest,
 ) -> Response[Union[CreateManagedDIDResponse, ErrorResponse]]:
     """Create unpublished DID and store it in Prism Agent's wallet
 
@@ -105,9 +105,9 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        json_body: CreateManagedDidRequest,
+    *,
+    client: Client,
+    json_body: CreateManagedDidRequest,
 ) -> Optional[Union[CreateManagedDIDResponse, ErrorResponse]]:
     """Create unpublished DID and store it in Prism Agent's wallet
 
@@ -137,9 +137,9 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        json_body: CreateManagedDidRequest,
+    *,
+    client: Client,
+    json_body: CreateManagedDidRequest,
 ) -> Response[Union[CreateManagedDIDResponse, ErrorResponse]]:
     """Create unpublished DID and store it in Prism Agent's wallet
 
@@ -174,9 +174,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        json_body: CreateManagedDidRequest,
+    *,
+    client: Client,
+    json_body: CreateManagedDidRequest,
 ) -> Optional[Union[CreateManagedDIDResponse, ErrorResponse]]:
     """Create unpublished DID and store it in Prism Agent's wallet
 

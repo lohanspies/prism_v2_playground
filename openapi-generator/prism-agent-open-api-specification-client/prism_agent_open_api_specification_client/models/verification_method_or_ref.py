@@ -8,6 +8,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.verification_method import VerificationMethod
 
+
 T = TypeVar("T", bound="VerificationMethodOrRef")
 
 

@@ -11,12 +11,12 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies".format(client.base_url)
 
@@ -45,7 +45,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[ErrorResponse, VerificationPolicyPage]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = VerificationPolicyPage.from_dict(response.json())
@@ -66,7 +66,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[ErrorResponse, VerificationPolicyPage]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -77,12 +77,12 @@ def _build_response(
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
@@ -119,12 +119,12 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
@@ -154,12 +154,12 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 
@@ -194,12 +194,12 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[ErrorResponse, VerificationPolicyPage]]:
     """Lookup verification policies by query
 

@@ -11,6 +11,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.connection_invitation import ConnectionInvitation
 
+
 T = TypeVar("T", bound="Connection")
 
 

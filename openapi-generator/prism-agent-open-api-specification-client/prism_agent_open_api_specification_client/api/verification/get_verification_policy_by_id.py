@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-        id: str,
-        *,
-        client: Client,
+    id: str,
+    *,
+    client: Client,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies/{id}".format(client.base_url, id=id)
 
@@ -62,9 +62,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-        id: str,
-        *,
-        client: Client,
+    id: str,
+    *,
+    client: Client,
 ) -> Response[Union[ErrorResponse, VerificationPolicy]]:
     """Fetch the verification policy by id
 
@@ -95,9 +95,9 @@ def sync_detailed(
 
 
 def sync(
-        id: str,
-        *,
-        client: Client,
+    id: str,
+    *,
+    client: Client,
 ) -> Optional[Union[ErrorResponse, VerificationPolicy]]:
     """Fetch the verification policy by id
 
@@ -121,9 +121,9 @@ def sync(
 
 
 async def asyncio_detailed(
-        id: str,
-        *,
-        client: Client,
+    id: str,
+    *,
+    client: Client,
 ) -> Response[Union[ErrorResponse, VerificationPolicy]]:
     """Fetch the verification policy by id
 
@@ -152,9 +152,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        id: str,
-        *,
-        client: Client,
+    id: str,
+    *,
+    client: Client,
 ) -> Optional[Union[ErrorResponse, VerificationPolicy]]:
     """Fetch the verification policy by id
 

@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        json_body: CreateIssueCredentialRecordRequest,
+    *,
+    client: Client,
+    json_body: CreateIssueCredentialRecordRequest,
 ) -> Dict[str, Any]:
     url = "{}/issue-credentials/credential-offers".format(client.base_url)
 
@@ -34,7 +34,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     if response.status_code == HTTPStatus.CREATED:
         response_201 = IssueCredentialRecord.from_dict(response.json())
@@ -51,7 +51,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -62,9 +62,9 @@ def _build_response(
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        json_body: CreateIssueCredentialRecordRequest,
+    *,
+    client: Client,
+    json_body: CreateIssueCredentialRecordRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
 
@@ -96,9 +96,9 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        json_body: CreateIssueCredentialRecordRequest,
+    *,
+    client: Client,
+    json_body: CreateIssueCredentialRecordRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
 
@@ -123,9 +123,9 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        json_body: CreateIssueCredentialRecordRequest,
+    *,
+    client: Client,
+    json_body: CreateIssueCredentialRecordRequest,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
 
@@ -155,9 +155,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        json_body: CreateIssueCredentialRecordRequest,
+    *,
+    client: Client,
+    json_body: CreateIssueCredentialRecordRequest,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As a credential issuer, create a new credential offer to be sent to a holder.
 

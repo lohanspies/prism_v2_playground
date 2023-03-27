@@ -7,6 +7,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.issue_credential_record_base_claims import IssueCredentialRecordBaseClaims
 
+
 T = TypeVar("T", bound="CreateIssueCredentialRecordRequest")
 
 

@@ -5,6 +5,7 @@ import attr
 if TYPE_CHECKING:
     from ..models.connection import Connection
 
+
 T = TypeVar("T", bound="ConnectionsPageAllOf")
 
 

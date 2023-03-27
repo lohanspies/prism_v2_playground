@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from ..models.verification_method import VerificationMethod
     from ..models.verification_method_or_ref import VerificationMethodOrRef
 
+
 T = TypeVar("T", bound="DID")
 
 

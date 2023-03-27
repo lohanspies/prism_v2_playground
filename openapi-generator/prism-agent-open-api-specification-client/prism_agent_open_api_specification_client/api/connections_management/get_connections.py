@@ -11,10 +11,10 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/connections".format(client.base_url)
 
@@ -63,10 +63,10 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[ConnectionsPage, ErrorResponse]]:
     """Gets the list of connection records.
 
@@ -99,10 +99,10 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[ConnectionsPage, ErrorResponse]]:
     """Gets the list of connection records.
 
@@ -128,10 +128,10 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[ConnectionsPage, ErrorResponse]]:
     """Gets the list of connection records.
 
@@ -162,10 +162,10 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[ConnectionsPage, ErrorResponse]]:
     """Gets the list of connection records.
 

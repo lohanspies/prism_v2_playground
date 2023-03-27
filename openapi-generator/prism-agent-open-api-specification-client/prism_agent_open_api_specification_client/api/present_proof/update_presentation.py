@@ -11,10 +11,10 @@ from ...types import Response
 
 
 def _get_kwargs(
-        record_id: str,
-        *,
-        client: Client,
-        json_body: RequestPresentationAction,
+    record_id: str,
+    *,
+    client: Client,
+    json_body: RequestPresentationAction,
 ) -> Dict[str, Any]:
     url = "{}/present-proof/presentations/{recordId}".format(client.base_url, recordId=record_id)
 
@@ -61,10 +61,10 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-        record_id: str,
-        *,
-        client: Client,
-        json_body: RequestPresentationAction,
+    record_id: str,
+    *,
+    client: Client,
+    json_body: RequestPresentationAction,
 ) -> Response[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
@@ -100,10 +100,10 @@ def sync_detailed(
 
 
 def sync(
-        record_id: str,
-        *,
-        client: Client,
-        json_body: RequestPresentationAction,
+    record_id: str,
+    *,
+    client: Client,
+    json_body: RequestPresentationAction,
 ) -> Optional[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
@@ -132,10 +132,10 @@ def sync(
 
 
 async def asyncio_detailed(
-        record_id: str,
-        *,
-        client: Client,
-        json_body: RequestPresentationAction,
+    record_id: str,
+    *,
+    client: Client,
+    json_body: RequestPresentationAction,
 ) -> Response[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.
@@ -169,10 +169,10 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        record_id: str,
-        *,
-        client: Client,
-        json_body: RequestPresentationAction,
+    record_id: str,
+    *,
+    client: Client,
+    json_body: RequestPresentationAction,
 ) -> Optional[Union[Any, ErrorResponse]]:
     """Updates the proof presentation record matching the unique identifier, with the specific action to
     perform.

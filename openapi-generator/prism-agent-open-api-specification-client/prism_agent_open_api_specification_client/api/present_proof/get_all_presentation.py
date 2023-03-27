@@ -11,11 +11,11 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        thid: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    thid: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/present-proof/presentations".format(client.base_url)
 
@@ -42,7 +42,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[ErrorResponse, PresentationStatusPage]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = PresentationStatusPage.from_dict(response.json())
@@ -59,7 +59,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[ErrorResponse, PresentationStatusPage]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -70,11 +70,11 @@ def _build_response(
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        thid: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    thid: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[ErrorResponse, PresentationStatusPage]]:
     """Gets the list of proof presentation records.
 
@@ -109,11 +109,11 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        thid: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    thid: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[ErrorResponse, PresentationStatusPage]]:
     """Gets the list of proof presentation records.
 
@@ -141,11 +141,11 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        thid: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    thid: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[ErrorResponse, PresentationStatusPage]]:
     """Gets the list of proof presentation records.
 
@@ -178,11 +178,11 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        thid: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    thid: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[ErrorResponse, PresentationStatusPage]]:
     """Gets the list of proof presentation records.
 

@@ -11,15 +11,15 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        author: Union[Unset, None, str] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        version: Union[Unset, None, str] = UNSET,
-        tags: Union[Unset, None, str] = UNSET,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    author: Union[Unset, None, str] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
+    tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas".format(client.base_url)
 
@@ -54,7 +54,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = CredentialSchemaResponsePage.from_dict(response.json())
@@ -75,7 +75,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -86,15 +86,15 @@ def _build_response(
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        author: Union[Unset, None, str] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        version: Union[Unset, None, str] = UNSET,
-        tags: Union[Unset, None, str] = UNSET,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    author: Union[Unset, None, str] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
+    tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
@@ -138,15 +138,15 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        author: Union[Unset, None, str] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        version: Union[Unset, None, str] = UNSET,
-        tags: Union[Unset, None, str] = UNSET,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    author: Union[Unset, None, str] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
+    tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
@@ -183,15 +183,15 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        author: Union[Unset, None, str] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        version: Union[Unset, None, str] = UNSET,
-        tags: Union[Unset, None, str] = UNSET,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    author: Union[Unset, None, str] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
+    tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Response[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 
@@ -233,15 +233,15 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        author: Union[Unset, None, str] = UNSET,
-        name: Union[Unset, None, str] = UNSET,
-        version: Union[Unset, None, str] = UNSET,
-        tags: Union[Unset, None, str] = UNSET,
-        offset: Union[Unset, None, int] = UNSET,
-        limit: Union[Unset, None, int] = UNSET,
-        order: Union[Unset, None, str] = UNSET,
+    *,
+    client: Client,
+    author: Union[Unset, None, str] = UNSET,
+    name: Union[Unset, None, str] = UNSET,
+    version: Union[Unset, None, str] = UNSET,
+    tags: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    order: Union[Unset, None, str] = UNSET,
 ) -> Optional[Union[CredentialSchemaResponsePage, ErrorResponse]]:
     """Lookup schemas by indexed fields
 

@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        json_body: CredentialSchemaInput,
+    *,
+    client: Client,
+    json_body: CredentialSchemaInput,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas".format(client.base_url)
 
@@ -34,7 +34,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     if response.status_code == HTTPStatus.CREATED:
         response_201 = CredentialSchemaResponse.from_dict(response.json())
@@ -55,7 +55,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -66,9 +66,9 @@ def _build_response(
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        json_body: CredentialSchemaInput,
+    *,
+    client: Client,
+    json_body: CredentialSchemaInput,
 ) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
@@ -112,9 +112,9 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        json_body: CredentialSchemaInput,
+    *,
+    client: Client,
+    json_body: CredentialSchemaInput,
 ) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
@@ -151,9 +151,9 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        json_body: CredentialSchemaInput,
+    *,
+    client: Client,
+    json_body: CredentialSchemaInput,
 ) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 
@@ -195,9 +195,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        json_body: CredentialSchemaInput,
+    *,
+    client: Client,
+    json_body: CredentialSchemaInput,
 ) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Publish new schema to the schema registry
 

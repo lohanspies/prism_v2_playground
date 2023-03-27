@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-        *,
-        client: Client,
-        json_body: AcceptConnectionInvitationRequest,
+    *,
+    client: Client,
+    json_body: AcceptConnectionInvitationRequest,
 ) -> Dict[str, Any]:
     url = "{}/connection-invitations".format(client.base_url)
 
@@ -58,9 +58,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-        *,
-        client: Client,
-        json_body: AcceptConnectionInvitationRequest,
+    *,
+    client: Client,
+    json_body: AcceptConnectionInvitationRequest,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Accepts an Out of Band invitation.
 
@@ -103,9 +103,9 @@ def sync_detailed(
 
 
 def sync(
-        *,
-        client: Client,
-        json_body: AcceptConnectionInvitationRequest,
+    *,
+    client: Client,
+    json_body: AcceptConnectionInvitationRequest,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Accepts an Out of Band invitation.
 
@@ -141,9 +141,9 @@ def sync(
 
 
 async def asyncio_detailed(
-        *,
-        client: Client,
-        json_body: AcceptConnectionInvitationRequest,
+    *,
+    client: Client,
+    json_body: AcceptConnectionInvitationRequest,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Accepts an Out of Band invitation.
 
@@ -184,9 +184,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        *,
-        client: Client,
-        json_body: AcceptConnectionInvitationRequest,
+    *,
+    client: Client,
+    json_body: AcceptConnectionInvitationRequest,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Accepts an Out of Band invitation.
 

@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-        did_ref: str,
-        *,
-        client: Client,
+    did_ref: str,
+    *,
+    client: Client,
 ) -> Dict[str, Any]:
     url = "{}/did-registrar/dids/{didRef}/deactivations".format(client.base_url, didRef=did_ref)
 
@@ -30,7 +30,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
     if response.status_code == HTTPStatus.ACCEPTED:
         response_202 = DIDOperationResponse.from_dict(response.json())
@@ -51,7 +51,7 @@ def _parse_response(
 
 
 def _build_response(
-        *, client: Client, response: httpx.Response
+    *, client: Client, response: httpx.Response
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -62,9 +62,9 @@ def _build_response(
 
 
 def sync_detailed(
-        did_ref: str,
-        *,
-        client: Client,
+    did_ref: str,
+    *,
+    client: Client,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
     """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
@@ -95,9 +95,9 @@ def sync_detailed(
 
 
 def sync(
-        did_ref: str,
-        *,
-        client: Client,
+    did_ref: str,
+    *,
+    client: Client,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
     """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
@@ -121,9 +121,9 @@ def sync(
 
 
 async def asyncio_detailed(
-        did_ref: str,
-        *,
-        client: Client,
+    did_ref: str,
+    *,
+    client: Client,
 ) -> Response[Union[DIDOperationResponse, ErrorResponse]]:
     """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 
@@ -152,9 +152,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-        did_ref: str,
-        *,
-        client: Client,
+    did_ref: str,
+    *,
+    client: Client,
 ) -> Optional[Union[DIDOperationResponse, ErrorResponse]]:
     """Deactivate DID in Prism Agent's wallet and post deactivate operation to the VDR
 

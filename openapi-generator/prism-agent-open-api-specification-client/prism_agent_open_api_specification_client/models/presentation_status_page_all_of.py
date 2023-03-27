@@ -5,6 +5,7 @@ import attr
 if TYPE_CHECKING:
     from ..models.presentation_status import PresentationStatus
 
+
 T = TypeVar("T", bound="PresentationStatusPageAllOf")
 
 

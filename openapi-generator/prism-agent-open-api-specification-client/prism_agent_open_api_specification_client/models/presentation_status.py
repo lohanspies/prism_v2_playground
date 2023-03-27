@@ -8,6 +8,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.proof_request_aux import ProofRequestAux
 
+
 T = TypeVar("T", bound="PresentationStatus")
 
 

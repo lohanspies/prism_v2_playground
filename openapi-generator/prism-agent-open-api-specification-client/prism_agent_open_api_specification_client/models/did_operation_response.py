@@ -5,6 +5,7 @@ import attr
 if TYPE_CHECKING:
     from ..models.did_operation_submission import DidOperationSubmission
 
+
 T = TypeVar("T", bound="DIDOperationResponse")
 
 

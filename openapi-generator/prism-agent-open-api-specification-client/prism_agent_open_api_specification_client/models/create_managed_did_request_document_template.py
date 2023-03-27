@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from ..models.managed_did_key_template import ManagedDIDKeyTemplate
     from ..models.service import Service
 
+
 T = TypeVar("T", bound="CreateManagedDidRequestDocumentTemplate")
 
 

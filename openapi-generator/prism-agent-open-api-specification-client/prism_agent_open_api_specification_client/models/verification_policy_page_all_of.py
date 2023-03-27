@@ -5,6 +5,7 @@ import attr
 if TYPE_CHECKING:
     from ..models.verification_policy import VerificationPolicy
 
+
 T = TypeVar("T", bound="VerificationPolicyPageAllOf")
 
 
