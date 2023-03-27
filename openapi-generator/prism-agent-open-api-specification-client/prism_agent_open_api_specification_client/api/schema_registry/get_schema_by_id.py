@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    guid: str,
-    *,
-    client: Client,
+        guid: str,
+        *,
+        client: Client,
 ) -> Dict[str, Any]:
     url = "{}/schema-registry/schemas/{guid}".format(client.base_url, guid=guid)
 
@@ -30,7 +30,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = CredentialSchemaResponse.from_dict(response.json())
@@ -55,7 +55,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -66,9 +66,9 @@ def _build_response(
 
 
 def sync_detailed(
-    guid: str,
-    *,
-    client: Client,
+        guid: str,
+        *,
+        client: Client,
 ) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Fetch the schema from the registry by `guid`
 
@@ -99,9 +99,9 @@ def sync_detailed(
 
 
 def sync(
-    guid: str,
-    *,
-    client: Client,
+        guid: str,
+        *,
+        client: Client,
 ) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Fetch the schema from the registry by `guid`
 
@@ -125,9 +125,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    guid: str,
-    *,
-    client: Client,
+        guid: str,
+        *,
+        client: Client,
 ) -> Response[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Fetch the schema from the registry by `guid`
 
@@ -156,9 +156,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    guid: str,
-    *,
-    client: Client,
+        guid: str,
+        *,
+        client: Client,
 ) -> Optional[Union[CredentialSchemaResponse, ErrorResponse]]:
     """Fetch the schema from the registry by `guid`
 

@@ -18,7 +18,6 @@ if TYPE_CHECKING:
         UpdateManagedDIDRequestActionsInnerUpdateService,
     )
 
-
 T = TypeVar("T", bound="UpdateManagedDIDRequestActionsInner")
 
 

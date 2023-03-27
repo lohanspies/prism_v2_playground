@@ -5,7 +5,6 @@ import attr
 if TYPE_CHECKING:
     from ..models.issue_credential_record import IssueCredentialRecord
 
-
 T = TypeVar("T", bound="IssueCredentialRecordPageAllOf")
 
 

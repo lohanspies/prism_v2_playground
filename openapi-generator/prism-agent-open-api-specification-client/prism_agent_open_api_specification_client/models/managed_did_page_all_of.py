@@ -5,7 +5,6 @@ import attr
 if TYPE_CHECKING:
     from ..models.managed_did import ManagedDID
 
-
 T = TypeVar("T", bound="ManagedDIDPageAllOf")
 
 

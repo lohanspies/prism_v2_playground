@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    did_ref: str,
-    *,
-    client: Client,
+        did_ref: str,
+        *,
+        client: Client,
 ) -> Dict[str, Any]:
     url = "{}/did-registrar/dids/{didRef}".format(client.base_url, didRef=did_ref)
 
@@ -58,9 +58,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    did_ref: str,
-    *,
-    client: Client,
+        did_ref: str,
+        *,
+        client: Client,
 ) -> Response[Union[ErrorResponse, ManagedDID]]:
     """Get DID stored in Prism Agent's wallet
 
@@ -91,9 +91,9 @@ def sync_detailed(
 
 
 def sync(
-    did_ref: str,
-    *,
-    client: Client,
+        did_ref: str,
+        *,
+        client: Client,
 ) -> Optional[Union[ErrorResponse, ManagedDID]]:
     """Get DID stored in Prism Agent's wallet
 
@@ -117,9 +117,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    did_ref: str,
-    *,
-    client: Client,
+        did_ref: str,
+        *,
+        client: Client,
 ) -> Response[Union[ErrorResponse, ManagedDID]]:
     """Get DID stored in Prism Agent's wallet
 
@@ -148,9 +148,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    did_ref: str,
-    *,
-    client: Client,
+        did_ref: str,
+        *,
+        client: Client,
 ) -> Optional[Union[ErrorResponse, ManagedDID]]:
     """Get DID stored in Prism Agent's wallet
 

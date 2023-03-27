@@ -7,7 +7,6 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.credential_schema_input_schema import CredentialSchemaInputSchema
 
-
 T = TypeVar("T", bound="CredentialSchemaInput")
 
 

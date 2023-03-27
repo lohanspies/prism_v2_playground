@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    connection_id: str,
-    *,
-    client: Client,
+        connection_id: str,
+        *,
+        client: Client,
 ) -> Dict[str, Any]:
     url = "{}/connections/{connectionId}".format(client.base_url, connectionId=connection_id)
 
@@ -58,9 +58,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    connection_id: str,
-    *,
-    client: Client,
+        connection_id: str,
+        *,
+        client: Client,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
 
@@ -91,9 +91,9 @@ def sync_detailed(
 
 
 def sync(
-    connection_id: str,
-    *,
-    client: Client,
+        connection_id: str,
+        *,
+        client: Client,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
 
@@ -117,9 +117,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    connection_id: str,
-    *,
-    client: Client,
+        connection_id: str,
+        *,
+        client: Client,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
 
@@ -148,9 +148,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    connection_id: str,
-    *,
-    client: Client,
+        connection_id: str,
+        *,
+        client: Client,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Gets an existing connection record by its unique identifier.
 

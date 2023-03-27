@@ -7,7 +7,6 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.connection import Connection
 
-
 T = TypeVar("T", bound="ConnectionsPage")
 
 

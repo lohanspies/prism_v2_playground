@@ -8,3 +8,4 @@ pillow
 qrcode
 peerdid==0.3.0
 pyjwt
+black==23.1.0

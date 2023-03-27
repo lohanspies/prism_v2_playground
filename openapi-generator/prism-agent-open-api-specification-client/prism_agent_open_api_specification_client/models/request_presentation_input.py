@@ -8,7 +8,6 @@ if TYPE_CHECKING:
     from ..models.options import Options
     from ..models.proof_request_aux import ProofRequestAux
 
-
 T = TypeVar("T", bound="RequestPresentationInput")
 
 

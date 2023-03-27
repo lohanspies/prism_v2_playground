@@ -7,7 +7,6 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.issue_credential_record import IssueCredentialRecord
 
-
 T = TypeVar("T", bound="IssueCredentialRecordPage")
 
 

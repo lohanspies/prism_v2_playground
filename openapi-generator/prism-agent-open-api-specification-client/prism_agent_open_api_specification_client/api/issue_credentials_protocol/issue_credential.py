@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Dict[str, Any]:
     url = "{}/issue-credentials/records/{recordId}/issue-credential".format(client.base_url, recordId=record_id)
 
@@ -30,7 +30,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = IssueCredentialRecord.from_dict(response.json())
@@ -51,7 +51,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -62,9 +62,9 @@ def _build_response(
 
 
 def sync_detailed(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
 
@@ -96,9 +96,9 @@ def sync_detailed(
 
 
 def sync(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
 
@@ -123,9 +123,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Response[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
 
@@ -155,9 +155,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Optional[Union[ErrorResponse, IssueCredentialRecord]]:
     """As an issuer, issues the verifiable credential related to the specified record.
 

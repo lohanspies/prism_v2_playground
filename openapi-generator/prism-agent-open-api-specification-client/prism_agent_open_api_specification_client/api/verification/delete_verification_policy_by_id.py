@@ -11,10 +11,10 @@ from ...types import UNSET, Response
 
 
 def _get_kwargs(
-    id: str,
-    *,
-    client: Client,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        nonce: int,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies/{id}".format(client.base_url, id=id)
 
@@ -37,7 +37,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Optional[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DeleteVerificationPolicyByIdResponse200.from_dict(response.json())
@@ -62,7 +62,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -73,10 +73,10 @@ def _build_response(
 
 
 def sync_detailed(
-    id: str,
-    *,
-    client: Client,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        nonce: int,
 ) -> Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
@@ -109,10 +109,10 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
-    *,
-    client: Client,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        nonce: int,
 ) -> Optional[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
@@ -138,10 +138,10 @@ def sync(
 
 
 async def asyncio_detailed(
-    id: str,
-    *,
-    client: Client,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        nonce: int,
 ) -> Response[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 
@@ -172,10 +172,10 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
-    *,
-    client: Client,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        nonce: int,
 ) -> Optional[Union[DeleteVerificationPolicyByIdResponse200, ErrorResponse]]:
     """Delete the verification policy by id
 

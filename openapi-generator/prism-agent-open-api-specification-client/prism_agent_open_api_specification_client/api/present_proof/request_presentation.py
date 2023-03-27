@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    *,
-    client: Client,
-    json_body: RequestPresentationInput,
+        *,
+        client: Client,
+        json_body: RequestPresentationInput,
 ) -> Dict[str, Any]:
     url = "{}/present-proof/presentations".format(client.base_url)
 
@@ -34,7 +34,7 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
     if response.status_code == HTTPStatus.CREATED:
         response_201 = RequestPresentationOutput.from_dict(response.json())
@@ -55,7 +55,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+        *, client: Client, response: httpx.Response
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -66,9 +66,9 @@ def _build_response(
 
 
 def sync_detailed(
-    *,
-    client: Client,
-    json_body: RequestPresentationInput,
+        *,
+        client: Client,
+        json_body: RequestPresentationInput,
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
 
@@ -106,9 +106,9 @@ def sync_detailed(
 
 
 def sync(
-    *,
-    client: Client,
-    json_body: RequestPresentationInput,
+        *,
+        client: Client,
+        json_body: RequestPresentationInput,
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
 
@@ -139,9 +139,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    *,
-    client: Client,
-    json_body: RequestPresentationInput,
+        *,
+        client: Client,
+        json_body: RequestPresentationInput,
 ) -> Response[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
 
@@ -177,9 +177,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    *,
-    client: Client,
-    json_body: RequestPresentationInput,
+        *,
+        client: Client,
+        json_body: RequestPresentationInput,
 ) -> Optional[Union[ErrorResponse, RequestPresentationOutput]]:
     """As a Verifier, create a new proof presentation request and send it to the Prover.
 

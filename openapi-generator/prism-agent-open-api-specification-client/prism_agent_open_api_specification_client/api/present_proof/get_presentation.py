@@ -11,9 +11,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Dict[str, Any]:
     url = "{}/present-proof/presentations/{recordId}".format(client.base_url, recordId=record_id)
 
@@ -58,9 +58,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Response[Union[ErrorResponse, PresentationStatus]]:
     """Gets an existing proof presentation record by its unique identifier. More information on the error
     can be found in the response body.
@@ -92,9 +92,9 @@ def sync_detailed(
 
 
 def sync(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Optional[Union[ErrorResponse, PresentationStatus]]:
     """Gets an existing proof presentation record by its unique identifier. More information on the error
     can be found in the response body.
@@ -119,9 +119,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Response[Union[ErrorResponse, PresentationStatus]]:
     """Gets an existing proof presentation record by its unique identifier. More information on the error
     can be found in the response body.
@@ -151,9 +151,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    record_id: str,
-    *,
-    client: Client,
+        record_id: str,
+        *,
+        client: Client,
 ) -> Optional[Union[ErrorResponse, PresentationStatus]]:
     """Gets an existing proof presentation record by its unique identifier. More information on the error
     can be found in the response body.

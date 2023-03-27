@@ -5,7 +5,6 @@ import attr
 if TYPE_CHECKING:
     from ..models.create_managed_did_request_document_template import CreateManagedDidRequestDocumentTemplate
 
-
 T = TypeVar("T", bound="CreateManagedDidRequest")
 
 

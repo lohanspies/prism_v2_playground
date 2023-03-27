@@ -12,11 +12,11 @@ from ...types import UNSET, Response
 
 
 def _get_kwargs(
-    id: str,
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
+        nonce: int,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies/{id}".format(client.base_url, id=id)
 
@@ -74,11 +74,11 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    id: str,
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
+        nonce: int,
 ) -> Response[Union[ErrorResponse, VerificationPolicy]]:
     """Update the verification policy object by id
 
@@ -116,11 +116,11 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
+        nonce: int,
 ) -> Optional[Union[ErrorResponse, VerificationPolicy]]:
     """Update the verification policy object by id
 
@@ -151,11 +151,11 @@ def sync(
 
 
 async def asyncio_detailed(
-    id: str,
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
+        nonce: int,
 ) -> Response[Union[ErrorResponse, VerificationPolicy]]:
     """Update the verification policy object by id
 
@@ -191,11 +191,11 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
-    nonce: int,
+        id: str,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
+        nonce: int,
 ) -> Optional[Union[ErrorResponse, VerificationPolicy]]:
     """Update the verification policy object by id
 

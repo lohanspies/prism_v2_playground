@@ -5,7 +5,6 @@ import attr
 if TYPE_CHECKING:
     from ..models.public_key_jwk import PublicKeyJwk
 
-
 T = TypeVar("T", bound="VerificationMethod")
 
 

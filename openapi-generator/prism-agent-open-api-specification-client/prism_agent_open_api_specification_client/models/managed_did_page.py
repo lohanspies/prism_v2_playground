@@ -7,7 +7,6 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.managed_did import ManagedDID
 
-
 T = TypeVar("T", bound="ManagedDIDPage")
 
 

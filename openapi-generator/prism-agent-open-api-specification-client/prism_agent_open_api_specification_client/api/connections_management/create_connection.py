@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    *,
-    client: Client,
-    json_body: CreateConnectionRequest,
+        *,
+        client: Client,
+        json_body: CreateConnectionRequest,
 ) -> Dict[str, Any]:
     url = "{}/connections".format(client.base_url)
 
@@ -58,9 +58,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    *,
-    client: Client,
-    json_body: CreateConnectionRequest,
+        *,
+        client: Client,
+        json_body: CreateConnectionRequest,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Creates a new connection record and returns an Out of Band invitation.
 
@@ -95,9 +95,9 @@ def sync_detailed(
 
 
 def sync(
-    *,
-    client: Client,
-    json_body: CreateConnectionRequest,
+        *,
+        client: Client,
+        json_body: CreateConnectionRequest,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Creates a new connection record and returns an Out of Band invitation.
 
@@ -125,9 +125,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    *,
-    client: Client,
-    json_body: CreateConnectionRequest,
+        *,
+        client: Client,
+        json_body: CreateConnectionRequest,
 ) -> Response[Union[Connection, ErrorResponse]]:
     """Creates a new connection record and returns an Out of Band invitation.
 
@@ -160,9 +160,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    *,
-    client: Client,
-    json_body: CreateConnectionRequest,
+        *,
+        client: Client,
+        json_body: CreateConnectionRequest,
 ) -> Optional[Union[Connection, ErrorResponse]]:
     """Creates a new connection record and returns an Out of Band invitation.
 

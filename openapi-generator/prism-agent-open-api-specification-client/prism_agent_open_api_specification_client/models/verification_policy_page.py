@@ -7,7 +7,6 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.verification_policy import VerificationPolicy
 
-
 T = TypeVar("T", bound="VerificationPolicyPage")
 
 

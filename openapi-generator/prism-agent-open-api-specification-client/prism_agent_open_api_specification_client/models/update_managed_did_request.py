@@ -5,7 +5,6 @@ import attr
 if TYPE_CHECKING:
     from ..models.update_managed_did_request_actions_inner import UpdateManagedDIDRequestActionsInner
 
-
 T = TypeVar("T", bound="UpdateManagedDIDRequest")
 
 

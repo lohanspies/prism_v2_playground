@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from ..models.did import DID
     from ..models.did_document_metadata import DIDDocumentMetadata
 
-
 T = TypeVar("T", bound="DIDResponse")
 
 

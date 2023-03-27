@@ -12,9 +12,9 @@ from ...types import Response
 
 
 def _get_kwargs(
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
 ) -> Dict[str, Any]:
     url = "{}/verification/policies".format(client.base_url)
 
@@ -62,9 +62,9 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 
 def sync_detailed(
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
 ) -> Response[Union[ErrorResponse, VerificationPolicy]]:
     """Create the new verification policy
 
@@ -98,9 +98,9 @@ def sync_detailed(
 
 
 def sync(
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
 ) -> Optional[Union[ErrorResponse, VerificationPolicy]]:
     """Create the new verification policy
 
@@ -127,9 +127,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
 ) -> Response[Union[ErrorResponse, VerificationPolicy]]:
     """Create the new verification policy
 
@@ -161,9 +161,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    *,
-    client: Client,
-    json_body: VerificationPolicyInput,
+        *,
+        client: Client,
+        json_body: VerificationPolicyInput,
 ) -> Optional[Union[ErrorResponse, VerificationPolicy]]:
     """Create the new verification policy
 
