@@ -19,13 +19,22 @@ docker compose up --build -d
 # Starting the local Prism Agents.
 ./run_agents.sh
 ```
-### 2. Access the Prism Playground Jupyter Notebooks
+### 2a. Access the Prism Playground Jupyter Notebooks
 The default password is `Prismv2`    
 This is the default location to access the Prism Playground notebooks:
 
 ```bash
 http://127.0.0.1:8888/
 ```
+
+### 2b. Access the Prism Agent Swagger API
+This is the default location to access the Prism Agent Swagger API:
+> NOTE: You need to pass in the `apikey` header with the value `kxr9i@6XgKBUxe%O`
+
+[Issuer Agent Swagger Interface](http://localhost:8080/apidocs/)  
+[Holder Agent Swagger Interface](http://localhost:8090/apidocs/)  
+[Verifier Agent Swagger Interface](http://localhost:9000/apidocs/)  
+
 
 ### 3. Stop Prism Playground and Local Prism Agents
 ```bash
