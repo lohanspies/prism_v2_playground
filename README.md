@@ -13,6 +13,19 @@ To start the Prism Playground you can use the commands below to start and stop t
 ```bash
 cd <path>/prism_v2_playground
 
+# Copy sample.env to .env
+cp sample.env .env
+
+# Set your Github PAT in the `.env` file
+> NOTE: Your Github PAT should have `read-packages` access
+ATALA_PRISM_SECRET_READ_ACCESS_TOKEN=<your Github PAT>
+
+# Load env file variables
+source .env
+ 
+# Login to ghcr
+echo $ATALA_PRISM_SECRET_READ_ACCESS_TOKEN | docker login ghcr.io -u atala-dev --password-stdin
+
 # Starting the Jupyter Notebook Server (Prism Playground)
 docker compose up --build -d
 
