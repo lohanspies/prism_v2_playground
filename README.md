@@ -13,19 +13,40 @@ To start the Prism Playground you can use the commands below to start and stop t
 ```bash
 cd <path>/prism_v2_playground
 
+# Copy sample.env to .env
+cp sample.env .env
+
+# Set your Github PAT in the `.env` file
+> NOTE: Your Github PAT should have `read-packages` access
+ATALA_PRISM_SECRET_READ_ACCESS_TOKEN=<your Github PAT>
+
+# Load env file variables
+source .env
+ 
+# Login to ghcr
+echo $ATALA_PRISM_SECRET_READ_ACCESS_TOKEN | docker login ghcr.io -u atala-dev --password-stdin
+
 # Starting the Jupyter Notebook Server (Prism Playground)
 docker compose up --build -d
 
 # Starting the local Prism Agents.
 ./run_agents.sh
 ```
-### 2. Access the Prism Playground Jupyter Notebooks
+### 2a. Access the Prism Playground Jupyter Notebooks
 The default password is `Prismv2`    
 This is the default location to access the Prism Playground notebooks:
 
 ```bash
 http://127.0.0.1:8888/
 ```
+
+### 2b. Access the Prism Agent Swagger API
+This is the default location to access the Prism Agent Swagger API:
+> NOTE: You need to pass in the `apikey` header with the value `kxr9i@6XgKBUxe%O`
+
+[Issuer Agent Swagger Interface](http://localhost:8080/apidocs/)  
+[Holder Agent Swagger Interface](http://localhost:8090/apidocs/)  
+[Verifier Agent Swagger Interface](http://localhost:9000/apidocs/)  
 
 ℹ️ If you are running Ubuntu (or Linux) operating system and have a firewall enabled ensure that you allow communication between the docker instances.
 Here is an example of adding a firewall rule with `ufw`:

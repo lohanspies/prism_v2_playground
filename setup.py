@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 PACKAGE_NAME = "prism_cloudcontroller"
 
-with open(os.path.abspath("openapi-generator/prism-agent-open-api-specification-client/README.md"), "r") as fh:
+with open(os.path.abspath("openapi-generator/prism-agent-client/README.md"), "r") as fh:
     long_description = fh.read()
 
 
@@ -22,11 +22,11 @@ if __name__ == "__main__":
         description="A simple python package for controlling an prism agent through the admin-api interface",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url="https://github.com/lohanspies/prism_v2_playground/tree/master/openapi-generator/prism-agent-open-api-specification-client/prism_agent_open_api_specification_client",
+        url="https://github.com/lohanspies/prism_v2_playground/tree/master/openapi-generator/prism-agent-client/prism_agent_client",
         packages=find_packages(),
         include_package_data=True,
         package_data={
-            "openapi-generator/prism-agent-open-api-specification-client/prism_agent_open_api_specification_client": [
+            "openapi-generator/prism-agent-client/prism_agent_client": [
                 "requirements.txt",
             ]
         },

@@ -25,7 +25,7 @@ services:
   # Services
   ##########################
   prism-node:
-    image: public.ecr.aws/d5l5e4b2/prism-v2-dev-sjd4e-us-east-1-public:prism-node-${PRISM_NODE_VERSION}
+    image: ghcr.io/input-output-hk/prism-node:${PRISM_NODE_VERSION}
     environment:
       NODE_LEDGER: in-memory
       NODE_PSQL_HOST: db:5432
@@ -34,7 +34,7 @@ services:
         condition: service_healthy
 
   prism-agent:
-    image: public.ecr.aws/d5l5e4b2/prism-v2-dev-sjd4e-us-east-1-public:prism-agent-${PRISM_AGENT_VERSION}
+    image: ghcr.io/input-output-hk/prism-agent:${PRISM_AGENT_VERSION}
     environment:
       IRIS_HOST: iris
       IRIS_PORT: 8081
@@ -67,7 +67,7 @@ services:
       prism-node:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://prism-agent:${PORT}/connections"]
+      test: ["CMD", "curl", "-f", "http://prism-agent:8085/connections"]
       interval: 30s
       timeout: 10s
       retries: 5

@@ -20,7 +20,7 @@ RUN python3 -m pip install -r requirements.txt
 
 # Install Prism V2 Agent generated client controller library
 # Copy the library folder
-ADD openapi-generator/prism-agent-open-api-specification-client .
+ADD openapi-generator/prism-agent-client .
 # Install all Python dependencies
 RUN pip install --no-cache-dir -e .
 
