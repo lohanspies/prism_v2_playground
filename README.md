@@ -27,6 +27,12 @@ This is the default location to access the Prism Playground notebooks:
 http://127.0.0.1:8888/
 ```
 
+ℹ️ If you are running Ubuntu (or Linux) operating system and have a firewall enabled ensure that you allow communication between the docker instances.
+Here is an example of adding a firewall rule with `ufw`:
+```bash
+sudo ufw allow to 172.17.0.1
+```
+
 ### 3. Stop Prism Playground and Local Prism Agents
 ```bash
 cd <path>/prism_v2_playground
