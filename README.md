@@ -48,6 +48,11 @@ This is the default location to access the Prism Agent Swagger API:
 [Holder Agent Swagger Interface](http://localhost:8090/apidocs/)  
 [Verifier Agent Swagger Interface](http://localhost:9000/apidocs/)  
 
+ℹ️ If you are running Ubuntu (or Linux) operating system and have a firewall enabled ensure that you allow communication between the docker instances.
+Here is an example of adding a firewall rule with `ufw`:
+```bash
+sudo ufw allow to 172.17.0.1
+```
 
 ### 3. Stop Prism Playground and Local Prism Agents
 ```bash
