@@ -15,4 +15,6 @@
 
 #openapi-generator-cli generate -i https://nizhm0j69lrg.atalaprism.io/docs/prism-agent/api/openapi-spec.yaml -g openapi-yaml -o ./derereferenced_openapi.yml
 
-openapi-generator-cli generate -i http://localhost:8080/prism-agent/api/openapi-spec.yaml -g openapi-yaml -o ./derereferenced_openapi.yml --auth apiKey:kxr9i%406XgKBUxe%25O
+#openapi-generator-cli generate -i http://localhost:8080/prism-agent/api/openapi-spec.yaml -g openapi-yaml -o ./derereferenced_openapi.yml --auth apiKey:kxr9i%406XgKBUxe%25O
+
+openapi-generator-cli generate -i http://localhost:8080/docs/prism-agent/api/docs.yaml -g openapi-yaml -o ./derereferenced_openapi.yml --auth apiKey:kxr9i%406XgKBUxe%25O --skip-validate-spec
