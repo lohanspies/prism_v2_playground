@@ -89,7 +89,7 @@ fi
 NAME="${NAME:=local}"
 PORT="${PORT:=80}"
 ENV_FILE="${ENV_FILE:=${SCRIPT_DIR}/.env}"
-DIDCOMM_SERVICE_ENDPOINT="${DIDCOMM_SERVICE_ENDPOINT:=http://host.docker.internal:${PORT}/didcomm}"
+DIDCOMM_SERVICE_ENDPOINT="${DIDCOMM_SERVICE_ENDPOINT:=http://${DOCKERHOST}:${PORT}/didcomm}"
 
 echo "NAME                                = ${NAME}"
 echo "PORT                                = ${PORT}"
